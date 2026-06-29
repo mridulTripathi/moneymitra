@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -61,16 +62,15 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} h-full`} suppressHydrationWarning>
-      <head>
+      <body className="min-h-full flex flex-col bg-[#F8FAFC] dark:bg-[#0F172A] text-[#0F172A] dark:text-[#F1F5F9] transition-colors">
         {umamiUrl && umamiWebsiteId && (
-          <script
+          <Script
             defer
             src={`${umamiUrl}/script.js`}
             data-website-id={umamiWebsiteId}
+            strategy="afterInteractive"
           />
         )}
-      </head>
-      <body className="min-h-full flex flex-col bg-[#F8FAFC] dark:bg-[#0F172A] text-[#0F172A] dark:text-[#F1F5F9] transition-colors">
         <ThemeProvider>
           <Header />
           <main className="flex-1">{children}</main>
