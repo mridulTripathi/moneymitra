@@ -124,6 +124,11 @@ export default function EMICalculator() {
                 <AnimatedNumber value={totalInterest} duration={600} formatter={(n) => formatShort(n)} className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite" />
               </div>
             </div>
+            <div className="mt-5">
+              <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">Principal vs Interest</p>
+              <p className="text-xs text-[var(--text-tertiary)] mb-3">Where your money actually goes</p>
+              <EMIChart principal={principal} totalInterest={totalInterest} totalPayable={totalPayable} />
+            </div>
           </div>
 
           {/* Mobile breakdown */}
@@ -262,13 +267,6 @@ export default function EMICalculator() {
             </div>
           );
         })()}
-      </div>
-
-      {/* Chart */}
-      <div className="mt-5 bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
-        <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">Principal vs Interest</p>
-        <p className="text-xs text-[var(--text-tertiary)] mb-3">Where your money actually goes</p>
-        <EMIChart principal={principal} totalInterest={totalInterest} totalPayable={totalPayable} />
       </div>
 
       {/* Contextual tips */}
