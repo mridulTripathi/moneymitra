@@ -9,7 +9,7 @@ import { track, getLoanRange } from "@/lib/analytics";
 
 const EMIChart = dynamic(() => import("./EMIChart"), {
   ssr: false,
-  loading: () => <div className="h-[200px] rounded-xl bg-[#F1F5F9] dark:bg-[#0F172A] animate-pulse" />,
+  loading: () => <div className="h-[200px] rounded-xl bg-[var(--bg-elevated)] animate-pulse" />,
 });
 
 export default function EMICalculator() {
@@ -77,15 +77,15 @@ export default function EMICalculator() {
   return (
     <>
       {/* Sticky mobile result */}
-      <div className="md:hidden sticky top-14 z-40 bg-white dark:bg-[#1E293B] border-b border-[#E2E8F0] dark:border-[#334155] px-4 py-3 flex items-center justify-between shadow-sm">
+      <div className="md:hidden sticky top-14 z-40 bg-[var(--bg-card)] border-b border-[var(--border-default)] px-4 py-3 flex items-center justify-between shadow-sm">
         <div>
-          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Monthly EMI</p>
+          <p className="text-xs text-[var(--text-secondary)]">Monthly EMI</p>
           <p className="text-2xl font-bold text-[#F59E0B] tabular-nums" aria-live="polite" aria-atomic="true">
             {formatINR(Math.round(emi))}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Total Interest</p>
+          <p className="text-xs text-[var(--text-secondary)]">Total Interest</p>
           <p className="text-base font-semibold text-red-500 tabular-nums" aria-live="polite" aria-atomic="true">
             {formatShort(totalInterest)}
           </p>
@@ -94,10 +94,10 @@ export default function EMICalculator() {
 
       <div className="grid lg:grid-cols-2 gap-5">
         {/* Inputs */}
-        <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-5 sm:p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
+        <div className="bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
           <div className="flex items-center gap-2 mb-5">
             <span className="text-xl" aria-hidden="true">💰</span>
-            <h2 className="font-bold text-[#0F172A] dark:text-[#F1F5F9] text-lg">Loan Details</h2>
+            <h2 className="font-bold text-[var(--text-primary)] text-lg">Loan Details</h2>
           </div>
           <SliderInput label="Loan Amount" value={principal} min={100000} max={50000000} step={50000} onChange={setPrincipal} prefix="₹" format={formatIndian} hint="Home loan, car loan, personal loan…" />
           <SliderInput label="Annual Interest Rate" value={rate} min={5} max={20} step={0.1} onChange={setRate} suffix="%" format={(v) => v.toFixed(1)} hint="Check your loan offer letter" />
@@ -110,105 +110,66 @@ export default function EMICalculator() {
         {/* Results */}
         <div className="flex flex-col gap-4">
           {/* Desktop result card */}
-          <div className="hidden md:block bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-            <p className="text-sm text-[#64748B] dark:text-[#94A3B8] mb-1">Monthly EMI</p>
+          <div className="hidden md:block bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
+            <p className="text-sm text-[var(--text-secondary)] mb-1">Monthly EMI</p>
             <p className="text-5xl font-bold text-[#F59E0B] tabular-nums result-value" aria-live="polite" aria-atomic="true">
               {formatINR(Math.round(emi))}
             </p>
             <div className="mt-5 grid grid-cols-2 gap-4">
-              <div className="bg-[#F8FAFC] dark:bg-[#0F172A] rounded-xl p-3">
-                <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">Total Payable</p>
-                <p className="font-bold text-[#0F172A] dark:text-[#F1F5F9] tabular-nums text-lg" aria-live="polite">{formatShort(totalPayable)}</p>
+              <div className="bg-[var(--bg-base)] rounded-xl p-3">
+                <p className="text-xs text-[var(--text-secondary)] mb-1">Total Payable</p>
+                <p className="font-bold text-[var(--text-primary)] tabular-nums text-lg" aria-live="polite">{formatShort(totalPayable)}</p>
               </div>
               <div className="bg-red-50 rounded-xl p-3">
-                <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">Total Interest</p>
+                <p className="text-xs text-[var(--text-secondary)] mb-1">Total Interest</p>
                 <p className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite">{formatShort(totalInterest)}</p>
               </div>
             </div>
           </div>
 
           {/* Mobile breakdown */}
-          <div className="md:hidden bg-white dark:bg-[#1E293B] rounded-2xl p-5 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-            <p className="text-sm font-medium text-[#64748B] dark:text-[#94A3B8] mb-3">Breakdown</p>
+          <div className="md:hidden bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm border border-[var(--border-default)]">
+            <p className="text-sm font-medium text-[var(--text-secondary)] mb-3">Breakdown</p>
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-[#F8FAFC] dark:bg-[#0F172A] rounded-xl p-3">
-                <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">Loan Amount</p>
-                <p className="font-bold text-[#0F172A] dark:text-[#F1F5F9] tabular-nums">{formatShort(principal)}</p>
+              <div className="bg-[var(--bg-base)] rounded-xl p-3">
+                <p className="text-xs text-[var(--text-secondary)] mb-1">Loan Amount</p>
+                <p className="font-bold text-[var(--text-primary)] tabular-nums">{formatShort(principal)}</p>
               </div>
-              <div className="bg-[#F8FAFC] dark:bg-[#0F172A] rounded-xl p-3">
-                <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">Total Payable</p>
-                <p className="font-bold text-[#0F172A] dark:text-[#F1F5F9] tabular-nums">{formatShort(totalPayable)}</p>
+              <div className="bg-[var(--bg-base)] rounded-xl p-3">
+                <p className="text-xs text-[var(--text-secondary)] mb-1">Total Payable</p>
+                <p className="font-bold text-[var(--text-primary)] tabular-nums">{formatShort(totalPayable)}</p>
               </div>
               <div className="col-span-2 bg-red-50 rounded-xl p-3">
-                <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">Interest over {tenure} years</p>
+                <p className="text-xs text-[var(--text-secondary)] mb-1">Interest over {tenure} years</p>
                 <p className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite">{formatShort(totalInterest)}</p>
-                <p className="text-xs text-[#94A3B8] mt-1">{((totalInterest / principal) * 100).toFixed(0)}% extra over the principal</p>
+                <p className="text-xs text-[var(--text-tertiary)] mt-1">{((totalInterest / principal) * 100).toFixed(0)}% extra over the principal</p>
               </div>
             </div>
           </div>
 
-          {/* Chart */}
-          <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-5 sm:p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-            <p className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9] mb-1">Principal vs Interest</p>
-            <p className="text-xs text-[#94A3B8] mb-3">Where your money actually goes</p>
-            <EMIChart principal={principal} totalInterest={totalInterest} totalPayable={totalPayable} />
-          </div>
         </div>
       </div>
 
-      {/* Amortization table */}
-      <div className="mt-5 bg-white dark:bg-[#1E293B] rounded-2xl p-5 sm:p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-          <button
-            onClick={() => setShowTable(!showTable)}
-            className="font-semibold text-[#0D9488] dark:text-[#14B8A6] hover:text-[#0F766E] flex items-center gap-2 transition-colors"
-            aria-expanded={showTable}
-            aria-controls="amortization-table"
-          >
-            <span className="text-lg" aria-hidden="true">{showTable ? "▲" : "▼"}</span>
-            {showTable ? "Hide" : "View"} full repayment schedule
-          </button>
-          {showTable && (
-            <button onClick={downloadCSV} className="text-sm bg-[#F1F5F9] dark:bg-[#0F172A] hover:bg-[#E2E8F0] text-[#0F172A] dark:text-[#F1F5F9] px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5">
-              ⬇ Export CSV
-            </button>
-          )}
-        </div>
-        {!showTable && <p className="text-sm text-[#94A3B8]">See exactly how much principal and interest you pay each year.</p>}
-        {showTable && (
-          <div id="amortization-table" className="overflow-x-auto -mx-1">
-            <table className="w-full text-sm min-w-[400px]">
-              <thead>
-                <tr className="border-b-2 border-[#E2E8F0] dark:border-[#334155]">
-                  <th className="text-left py-2.5 pr-4 text-[#64748B] dark:text-[#94A3B8] font-semibold" scope="col">Year</th>
-                  <th className="text-right py-2.5 pr-4 text-[#64748B] dark:text-[#94A3B8] font-semibold" scope="col">Principal Paid</th>
-                  <th className="text-right py-2.5 pr-4 text-[#64748B] dark:text-[#94A3B8] font-semibold" scope="col">Interest Paid</th>
-                  <th className="text-right py-2.5 text-[#64748B] dark:text-[#94A3B8] font-semibold" scope="col">Balance</th>
-                </tr>
-              </thead>
-              <tbody>
-                {yearlySchedule.map((row) => (
-                  <tr key={row.year} className="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] dark:bg-[#0F172A] transition-colors">
-                    <td className="py-2.5 pr-4 font-medium text-[#0F172A] dark:text-[#F1F5F9]">Year {row.year}</td>
-                    <td className="py-2.5 pr-4 text-right text-[#10B981] dark:text-[#34D399] tabular-nums font-medium">{formatINR(Math.round(row.principal))}</td>
-                    <td className="py-2.5 pr-4 text-right text-red-500 tabular-nums font-medium">{formatINR(Math.round(row.interest))}</td>
-                    <td className="py-2.5 text-right text-[#0F172A] dark:text-[#F1F5F9] tabular-nums">{formatINR(Math.round(row.balance))}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {/* Mobile teaser cards - shown when collapsed on mobile */}
+      <div className="md:hidden flex flex-col gap-3 mt-4">
+        <button onClick={() => setShowDownPayment(v => !v)} className="w-full flex items-center justify-between bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-4 text-left">
+          <div>
+            <p className="font-semibold text-[var(--text-primary)] text-sm">🏠 How does my down payment affect the EMI?</p>
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">Adjust down payment to see how it changes your EMI instantly</p>
           </div>
-        )}
-        <EmailCapture />
-      </div>
-
-      {/* Contextual tips */}
-      <div className="mt-5">
-        <EMITips principal={principal} rate={rate} totalInterest={totalInterest} />
+          <span className="text-[var(--text-secondary)] text-lg ml-3">›</span>
+        </button>
+        <button onClick={() => setShowInvestVsPay(v => !v)} className="w-full flex items-center justify-between bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-4 text-left">
+          <div>
+            <p className="font-semibold text-[var(--text-primary)] text-sm">📊 Should I invest extra cash or prepay my loan?</p>
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">See which option grows your wealth faster</p>
+          </div>
+          <span className="text-[var(--text-secondary)] text-lg ml-3">›</span>
+        </button>
       </div>
 
       {/* Card A: Down Payment Factor */}
-      <div className="mt-5 bg-white dark:bg-[#1E293B] rounded-2xl p-5 sm:p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
+      <div className="mt-5 bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
         <button
           onClick={() => setShowDownPayment(!showDownPayment)}
           className="font-semibold text-[#0D9488] dark:text-[#14B8A6] hover:text-[#0F766E] flex items-center gap-2 transition-colors"
@@ -217,7 +178,7 @@ export default function EMICalculator() {
           <span className="text-lg" aria-hidden="true">{showDownPayment ? "▲" : "▼"}</span>
           Down payment &amp; LTV impact
         </button>
-        {!showDownPayment && <p className="text-sm text-[#94A3B8] mt-2">See how your down payment changes the loan amount and EMI.</p>}
+        {!showDownPayment && <p className="text-sm text-[var(--text-tertiary)] mt-2">See how your down payment changes the loan amount and EMI.</p>}
         {showDownPayment && (() => {
           const loanFromDP = Math.max(0, propertyValue - downPayment);
           const ltv = propertyValue > 0 ? (loanFromDP / propertyValue) * 100 : 0;
@@ -229,17 +190,17 @@ export default function EMICalculator() {
                 <SliderInput label="Down Payment" value={downPayment} min={0} max={propertyValue} step={50000} onChange={setDownPayment} prefix="₹" format={formatIndian} hint="Banks usually require at least 10-20%" />
               </div>
               <div className="flex flex-col gap-3 justify-center">
-                <div className="bg-[#F8FAFC] dark:bg-[#0F172A] rounded-xl p-4">
-                  <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">Loan needed</p>
-                  <p className="font-bold text-[#0F172A] dark:text-[#F1F5F9] tabular-nums text-xl" aria-live="polite">{formatINR(Math.round(loanFromDP))}</p>
+                <div className="bg-[var(--bg-base)] rounded-xl p-4">
+                  <p className="text-xs text-[var(--text-secondary)] mb-1">Loan needed</p>
+                  <p className="font-bold text-[var(--text-primary)] tabular-nums text-xl" aria-live="polite">{formatINR(Math.round(loanFromDP))}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-[#F0FDFA] dark:bg-[#042F2E] rounded-xl p-3">
-                    <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">LTV ratio</p>
+                  <div className="bg-[var(--tip-bg)] rounded-xl p-3">
+                    <p className="text-xs text-[var(--text-secondary)] mb-1">LTV ratio</p>
                     <p className="font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums text-lg" aria-live="polite">{ltv.toFixed(0)}%</p>
                   </div>
                   <div className="bg-amber-50 rounded-xl p-3">
-                    <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">New EMI</p>
+                    <p className="text-xs text-[var(--text-secondary)] mb-1">New EMI</p>
                     <p className="font-bold text-[#F59E0B] tabular-nums text-lg" aria-live="polite">{formatINR(Math.round(dpEMI))}</p>
                   </div>
                 </div>
@@ -251,7 +212,7 @@ export default function EMICalculator() {
       </div>
 
       {/* Card B: Invest vs Pay Down */}
-      <div className="mt-5 bg-white dark:bg-[#1E293B] rounded-2xl p-5 sm:p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
+      <div className="mt-5 bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
         <button
           onClick={() => setShowInvestVsPay(!showInvestVsPay)}
           className="font-semibold text-[#0D9488] dark:text-[#14B8A6] hover:text-[#0F766E] flex items-center gap-2 transition-colors"
@@ -260,7 +221,7 @@ export default function EMICalculator() {
           <span className="text-lg" aria-hidden="true">{showInvestVsPay ? "▲" : "▼"}</span>
           Invest the money vs pay down the loan
         </button>
-        {!showInvestVsPay && <p className="text-sm text-[#94A3B8] mt-2">Should a lump sum go into your loan or the market?</p>}
+        {!showInvestVsPay && <p className="text-sm text-[var(--text-tertiary)] mt-2">Should a lump sum go into your loan or the market?</p>}
         {showInvestVsPay && (() => {
           // Pay-down scenario: interest saved by prepaying extraAmount now (reduce tenure)
           const sched = amortizationSchedule(principal, rate, tenure);
@@ -281,12 +242,12 @@ export default function EMICalculator() {
               </div>
               <div className="flex flex-col gap-3 justify-center">
                 <div className="grid grid-cols-2 gap-3">
-                  <div className={`rounded-xl p-3 ${!investWins ? "bg-[#F0FDFA] dark:bg-[#042F2E] border border-[#0D9488]/30" : "bg-[#F8FAFC] dark:bg-[#0F172A]"}`}>
-                    <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">Pay down → interest saved</p>
+                  <div className={`rounded-xl p-3 ${!investWins ? "bg-[var(--tip-bg)] border border-[#0D9488]/30" : "bg-[var(--bg-base)]"}`}>
+                    <p className="text-xs text-[var(--text-secondary)] mb-1">Pay down → interest saved</p>
                     <p className="font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums text-lg" aria-live="polite">{formatShort(interestSaved)}</p>
                   </div>
-                  <div className={`rounded-xl p-3 ${investWins ? "bg-[#F0FDFA] dark:bg-[#042F2E] border border-[#0D9488]/30" : "bg-[#F8FAFC] dark:bg-[#0F172A]"}`}>
-                    <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-1">Invest → gain</p>
+                  <div className={`rounded-xl p-3 ${investWins ? "bg-[var(--tip-bg)] border border-[#0D9488]/30" : "bg-[var(--bg-base)]"}`}>
+                    <p className="text-xs text-[var(--text-secondary)] mb-1">Invest → gain</p>
                     <p className="font-bold text-[#F59E0B] tabular-nums text-lg" aria-live="polite">{formatShort(investGain)}</p>
                   </div>
                 </div>
@@ -302,6 +263,64 @@ export default function EMICalculator() {
             </div>
           );
         })()}
+      </div>
+
+      {/* Chart */}
+      <div className="mt-5 bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
+        <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">Principal vs Interest</p>
+        <p className="text-xs text-[var(--text-tertiary)] mb-3">Where your money actually goes</p>
+        <EMIChart principal={principal} totalInterest={totalInterest} totalPayable={totalPayable} />
+      </div>
+
+      {/* Contextual tips */}
+      <div className="mt-5">
+        <EMITips principal={principal} rate={rate} totalInterest={totalInterest} />
+      </div>
+
+      {/* Amortization table */}
+      <div className="mt-5 bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <button
+            onClick={() => setShowTable(!showTable)}
+            className="font-semibold text-[#0D9488] dark:text-[#14B8A6] hover:text-[#0F766E] flex items-center gap-2 transition-colors"
+            aria-expanded={showTable}
+            aria-controls="amortization-table"
+          >
+            <span className="text-lg" aria-hidden="true">{showTable ? "▲" : "▼"}</span>
+            {showTable ? "Hide" : "View"} full repayment schedule
+          </button>
+          {showTable && (
+            <button onClick={downloadCSV} className="text-sm bg-[var(--bg-elevated)] hover:bg-[#E2E8F0] text-[var(--text-primary)] px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5">
+              ⬇ Export CSV
+            </button>
+          )}
+        </div>
+        {!showTable && <p className="text-sm text-[var(--text-tertiary)]">See exactly how much principal and interest you pay each year.</p>}
+        {showTable && (
+          <div id="amortization-table" className="overflow-x-auto -mx-1">
+            <table className="w-full text-sm min-w-[400px]">
+              <thead>
+                <tr className="border-b-2 border-[var(--border-default)]">
+                  <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Year</th>
+                  <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Principal Paid</th>
+                  <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Interest Paid</th>
+                  <th className="text-right py-2.5 text-[var(--text-secondary)] font-semibold" scope="col">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {yearlySchedule.map((row) => (
+                  <tr key={row.year} className="border-b border-[#F1F5F9] hover:bg-[var(--bg-base)] transition-colors">
+                    <td className="py-2.5 pr-4 font-medium text-[var(--text-primary)]">Year {row.year}</td>
+                    <td className="py-2.5 pr-4 text-right text-[#10B981] dark:text-[#34D399] tabular-nums font-medium">{formatINR(Math.round(row.principal))}</td>
+                    <td className="py-2.5 pr-4 text-right text-red-500 tabular-nums font-medium">{formatINR(Math.round(row.interest))}</td>
+                    <td className="py-2.5 text-right text-[var(--text-primary)] tabular-nums">{formatINR(Math.round(row.balance))}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <EmailCapture />
       </div>
     </>
   );

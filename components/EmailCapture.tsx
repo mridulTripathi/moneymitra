@@ -54,8 +54,8 @@ export default function EmailCapture({ sourcePage = 'unknown' }: EmailCapturePro
   };
 
   return (
-    <div className="mt-4 pt-4 border-t border-[#E2E8F0] dark:border-[#334155]">
-      <p className="text-sm text-[#64748B] dark:text-[#94A3B8] mb-2">💡 Get a monthly money tip — no spam.</p>
+    <div className="mt-4 pt-4 border-t border-[var(--border-default)]">
+      <p className="text-sm text-[var(--text-secondary)] mb-2">💡 Get a monthly money tip — no spam.</p>
       <form onSubmit={handleSubmit} className="flex gap-2 flex-wrap">
         <input
           type="email"
@@ -63,7 +63,7 @@ export default function EmailCapture({ sourcePage = 'unknown' }: EmailCapturePro
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@email.com"
           required
-          className="flex-1 min-w-0 border border-[#E2E8F0] dark:border-[#334155] bg-white dark:bg-[#0F172A] rounded-xl px-4 py-2.5 text-sm text-[#0F172A] dark:text-[#F1F5F9] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
+          className="flex-1 min-w-0 border border-[var(--border-default)] bg-white dark:bg-[#0F172A] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
         />
         <button
           type="submit"

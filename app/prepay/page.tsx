@@ -57,7 +57,7 @@ export default function PrepayPage() {
       <JsonLd data={howToSchema} />
       <JsonLd data={breadcrumbSchema} />
 
-      <nav aria-label="Breadcrumb" className="text-xs text-[#94A3B8] mb-4">
+      <nav aria-label="Breadcrumb" className="text-xs text-[var(--text-tertiary)] mb-4">
         <ol className="flex items-center gap-1">
           <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
           <li aria-hidden="true">›</li>

@@ -15,11 +15,11 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-white dark:bg-[#1E293B] border-t border-[#E2E8F0] dark:border-[#334155] py-6 mt-12">
-      <div className="max-w-6xl mx-auto px-4 text-center text-sm text-[#64748B] dark:text-[#94A3B8]">
+    <footer className="bg-[var(--bg-card)] border-t border-[var(--border-default)] py-6 mt-12">
+      <div className="max-w-6xl mx-auto px-4 text-center text-sm text-[var(--text-secondary)]">
         <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-4" aria-label="Footer">
           {footerLinks.map((l) => (
-            <Link key={l.href} href={l.href} className="text-xs text-[#64748B] dark:text-[#94A3B8] hover:text-[#0D9488] dark:hover:text-[#14B8A6] transition-colors">
+            <Link key={l.href} href={l.href} className="text-xs text-[var(--text-secondary)] hover:text-[#0D9488] dark:hover:text-[#14B8A6] transition-colors">
               {l.label}
             </Link>
           ))}

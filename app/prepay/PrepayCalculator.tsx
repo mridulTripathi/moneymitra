@@ -5,7 +5,7 @@ import EmailCapture from "@/components/EmailCapture";
 
 const PrepayChart = dynamic(() => import("./PrepayChart"), {
   ssr: false,
-  loading: () => <div className="h-[280px] rounded-xl bg-[#F1F5F9] dark:bg-[#0F172A] animate-pulse" />,
+  loading: () => <div className="h-[280px] rounded-xl bg-[var(--bg-elevated)] animate-pulse" />,
 });
 import SliderInput from "@/components/SliderInput";
 import PrepayTips from "@/components/tips/PrepayTips";
@@ -136,41 +136,41 @@ export default function PrepayCalculator() {
   return (
     <div className="flex flex-col gap-6">
       {/* Sticky mobile result bar */}
-      <div className="md:hidden sticky top-14 z-40 bg-white dark:bg-[#1E293B] border-b border-[#E2E8F0] dark:border-[#334155] px-4 py-3 flex items-center justify-between shadow-sm">
+      <div className="md:hidden sticky top-14 z-40 bg-[var(--bg-card)] border-b border-[var(--border-default)] px-4 py-3 flex items-center justify-between shadow-sm">
         <div>
-          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Interest saved</p>
+          <p className="text-xs text-[var(--text-secondary)]">Interest saved</p>
           <p className="text-xl font-bold text-[#10B981] dark:text-[#34D399] tabular-nums">{formatShort(result.interestSaved)}</p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Time saved</p>
+          <p className="text-xs text-[var(--text-secondary)]">Time saved</p>
           <p className="text-base font-bold text-[#F59E0B]">{formatTenure(result.timeSavedMonths)}</p>
         </div>
       </div>
 
       {/* Inputs */}
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-          <h2 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] mb-5 text-lg">Loan Details</h2>
+        <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
+          <h2 className="font-semibold text-[var(--text-primary)] mb-5 text-lg">Loan Details</h2>
           <SliderInput label="Original Loan Amount" value={loanAmt} min={100000} max={50000000} step={50000} onChange={setLoanAmt} prefix="₹" format={formatIndian} hint="From your loan sanction letter" />
           <SliderInput label="Annual Interest Rate" value={rate} min={5} max={20} step={0.1} onChange={setRate} suffix="%" format={(v) => v.toFixed(1)} hint="Current applicable rate" />
           <SliderInput label="Original Tenure" value={tenure} min={1} max={30} step={1} onChange={setTenure} suffix=" yr" format={String} hint="Total loan period agreed" />
           <SliderInput label="EMIs Already Paid" value={emisPaid} min={0} max={tenure * 12 - 1} step={1} onChange={setEmisPaid} suffix=" months" format={String} hint="How many monthly payments done so far" />
         </div>
 
-        <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-          <h2 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] mb-5 text-lg">Prepayment Details</h2>
+        <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
+          <h2 className="font-semibold text-[var(--text-primary)] mb-5 text-lg">Prepayment Details</h2>
           <SliderInput label="Prepayment Amount" value={prepayAmt} min={10000} max={loanAmt} step={10000} onChange={setPrepayAmt} prefix="₹" format={formatIndian} />
           <SliderInput label="Prepayment After (months from now)" value={prepayMonth} min={1} max={Math.max(1, tenure * 12 - emisPaid - 1)} step={1} onChange={setPrepayMonth} suffix=" mo" format={String} />
 
           <div className="mt-4">
-            <p className="text-sm font-medium text-[#0F172A] dark:text-[#F1F5F9] mb-3">After prepayment, I want to:</p>
+            <p className="text-sm font-medium text-[var(--text-primary)] mb-3">After prepayment, I want to:</p>
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => setMode("reduceTenure")}
                 className={`py-3 px-4 rounded-xl text-sm font-medium border transition-all ${
                   mode === "reduceTenure"
                     ? "bg-[#0D9488] text-white border-[#0D9488]"
-                    : "bg-white dark:bg-[#1E293B] text-[#64748B] dark:text-[#94A3B8] border-[#E2E8F0] dark:border-[#334155] hover:border-[#0D9488]"
+                    : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[#0D9488]"
                 }`}
               >
                 Reduce tenure
@@ -182,7 +182,7 @@ export default function PrepayCalculator() {
                 className={`py-3 px-4 rounded-xl text-sm font-medium border transition-all ${
                   mode === "reduceEMI"
                     ? "bg-[#0D9488] text-white border-[#0D9488]"
-                    : "bg-white dark:bg-[#1E293B] text-[#64748B] dark:text-[#94A3B8] border-[#E2E8F0] dark:border-[#334155] hover:border-[#0D9488]"
+                    : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[#0D9488]"
                 }`}
               >
                 Reduce EMI
@@ -200,18 +200,18 @@ export default function PrepayCalculator() {
 
       {/* Comparison */}
       <div className="grid md:grid-cols-2 gap-4">
-        <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-          <p className="text-xs font-semibold text-[#64748B] dark:text-[#94A3B8] uppercase tracking-wide mb-4">Without Prepayment</p>
+        <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
+          <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide mb-4">Without Prepayment</p>
           <Row label="Monthly EMI" value={formatINR(Math.round(result.withoutEMI))} />
           <Row label="Remaining Tenure" value={formatTenure(result.withoutTenure)} />
           <Row label="Total Interest Remaining" value={formatShort(result.withoutInterest)} color="text-red-500" />
           <Row label="Loan Closes On" value={result.withoutClose} />
         </div>
-        <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155] relative overflow-hidden">
+        <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)] relative overflow-hidden">
           <div className="absolute top-0 right-0 bg-[#10B981] dark:bg-[#34D399] text-white text-xs px-3 py-1 rounded-bl-xl font-medium">
             With Prepayment
           </div>
-          <p className="text-xs font-semibold text-[#64748B] dark:text-[#94A3B8] uppercase tracking-wide mb-4">With Prepayment</p>
+          <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide mb-4">With Prepayment</p>
           <Row label="Monthly EMI" value={formatINR(Math.round(result.withEMI))} />
           <Row label="Remaining Tenure" value={formatTenure(result.withTenure)} />
           <Row label="Total Interest Remaining" value={formatShort(result.withInterest)} color="text-[#10B981] dark:text-[#34D399]" />
@@ -221,32 +221,32 @@ export default function PrepayCalculator() {
 
       {/* Savings callout */}
       <div className="bg-[#FFF8E7] border border-[#F59E0B]/30 rounded-2xl p-6">
-        <h3 className="font-bold text-[#0F172A] dark:text-[#F1F5F9] mb-4 text-lg">💰 Your Savings</h3>
+        <h3 className="font-bold text-[var(--text-primary)] mb-4 text-lg">💰 Your Savings</h3>
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="text-center">
             <p className="text-3xl font-bold text-[#F59E0B] tabular-nums result-value" aria-live="polite" aria-atomic="true">
               {formatShort(result.interestSaved)}
             </p>
-            <p className="text-sm text-[#64748B] dark:text-[#94A3B8] mt-1">✅ Interest saved</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">✅ Interest saved</p>
           </div>
           <div className="text-center">
             <p className="text-3xl font-bold text-[#10B981] dark:text-[#34D399] tabular-nums result-value" aria-live="polite" aria-atomic="true">
               {formatTenure(result.timeSavedMonths)}
             </p>
-            <p className="text-sm text-[#64748B] dark:text-[#94A3B8] mt-1">✅ Time saved</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">✅ Time saved</p>
           </div>
           <div className="text-center">
             <p className="text-lg font-bold text-[#0D9488] dark:text-[#14B8A6] result-value">{result.withClose}</p>
-            <p className="text-sm text-[#64748B] dark:text-[#94A3B8] mt-1">🎯 Loan closes on</p>
-            <p className="text-xs text-[#94A3B8]">instead of {result.withoutClose}</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">🎯 Loan closes on</p>
+            <p className="text-xs text-[var(--text-tertiary)]">instead of {result.withoutClose}</p>
           </div>
         </div>
       </div>
 
       {/* Chart */}
-      <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-        <h3 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] mb-1">Outstanding Balance Over Time</h3>
-        <p className="text-xs text-[#94A3B8] mb-4">The gap between the two lines is your interest saving</p>
+      <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
+        <h3 className="font-semibold text-[var(--text-primary)] mb-1">Outstanding Balance Over Time</h3>
+        <p className="text-xs text-[var(--text-tertiary)] mb-4">The gap between the two lines is your interest saving</p>
         <PrepayChart data={result.chartData} />
         <EmailCapture />
       </div>
@@ -260,10 +260,10 @@ export default function PrepayCalculator() {
   );
 }
 
-function Row({ label, value, color = "text-[#0F172A] dark:text-[#F1F5F9]" }: { label: string; value: string; color?: string }) {
+function Row({ label, value, color = "text-[var(--text-primary)]" }: { label: string; value: string; color?: string }) {
   return (
     <div className="flex justify-between items-center py-2.5 border-b border-[#F1F5F9] last:border-0">
-      <span className="text-sm text-[#64748B] dark:text-[#94A3B8]">{label}</span>
+      <span className="text-sm text-[var(--text-secondary)]">{label}</span>
       <span className={`text-sm font-semibold tabular-nums ${color}`}>{value}</span>
     </div>
   );

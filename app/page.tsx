@@ -138,7 +138,7 @@ export default function Home() {
           </svg>
         </div>
         <div className="relative max-w-4xl mx-auto px-4 py-20 text-center">
-          <div className="inline-block bg-white dark:bg-[#1E293B]/10 rounded-full px-4 py-1 text-sm font-medium mb-6 backdrop-blur-sm">
+          <div className="inline-block bg-[var(--bg-card)]/10 rounded-full px-4 py-1 text-sm font-medium mb-6 backdrop-blur-sm">
             Free · No signup · Instant
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 leading-tight">
@@ -160,8 +160,8 @@ export default function Home() {
 
       {/* Calculator cards */}
       <section id="calculators" className="max-w-6xl mx-auto px-4 py-16">
-        <h2 className="text-2xl font-bold text-center text-[#0F172A] dark:text-[#F1F5F9] mb-2">Choose your calculator</h2>
-        <p className="text-center text-[#64748B] dark:text-[#94A3B8] mb-6">Every tool you need for clarity about your money.</p>
+        <h2 className="text-2xl font-bold text-center text-[var(--text-primary)] mb-2">Choose your calculator</h2>
+        <p className="text-center text-[var(--text-secondary)] mb-6">Every tool you need for clarity about your money.</p>
         <FAQSearch />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {calculators.map((c) => (
@@ -173,8 +173,8 @@ export default function Home() {
               <div className={`w-12 h-12 ${c.iconBg} rounded-xl flex items-center justify-center text-2xl mb-4`} aria-hidden="true">
                 {c.emoji}
               </div>
-              <h3 className="font-bold text-[#0F172A] dark:text-[#F1F5F9] mb-1 text-lg">{c.title}</h3>
-              <p className="text-[#64748B] dark:text-[#94A3B8] text-sm leading-relaxed flex-1">{c.desc}</p>
+              <h3 className="font-bold text-[var(--text-primary)] mb-1 text-lg">{c.title}</h3>
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed flex-1">{c.desc}</p>
               <span className="mt-4 text-[#0D9488] dark:text-[#14B8A6] font-semibold text-sm">Calculate →</span>
             </Link>
           ))}
@@ -187,16 +187,16 @@ export default function Home() {
       </section>
 
       {/* Why MoneyMitra */}
-      <section className="bg-white dark:bg-[#1E293B] border-t border-[#E2E8F0] dark:border-[#334155] py-16" aria-label="Why use MoneyMitra">
+      <section className="bg-[var(--bg-card)] border-t border-[var(--border-default)] py-16" aria-label="Why use MoneyMitra">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-[#0F172A] dark:text-[#F1F5F9] mb-2">Why MoneyMitra?</h2>
-          <p className="text-[#64748B] dark:text-[#94A3B8] mb-10">Built for real people making real money decisions</p>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Why MoneyMitra?</h2>
+          <p className="text-[var(--text-secondary)] mb-10">Built for real people making real money decisions</p>
           <div className="grid sm:grid-cols-3 gap-6">
             {features.map((f) => (
-              <div key={f.title} className="flex flex-col items-center p-6 rounded-2xl bg-[#F8FAFC] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-[#334155]">
+              <div key={f.title} className="flex flex-col items-center p-6 rounded-2xl bg-[var(--bg-base)] border border-[var(--border-default)]">
                 <span className="text-4xl mb-3" aria-hidden="true">{f.icon}</span>
-                <h3 className="font-bold text-[#0F172A] dark:text-[#F1F5F9] mb-1">{f.title}</h3>
-                <p className="text-[#64748B] dark:text-[#94A3B8] text-sm">{f.desc}</p>
+                <h3 className="font-bold text-[var(--text-primary)] mb-1">{f.title}</h3>
+                <p className="text-[var(--text-secondary)] text-sm">{f.desc}</p>
               </div>
             ))}
           </div>

@@ -59,20 +59,20 @@ export default function SliderInput({
     <div className="mb-6">
       <div className="flex items-center justify-between gap-3 mb-2 flex-wrap">
         <div>
-          <label className="text-sm font-medium text-[#0F172A] dark:text-[#F1F5F9] leading-tight">{label}</label>
-          {hint && <p className="text-xs text-[#94A3B8] mt-0.5">{hint}</p>}
+          <label className="text-sm font-medium text-[var(--text-primary)] leading-tight">{label}</label>
+          {hint && <p className="text-xs text-[var(--text-tertiary)] mt-0.5">{hint}</p>}
         </div>
-        <div className="flex items-center gap-1 bg-[#F1F5F9] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-[#334155] rounded-xl px-3 py-2 min-w-[130px] max-w-[160px]">
-          {prefix && <span className="text-[#64748B] dark:text-[#94A3B8] text-sm flex-shrink-0">{prefix}</span>}
+        <div className="flex items-center gap-1 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-3 py-2 min-w-[130px] max-w-[160px]">
+          {prefix && <span className="text-[var(--text-secondary)] text-sm flex-shrink-0">{prefix}</span>}
           <input
             type="text"
             value={inputStr}
             onChange={e => handleInputChange(e.target.value)}
             onBlur={handleBlur}
-            className="bg-transparent text-right text-sm font-bold text-[#0F172A] dark:text-[#F1F5F9] w-full outline-none tabular-nums min-w-0"
+            className="bg-transparent text-right text-sm font-bold text-[var(--text-primary)] w-full outline-none tabular-nums min-w-0"
             inputMode="numeric"
           />
-          {suffix && <span className="text-[#64748B] dark:text-[#94A3B8] text-sm ml-1 flex-shrink-0">{suffix}</span>}
+          {suffix && <span className="text-[var(--text-secondary)] text-sm ml-1 flex-shrink-0">{suffix}</span>}
         </div>
       </div>
       <div className="relative py-1">
@@ -91,7 +91,7 @@ export default function SliderInput({
           style={{ background: "transparent" }}
         />
       </div>
-      <div className="flex justify-between text-xs text-[#94A3B8] mt-0.5">
+      <div className="flex justify-between text-xs text-[var(--text-tertiary)] mt-0.5">
         {rangeHint ? (
           <span className="text-slate-400">{rangeHint}</span>
         ) : (

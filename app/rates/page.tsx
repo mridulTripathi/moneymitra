@@ -3,6 +3,7 @@ import RatesPage from "./RatesPage";
 import FAQAccordion from "@/components/FAQAccordion";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
+import EmailCapture from "@/components/EmailCapture";
 import { createServiceClient } from "@/lib/supabase";
 import { pages, SITE_URL, SITE_NAME } from "@/lib/seo";
 
@@ -89,7 +90,7 @@ export default async function Page() {
       <JsonLd data={datasetSchema} />
       <JsonLd data={ratesFaqSchema} />
 
-      <nav aria-label="Breadcrumb" className="text-xs text-[#94A3B8] mb-4">
+      <nav aria-label="Breadcrumb" className="text-xs text-[var(--text-tertiary)] mb-4">
         <ol className="flex items-center gap-1">
           <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
           <li aria-hidden="true">›</li>
@@ -99,11 +100,35 @@ export default async function Page() {
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-[#0F172A] mb-2">Current Bank Interest Rates</h1>
-        <p className="text-[#64748B]">Latest home loan, FD and personal loan rates from major Indian banks and RBI policy rates.</p>
+        <div className="flex flex-wrap items-center gap-3 mt-2">
+          <div className="flex items-center gap-1.5 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-xs font-medium px-3 py-1 rounded-full">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            RBI Repo Rate: Live
+          </div>
+          <span className="text-slate-500 dark:text-slate-400 text-sm">
+            Bank rates updated monthly{lastUpdated ? ` · Last updated: ${new Date(lastUpdated).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''}
+          </span>
+        </div>
+        <p className="text-xs text-[var(--text-tertiary)] mt-2">
+          RBI policy rates (repo, CRR, SLR) update automatically. Bank product rates are verified and updated after each RBI MPC meeting.
+        </p>
       </div>
 
       <FAQSearch />
       <RatesPage rbi={rbi} bankRates={bankRates} lastUpdated={lastUpdated} />
+      <div className="bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 rounded-2xl p-6 mt-6">
+        <div className="flex items-start gap-3">
+          <span className="text-2xl">📬</span>
+          <div className="flex-1">
+            <h3 className="font-semibold text-[var(--text-primary)]">Get rate change alerts</h3>
+            <p className="text-sm text-[var(--text-secondary)] mt-0.5">We&apos;ll email you when RBI changes the repo rate or when bank rates update. One email per change. No spam, ever.</p>
+            <EmailCapture sourcePage="rates" />
+          </div>
+        </div>
+      </div>
       <FAQAccordion items={ratesFaqs} />
     </div>
   );

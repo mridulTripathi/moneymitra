@@ -101,3 +101,31 @@ INSERT INTO bank_rates (bank_name, bank_short_name, bank_type, rate_type, min_ra
 ('Axis Bank', 'Axis', 'private', 'personal_loan', 11.25, 22.00, '2026-06-01', 'https://www.axisbank.com/retail/loans/personal-loan'),
 ('Bajaj Finserv', 'Bajaj', 'nbfc', 'personal_loan', 13.00, 26.00, '2026-06-01', 'https://www.bajajfinserv.in/personal-loan'),
 ('Tata Capital', 'Tata', 'nbfc', 'personal_loan', 10.99, 35.00, '2026-06-01', 'https://www.tatacapital.com/personal-loan.html');
+
+-- Car loan rates (car_loan)
+INSERT INTO bank_rates (bank_name, bank_short_name, bank_type, rate_type, min_rate, max_rate, senior_citizen_extra, bank_url, effective_date) VALUES
+('State Bank of India', 'SBI', 'public_sector', 'car_loan', 9.15, 13.75, 0, 'https://sbi.co.in', '2026-06-01'),
+('HDFC Bank', 'HDFC', 'private', 'car_loan', 9.10, 13.50, 0, 'https://hdfcbank.com', '2026-06-01'),
+('ICICI Bank', 'ICICI', 'private', 'car_loan', 9.10, 13.75, 0, 'https://icicibank.com', '2026-06-01'),
+('Axis Bank', 'Axis', 'private', 'car_loan', 9.25, 14.00, 0, 'https://axisbank.com', '2026-06-01'),
+('Kotak Mahindra Bank', 'Kotak', 'private', 'car_loan', 9.25, 13.50, 0, 'https://kotak.com', '2026-06-01'),
+('Bajaj Finance', 'Bajaj', 'nbfc', 'car_loan', 6.99, 15.00, 0, 'https://bajajfinserv.in', '2026-06-01')
+ON CONFLICT DO NOTHING;
+
+-- RD rates (rd_1yr)
+INSERT INTO bank_rates (bank_name, bank_short_name, bank_type, rate_type, min_rate, max_rate, senior_citizen_extra, bank_url, effective_date) VALUES
+('State Bank of India', 'SBI', 'public_sector', 'rd_1yr', 6.80, 6.80, 0.50, 'https://sbi.co.in', '2026-06-01'),
+('HDFC Bank', 'HDFC', 'private', 'rd_1yr', 7.00, 7.00, 0.50, 'https://hdfcbank.com', '2026-06-01'),
+('ICICI Bank', 'ICICI', 'private', 'rd_1yr', 6.90, 6.90, 0.50, 'https://icicibank.com', '2026-06-01'),
+('Axis Bank', 'Axis', 'private', 'rd_1yr', 7.10, 7.10, 0.50, 'https://axisbank.com', '2026-06-01'),
+('Kotak Mahindra Bank', 'Kotak', 'private', 'rd_1yr', 7.25, 7.25, 0.50, 'https://kotak.com', '2026-06-01'),
+('Yes Bank', 'Yes', 'private', 'rd_1yr', 7.75, 7.75, 0.50, 'https://yesbank.in', '2026-06-01'),
+('IDFC First Bank', 'IDFC', 'private', 'rd_1yr', 7.75, 7.75, 0.50, 'https://idfcfirstbank.com', '2026-06-01'),
+('Punjab National Bank', 'PNB', 'public_sector', 'rd_1yr', 6.80, 6.80, 0.50, 'https://pnbindia.in', '2026-06-01'),
+('Bank of Baroda', 'BoB', 'public_sector', 'rd_1yr', 6.85, 6.85, 0.50, 'https://bankofbaroda.in', '2026-06-01'),
+('Canara Bank', 'Canara', 'public_sector', 'rd_1yr', 6.85, 6.85, 0.50, 'https://canarabank.com', '2026-06-01'),
+('AU Small Finance Bank', 'AU SFB', 'small_finance', 'rd_1yr', 7.75, 7.75, 0.50, 'https://aubank.in', '2026-06-01'),
+('Jana Small Finance Bank', 'Jana SFB', 'small_finance', 'rd_1yr', 8.10, 8.10, 0.50, 'https://janabank.in', '2026-06-01'),
+('Ujjivan Small Finance Bank', 'Ujjivan SFB', 'small_finance', 'rd_1yr', 8.15, 8.15, 0.50, 'https://ujjivansfb.in', '2026-06-01'),
+('Suryoday Small Finance Bank', 'Suryoday SFB', 'small_finance', 'rd_1yr', 8.50, 8.50, 0.50, 'https://suryodaybank.com', '2026-06-01')
+ON CONFLICT DO NOTHING;

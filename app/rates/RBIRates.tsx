@@ -12,12 +12,12 @@ export default function RBIRates({ rbi }: Props) {
   ].filter((i) => i.value != null);
 
   return (
-    <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-5 shadow-sm border border-[#E2E8F0] dark:border-[#334155] mb-5">
-      <p className="text-sm font-semibold text-[#0F172A] dark:text-[#F1F5F9] mb-3">RBI Policy Rates</p>
+    <div className="bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm border border-[var(--border-default)] mb-5">
+      <p className="text-sm font-semibold text-[var(--text-primary)] mb-3">RBI Policy Rates</p>
       <div className="flex flex-wrap gap-3">
         {items.map((i) => (
-          <div key={i.label} className="bg-[#F0FDFA] dark:bg-[#042F2E] border border-[#0D9488]/20 rounded-xl px-4 py-3 min-w-[110px]">
-            <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-0.5">{i.label}</p>
+          <div key={i.label} className="bg-[var(--tip-bg)] border border-[#0D9488]/20 rounded-xl px-4 py-3 min-w-[110px]">
+            <p className="text-xs text-[var(--text-secondary)] mb-0.5">{i.label}</p>
             <p className="text-xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums">{Number(i.value).toFixed(2)}%</p>
           </div>
         ))}
