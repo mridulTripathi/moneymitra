@@ -10,6 +10,7 @@ const PrepayChart = dynamic(() => import("./PrepayChart"), {
 import SliderInput from "@/components/SliderInput";
 import PrepayTips from "@/components/tips/PrepayTips";
 import { calcEMI, amortizationSchedule, formatINR, formatShort, formatTenure, addMonths, formatIndian } from "@/lib/utils";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 type Mode = "reduceTenure" | "reduceEMI";
 
@@ -224,15 +225,11 @@ export default function PrepayCalculator() {
         <h3 className="font-bold text-[var(--text-primary)] mb-4 text-lg">💰 Your Savings</h3>
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="text-center">
-            <p className="text-3xl font-bold text-[#F59E0B] tabular-nums result-value" aria-live="polite" aria-atomic="true">
-              {formatShort(result.interestSaved)}
-            </p>
+            <AnimatedNumber value={result.interestSaved} duration={700} formatter={(n) => formatShort(n)} className="text-3xl font-bold text-[#F59E0B] tabular-nums result-value" aria-live="polite" aria-atomic="true" />
             <p className="text-sm text-[var(--text-secondary)] mt-1">✅ Interest saved</p>
           </div>
           <div className="text-center">
-            <p className="text-3xl font-bold text-[#10B981] dark:text-[#34D399] tabular-nums result-value" aria-live="polite" aria-atomic="true">
-              {formatTenure(result.timeSavedMonths)}
-            </p>
+            <AnimatedNumber value={result.timeSavedMonths} duration={700} formatter={(n) => formatTenure(Math.round(n))} className="text-3xl font-bold text-[#10B981] dark:text-[#34D399] tabular-nums result-value" aria-live="polite" aria-atomic="true" />
             <p className="text-sm text-[var(--text-secondary)] mt-1">✅ Time saved</p>
           </div>
           <div className="text-center">

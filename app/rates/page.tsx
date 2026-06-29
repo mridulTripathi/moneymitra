@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import RatesPage from "./RatesPage";
 import FAQAccordion from "@/components/FAQAccordion";
 import FAQSearch from "@/components/FAQSearch";
@@ -118,7 +119,9 @@ export default async function Page() {
       </div>
 
       <FAQSearch />
-      <RatesPage rbi={rbi} bankRates={bankRates} lastUpdated={lastUpdated} />
+      <Suspense fallback={null}>
+        <RatesPage rbi={rbi} bankRates={bankRates} lastUpdated={lastUpdated} />
+      </Suspense>
       <div className="bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 rounded-2xl p-6 mt-6">
         <div className="flex items-start gap-3">
           <span className="text-2xl">📬</span>

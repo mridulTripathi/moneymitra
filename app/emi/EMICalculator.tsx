@@ -6,6 +6,7 @@ import EmailCapture from "@/components/EmailCapture";
 import EMITips from "@/components/tips/EMITips";
 import { calcEMI, amortizationSchedule, formatINR, formatShort, formatIndian } from "@/lib/utils";
 import { track, getLoanRange } from "@/lib/analytics";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 const EMIChart = dynamic(() => import("./EMIChart"), {
   ssr: false,
@@ -112,17 +113,15 @@ export default function EMICalculator() {
           {/* Desktop result card */}
           <div className="hidden md:block bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
             <p className="text-sm text-[var(--text-secondary)] mb-1">Monthly EMI</p>
-            <p className="text-5xl font-bold text-[#F59E0B] tabular-nums result-value" aria-live="polite" aria-atomic="true">
-              {formatINR(Math.round(emi))}
-            </p>
+            <AnimatedNumber value={emi} duration={500} formatter={(n) => formatINR(Math.round(n))} className="text-5xl font-bold text-[#F59E0B] tabular-nums result-value" aria-live="polite" aria-atomic="true" />
             <div className="mt-5 grid grid-cols-2 gap-4">
               <div className="bg-[var(--bg-base)] rounded-xl p-3">
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Total Payable</p>
-                <p className="font-bold text-[var(--text-primary)] tabular-nums text-lg" aria-live="polite">{formatShort(totalPayable)}</p>
+                <AnimatedNumber value={totalPayable} duration={600} formatter={(n) => formatShort(n)} className="font-bold text-[var(--text-primary)] tabular-nums text-lg" aria-live="polite" />
               </div>
               <div className="bg-red-50 rounded-xl p-3">
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Total Interest</p>
-                <p className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite">{formatShort(totalInterest)}</p>
+                <AnimatedNumber value={totalInterest} duration={600} formatter={(n) => formatShort(n)} className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite" />
               </div>
             </div>
           </div>

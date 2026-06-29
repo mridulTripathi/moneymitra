@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { track } from "@/lib/analytics";
 import RBIRates from "./RBIRates";
 import BankRatesTable from "./BankRatesTable";
@@ -27,8 +28,20 @@ type LoanTabKey = typeof LOAN_TABS[number]['key'];
 type InvestTabKey = typeof INVEST_TABS[number]['key'];
 
 export default function RatesPage({ rbi, bankRates }: Props) {
-  const [loanTab, setLoanTab] = useState<LoanTabKey>('home_loan');
-  const [investTab, setInvestTab] = useState<InvestTabKey>('fd_1yr');
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab');
+
+  const [loanTab, setLoanTab] = useState<LoanTabKey>(() => {
+    if (tabParam === 'home-loan') return 'home_loan';
+    if (tabParam === 'personal-loan') return 'personal_loan';
+    if (tabParam === 'car-loan') return 'car_loan';
+    return 'home_loan';
+  });
+  const [investTab, setInvestTab] = useState<InvestTabKey>(() => {
+    if (tabParam === 'fd') return 'fd_1yr';
+    if (tabParam === 'rd') return 'rd_1yr';
+    return 'fd_1yr';
+  });
   const [showSenior, setShowSenior] = useState(false);
 
   return (

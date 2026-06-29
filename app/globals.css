@@ -145,6 +145,10 @@ input[type="range"]::-moz-range-thumb {
 }
 
 
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }

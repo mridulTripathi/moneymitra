@@ -23,7 +23,7 @@ export default function TaxChart({ oldTax, newTax }: Props) {
           <XAxis type="number" tickFormatter={(v) => `₹${(v / 100000).toFixed(0)}L`} tick={{ fontSize: 11 }} />
           <YAxis type="category" dataKey="name" tick={{ fontSize: 13, fontWeight: 600 }} width={90} />
           <Tooltip formatter={(v) => formatINR(Math.round(Number(v)))} />
-          <Bar dataKey="tax" radius={[0, 6, 6, 0]}>
+          <Bar dataKey="tax" radius={[0, 6, 6, 0]} animationBegin={0} animationDuration={500} isAnimationActive={true}>
             {data.map((entry, i) => (
               <Cell key={i} fill={entry.name === "New Regime" ? "#0D9488" : "#7C3AED"} />
             ))}

@@ -4,6 +4,9 @@ import JsonLd from "@/components/JsonLd";
 import FAQSearch from "@/components/FAQSearch";
 import FAQAccordion from "@/components/FAQAccordion";
 import { SITE_URL, SITE_NAME, pages } from "@/lib/seo";
+import { createServiceClient } from "@/lib/supabase";
+
+export const revalidate = 21600;
 
 export const metadata: Metadata = {
   title: { absolute: "MoneyMitra — Free Financial Calculators for India" },
@@ -22,6 +25,24 @@ export const metadata: Metadata = {
     description: pages.home.description,
   },
 };
+
+async function getRatesSnapshot() {
+  try {
+    const client = createServiceClient();
+    const [rbiRes, bankRes] = await Promise.all([
+      client.from('rbi_policy_rates').select('*').order('effective_date', { ascending: false }).limit(1).single(),
+      client.from('bank_rates').select('bank_name,bank_short_name,rate_type,min_rate,max_rate').in('rate_type', ['home_loan', 'fd_1yr', 'personal_loan']),
+    ]);
+    const rbi = rbiRes.data;
+    const banks = bankRes.data ?? [];
+    const bestHomeLoan = banks.filter((b: {rate_type: string, min_rate: number}) => b.rate_type === 'home_loan').sort((a: {min_rate: number}, b: {min_rate: number}) => a.min_rate - b.min_rate)[0];
+    const bestFD = banks.filter((b: {rate_type: string, max_rate: number}) => b.rate_type === 'fd_1yr').sort((a: {max_rate: number}, b: {max_rate: number}) => b.max_rate - a.max_rate)[0];
+    const bestPersonalLoan = banks.filter((b: {rate_type: string, min_rate: number}) => b.rate_type === 'personal_loan').sort((a: {min_rate: number}, b: {min_rate: number}) => a.min_rate - b.min_rate)[0];
+    return { rbi, bestHomeLoan, bestFD, bestPersonalLoan };
+  } catch {
+    return { rbi: null, bestHomeLoan: null, bestFD: null, bestPersonalLoan: null };
+  }
+}
 
 const webAppSchema = {
   "@context": "https://schema.org",
@@ -119,7 +140,9 @@ const features = [
   { icon: "📱", title: "Works everywhere", desc: "Optimised for phone, tablet, and laptop" },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const ratesSnapshot = await getRatesSnapshot();
+
   return (
     <>
       <JsonLd data={webAppSchema} />
@@ -155,6 +178,90 @@ export default function Home() {
           >
             Start Calculating →
           </a>
+        </div>
+      </section>
+
+      {/* Live Rates Section */}
+      <section className="bg-slate-50 dark:bg-[#0a0f1a] py-8 -mx-4 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
+              📊 Live Market Rates
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+            </h2>
+            <span className="text-xs text-[var(--text-tertiary)]">Updated monthly</span>
+          </div>
+
+          {/* RBI Strip */}
+          <div className="bg-slate-900 dark:bg-[#0a1219] rounded-xl px-5 py-3 mb-4 overflow-hidden">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+              <span className="text-green-400 font-bold text-xs tracking-widest uppercase flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                RBI LIVE
+              </span>
+              {ratesSnapshot.rbi ? (
+                <>
+                  <span className="text-white">Repo <span className="text-green-400 font-semibold">{(ratesSnapshot.rbi as {repo_rate: number}).repo_rate}%</span></span>
+                  {(ratesSnapshot.rbi as {crr: number | null}).crr && <span className="text-white">CRR <span className="text-slate-300 font-semibold">{(ratesSnapshot.rbi as {crr: number | null}).crr}%</span></span>}
+                  {(ratesSnapshot.rbi as {slr: number | null}).slr && <span className="text-white">SLR <span className="text-slate-300 font-semibold">{(ratesSnapshot.rbi as {slr: number | null}).slr}%</span></span>}
+                  {(ratesSnapshot.rbi as {bank_rate?: number | null}).bank_rate && <span className="text-white">Bank Rate <span className="text-slate-300 font-semibold">{(ratesSnapshot.rbi as {bank_rate?: number | null}).bank_rate}%</span></span>}
+                </>
+              ) : (
+                <span className="text-slate-400 text-sm">Loading RBI rates...</span>
+              )}
+            </div>
+          </div>
+
+          {/* Best Rate Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* Home Loan */}
+            <a href="/rates?tab=home-loan" className="bg-[var(--bg-card)] border-l-4 border-[#0D9488] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow block">
+              <p className="text-xs text-[var(--text-secondary)] font-medium mb-1">🏠 Best Home Loan</p>
+              {ratesSnapshot.bestHomeLoan ? (
+                <>
+                  <p className="text-3xl font-bold text-[#0D9488]">From {(ratesSnapshot.bestHomeLoan as {min_rate: number}).min_rate}%</p>
+                  <p className="text-sm text-[var(--text-secondary)] mt-1">{(ratesSnapshot.bestHomeLoan as {bank_name: string}).bank_name}</p>
+                </>
+              ) : (
+                <div className="h-10 bg-[var(--bg-elevated)] rounded animate-pulse mt-1" />
+              )}
+              <p className="text-xs text-[#0D9488] mt-3 font-medium">See all rates →</p>
+            </a>
+
+            {/* FD */}
+            <a href="/rates?tab=fd" className="bg-[var(--bg-card)] border-l-4 border-[#F59E0B] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow block">
+              <p className="text-xs text-[var(--text-secondary)] font-medium mb-1">💰 Best FD Rate</p>
+              {ratesSnapshot.bestFD ? (
+                <>
+                  <p className="text-3xl font-bold text-[#F59E0B]">Up to {(ratesSnapshot.bestFD as {max_rate: number}).max_rate}%</p>
+                  <p className="text-sm text-[var(--text-secondary)] mt-1">{(ratesSnapshot.bestFD as {bank_name: string}).bank_name}</p>
+                </>
+              ) : (
+                <div className="h-10 bg-[var(--bg-elevated)] rounded animate-pulse mt-1" />
+              )}
+              <p className="text-xs text-[#F59E0B] mt-3 font-medium">See all rates →</p>
+            </a>
+
+            {/* Personal Loan */}
+            <a href="/rates?tab=personal-loan" className="bg-[var(--bg-card)] border-l-4 border-blue-500 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow block">
+              <p className="text-xs text-[var(--text-secondary)] font-medium mb-1">📋 Best Personal Loan</p>
+              {ratesSnapshot.bestPersonalLoan ? (
+                <>
+                  <p className="text-3xl font-bold text-blue-500">From {(ratesSnapshot.bestPersonalLoan as {min_rate: number}).min_rate}%</p>
+                  <p className="text-sm text-[var(--text-secondary)] mt-1">{(ratesSnapshot.bestPersonalLoan as {bank_name: string}).bank_name}</p>
+                </>
+              ) : (
+                <div className="h-10 bg-[var(--bg-elevated)] rounded animate-pulse mt-1" />
+              )}
+              <p className="text-xs text-blue-500 mt-3 font-medium">See all rates →</p>
+            </a>
+          </div>
         </div>
       </section>
 

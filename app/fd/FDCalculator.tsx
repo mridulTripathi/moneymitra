@@ -5,6 +5,7 @@ import SliderInput from "@/components/SliderInput";
 import EmailCapture from "@/components/EmailCapture";
 import { formatINR, formatShort, formatIndian } from "@/lib/utils";
 import { calculateFDMaturity, calculateRDMaturity, type CompoundingFrequency } from "@/lib/calculators/fd";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 const FDChart = dynamic(() => import("./FDChart"), {
   ssr: false,
@@ -129,7 +130,7 @@ export default function FDCalculator() {
         <div className="flex flex-col gap-4">
           <div className="hidden md:block bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
             <p className="text-sm text-[var(--text-secondary)] mb-1">Maturity Value</p>
-            <p className="text-5xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums" aria-live="polite" aria-atomic="true">{formatINR(Math.round(maturity))}</p>
+            <AnimatedNumber value={maturity} duration={700} formatter={(n) => formatINR(Math.round(n))} className="text-5xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums" aria-live="polite" aria-atomic="true" />
             <div className="mt-5 grid grid-cols-2 gap-4">
               <div className="bg-[var(--bg-base)] rounded-xl p-3">
                 <p className="text-xs text-[var(--text-secondary)] mb-1">{isFD ? "Invested" : "Total Deposited"}</p>
@@ -137,7 +138,7 @@ export default function FDCalculator() {
               </div>
               <div className="bg-green-50 rounded-xl p-3">
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Interest Earned</p>
-                <p className="font-bold text-[#10B981] dark:text-[#34D399] tabular-nums text-lg" aria-live="polite">{formatShort(interest)}</p>
+                <AnimatedNumber value={interest} duration={600} formatter={(n) => formatShort(n)} className="font-bold text-[#10B981] dark:text-[#34D399] tabular-nums text-lg" aria-live="polite" />
               </div>
             </div>
             {isFD && (

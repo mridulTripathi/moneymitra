@@ -14,7 +14,7 @@ export default function FDChart({ data }: Props) {
           <XAxis dataKey="year" tick={{ fontSize: 11 }} label={{ value: "Year", position: "insideBottom", offset: -2 }} />
           <YAxis tickFormatter={(v) => `₹${(v / 100000).toFixed(1)}L`} tick={{ fontSize: 11 }} />
           <Tooltip formatter={(v) => formatINR(Math.round(Number(v)))} labelFormatter={(l) => `Year ${l}`} />
-          <Line type="monotone" dataKey="value" stroke="#0D9488" strokeWidth={2.5} dot={false} />
+          <Line type="monotone" dataKey="value" stroke="#0D9488" strokeWidth={2.5} dot={false} animationBegin={0} animationDuration={500} isAnimationActive={true} />
         </LineChart>
       </ResponsiveContainer>
     </div>

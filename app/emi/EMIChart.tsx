@@ -22,9 +22,9 @@ export default function EMIChart({ principal, totalInterest, totalPayable }: Pro
       role="img"
       aria-label={`Pie chart showing principal ₹${Math.round(principal / 100000)}L vs interest ₹${Math.round(totalInterest / 100000)}L`}
     >
-      <ResponsiveContainer width="100%" height={200}>
+      <ResponsiveContainer width="100%" height={220}>
         <PieChart>
-          <Pie data={pieData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="value">
+          <Pie data={pieData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="value" animationBegin={0} animationDuration={500}>
             <Cell fill={TEAL} />
             <Cell fill={AMBER} />
           </Pie>

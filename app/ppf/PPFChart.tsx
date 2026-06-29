@@ -15,8 +15,8 @@ export default function PPFChart({ data }: Props) {
           <YAxis tickFormatter={(v) => `₹${(v / 100000).toFixed(0)}L`} tick={{ fontSize: 11 }} />
           <Tooltip formatter={(v, n) => [formatINR(Math.round(Number(v))), n === "invested" ? "Invested" : "Interest"]} labelFormatter={(l) => `Year ${l}`} />
           <Legend formatter={(v) => (v === "invested" ? "Cumulative Invested" : "Cumulative Interest")} />
-          <Bar dataKey="invested" stackId="a" fill="#0D9488" />
-          <Bar dataKey="interest" stackId="a" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="invested" stackId="a" fill="#0D9488" animationBegin={0} animationDuration={500} isAnimationActive={true} />
+          <Bar dataKey="interest" stackId="a" fill="#F59E0B" radius={[4, 4, 0, 0]} animationBegin={0} animationDuration={500} isAnimationActive={true} />
         </BarChart>
       </ResponsiveContainer>
     </div>

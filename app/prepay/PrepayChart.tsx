@@ -18,8 +18,8 @@ export default function PrepayChart({ data }: Props) {
           <YAxis tickFormatter={(v) => `₹${(v / 100000).toFixed(0)}L`} tick={{ fontSize: 11 }} />
           <Tooltip formatter={(v) => formatINR(Math.round(Number(v)))} labelFormatter={(l) => `Month ${l}`} />
           <Legend />
-          <Line type="monotone" dataKey="without" stroke="#F59E0B" name="Without Prepayment" dot={false} strokeWidth={2} />
-          <Line type="monotone" dataKey="with" stroke="#0D9488" name="With Prepayment" dot={false} strokeWidth={2} />
+          <Line type="monotone" dataKey="without" stroke="#F59E0B" name="Without Prepayment" dot={false} strokeWidth={2} animationBegin={0} animationDuration={500} isAnimationActive={true} />
+          <Line type="monotone" dataKey="with" stroke="#0D9488" name="With Prepayment" dot={false} strokeWidth={2} animationBegin={0} animationDuration={500} isAnimationActive={true} />
         </LineChart>
       </ResponsiveContainer>
     </div>

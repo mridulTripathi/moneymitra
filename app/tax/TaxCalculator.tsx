@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { formatINR, formatShort, formatIndian } from "@/lib/utils";
 import EmailCapture from "@/components/EmailCapture";
 import TaxTips from "@/components/tips/TaxTips";
+import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
 const TaxChart = dynamic(() => import("./TaxChart"), {
   ssr: false,
@@ -249,11 +250,11 @@ export default function TaxCalculator() {
       >
         <p className="text-2xl font-bold mb-1">
           {result.winner === "new" ? "🎉 New Regime" : "🏆 Old Regime"} saves you{" "}
-          {formatShort(result.savedAmt)} this year
+          <AnimatedNumber value={result.savedAmt} duration={700} formatter={(n) => formatShort(n)} /> this year
         </p>
         <p className="text-sm opacity-90">
           You save{" "}
-          <strong>{formatINR(Math.round(result.savedAmt / 12))}/month</strong> by choosing the{" "}
+          <strong><AnimatedNumber value={result.savedAmt / 12} duration={700} formatter={(n) => formatINR(Math.round(n))} />/month</strong> by choosing the{" "}
           {result.winner === "new" ? "New" : "Old"} Regime
         </p>
       </div>
@@ -284,7 +285,10 @@ export default function TaxCalculator() {
               <div className="my-2 border-t border-dashed border-[var(--border-default)]" />
               <TaxRow label="Tax (before cess)" value={formatINR(Math.round(r.taxBefore))} />
               <TaxRow label="Health & Education Cess (4%)" value={formatINR(Math.round(r.cess))} />
-              <TaxRow label="Total Tax" value={formatINR(Math.round(r.total))} bold color="text-red-500" />
+              <div className="flex justify-between items-center py-1.5">
+                <span className="text-sm text-[var(--text-secondary)]">Total Tax</span>
+                <AnimatedNumber value={r.total} duration={500} formatter={(n) => formatINR(Math.round(n))} className="text-sm tabular-nums font-bold text-red-500" />
+              </div>
               <div className="mt-3 p-3 bg-[#F0FDF9] rounded-xl">
                 <p className="text-xs text-[var(--text-secondary)]">Monthly Take-Home</p>
                 <p className="text-xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums">
