@@ -3,6 +3,7 @@ import LoanVsCardCalculator from "./LoanVsCardCalculator";
 import FAQAccordion from "@/components/FAQAccordion";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
+import { DisclaimerBar } from "@/components/DisclaimerBar";
 import { pages, SITE_URL, SITE_NAME } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -54,6 +55,8 @@ const breadcrumbSchema = {
 
 export default function LoanVsCardPage() {
   return (
+    <>
+    <DisclaimerBar />
     <div className="max-w-5xl mx-auto px-4 py-8">
       <JsonLd data={faqSchema} />
       <JsonLd data={howToSchema} />
@@ -76,5 +79,6 @@ export default function LoanVsCardPage() {
       <LoanVsCardCalculator />
       <FAQAccordion items={faqs} />
     </div>
+    </>
   );
 }

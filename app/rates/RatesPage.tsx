@@ -96,7 +96,9 @@ export default function RatesPage({ rbi, bankRates }: Props) {
           ))}
         </div>
         {investTab === 'rd_1yr' && (
-          <p className="text-xs text-[var(--text-tertiary)] mb-3">RD interest is compounded quarterly. Rates are typically similar to FD rates for the same tenure.</p>
+          <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3 mb-3">
+            <p className="text-sm text-blue-700 dark:text-blue-300">💡 RD interest is compounded quarterly by most banks. Rates shown are for 1-year tenure and are typically similar to FD rates.</p>
+          </div>
         )}
         <BankRatesTable
           rates={bankRates.filter(r => {
@@ -105,6 +107,7 @@ export default function RatesPage({ rbi, bankRates }: Props) {
           })}
           showSenior={showSenior}
           isFD={investTab === 'fd_1yr' || investTab === 'fd_sfb' || investTab === 'rd_1yr'}
+          isRD={investTab === 'rd_1yr'}
         />
       </div>
     </>

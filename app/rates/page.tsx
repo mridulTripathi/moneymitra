@@ -119,6 +119,12 @@ export default async function Page() {
       </div>
 
       <FAQSearch />
+      <div className="bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-400 dark:border-amber-600 rounded-r-xl p-4 my-6">
+        <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">⚠️ Important: Rates shown are indicative only</p>
+        <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+          Bank interest rates change without notice. MoneyMitra updates rates monthly but cannot guarantee real-time accuracy. Always verify the current rate directly with your bank before making any deposit or loan decision. This is not financial advice.
+        </p>
+      </div>
       <Suspense fallback={null}>
         <RatesPage rbi={rbi} bankRates={bankRates} lastUpdated={lastUpdated} />
       </Suspense>

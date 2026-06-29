@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import JsonLd from "@/components/JsonLd";
 import FAQSearch from "@/components/FAQSearch";
 import FAQAccordion from "@/components/FAQAccordion";
+import { SuggestToolForm } from "@/components/SuggestTool";
 import { SITE_URL, SITE_NAME, pages } from "@/lib/seo";
 import { createServiceClient } from "@/lib/supabase";
 
@@ -308,6 +309,16 @@ export default async function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Suggest a Tool */}
+      <section className="bg-teal-50 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-800 rounded-2xl p-8 mx-auto max-w-2xl my-12">
+        <div className="text-center mb-6">
+          <span className="text-3xl">🛠️</span>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200 mt-2">What tool should we build next?</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Tell us what financial calculation you wish existed. We read every suggestion.</p>
+        </div>
+        <SuggestToolForm sourcePage="home" />
       </section>
 
       {/* Home FAQ */}

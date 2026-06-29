@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/ThemeProvider";
+import { ConditionalSuggestButton } from "@/components/ConditionalSuggestButton";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
 
 const inter = Inter({
@@ -75,6 +76,7 @@ export default function RootLayout({
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+          <ConditionalSuggestButton />
         </ThemeProvider>
       </body>
     </html>

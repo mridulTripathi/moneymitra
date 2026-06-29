@@ -5,33 +5,84 @@ import { FAQ_DATA, FAQItem } from "@/lib/faq-data";
 import { track } from "@/lib/analytics";
 
 const fuse = new Fuse(FAQ_DATA, {
-  keys: ["question", "keywords", "answer"],
-  threshold: 0.4,
+  keys: [
+    { name: 'question', weight: 0.6 },
+    { name: 'keywords', weight: 0.3 },
+    { name: 'answer', weight: 0.1 }
+  ],
+  threshold: 0.25,
+  minMatchCharLength: 3,
   includeScore: true,
+  ignoreLocation: true,
+  useExtendedSearch: false,
 });
+
+function getBestMatches(query: string): FAQItem[] {
+  const results = fuse.search(query);
+  return results.filter(r => (r.score ?? 1) < 0.25).slice(0, 4).map(r => r.item);
+}
 
 export default function FAQSearch() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<FAQItem[]>([]);
+  const [suggestions, setSuggestions] = useState<FAQItem[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedResult, setSelectedResult] = useState<FAQItem | null>(null);
   const [aiAnswer, setAiAnswer] = useState<{ answer: string; source: string } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [focused, setFocused] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  // Debounced Fuse search for dropdown
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    // Clearing results when the query is emptied is intentional.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!query.trim()) { setResults([]); setAiAnswer(null); return; }
+    setSelectedResult(null);
+    setAiAnswer(null);
+    if (!query.trim() || query.trim().length < 3) {
+      setSuggestions([]);
+      setShowDropdown(false);
+      return;
+    }
     debounceRef.current = setTimeout(() => {
-      const hits = fuse.search(query).slice(0, 3).map(r => r.item);
-      setResults(hits);
-      if (hits.length > 0) track('faq-searched', { result_type: 'faq' });
-    }, 400);
+      const hits = getBestMatches(query);
+      setSuggestions(hits);
+      setShowDropdown(hits.length > 0 && focused);
+    }, 300);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const handleSuggestionClick = (item: FAQItem) => {
+    setQuery(item.question);
+    setShowDropdown(false);
+    setSelectedResult(item);
+    setAiAnswer(null);
+    track('faq-searched', { result_type: 'faq' });
+  };
+
   const handleSearch = async () => {
-    if (!query.trim() || results.length > 0) return;
+    if (!query.trim()) return;
+    setShowDropdown(false);
+    const hits = getBestMatches(query);
+    if (hits.length > 0) {
+      setSelectedResult(hits[0]);
+      setAiAnswer(null);
+      track('faq-searched', { result_type: 'faq' });
+      return;
+    }
+    // No good match — call AI
+    setSelectedResult(null);
     setLoading(true);
     setAiAnswer(null);
     try {
@@ -51,40 +102,61 @@ export default function FAQSearch() {
 
   return (
     <div className="mb-6">
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && handleSearch()}
-          placeholder="Ask anything — 'EMI for 50 lakh loan' or 'PPF vs FD'"
-          className="flex-1 border border-[var(--border-default)] bg-[var(--bg-card)] rounded-xl px-4 py-3 text-sm text-[var(--text-primary)] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
-        />
-        <button
-          onClick={handleSearch}
-          disabled={loading}
-          className="bg-[#0D9488] hover:bg-[#0F766E] text-white text-sm font-semibold px-5 py-3 rounded-xl transition-colors whitespace-nowrap disabled:opacity-60"
-        >
-          {loading ? "..." : "Search"}
-        </button>
+      <div className="relative" ref={containerRef}>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={query}
+            onChange={e => { setQuery(e.target.value); }}
+            onFocus={() => { setFocused(true); if (suggestions.length > 0) setShowDropdown(true); }}
+            onBlur={() => setFocused(false)}
+            onKeyDown={e => {
+              if (e.key === "Enter") { handleSearch(); }
+              if (e.key === "Escape") { setShowDropdown(false); }
+            }}
+            placeholder="Ask anything — 'EMI for 50 lakh loan' or 'PPF vs FD'"
+            className="flex-1 border border-[var(--border-default)] bg-[var(--bg-card)] rounded-xl px-4 py-3 text-sm text-[var(--text-primary)] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
+          />
+          <button
+            onClick={handleSearch}
+            disabled={loading}
+            className="bg-[#0D9488] hover:bg-[#0F766E] text-white text-sm font-semibold px-5 py-3 rounded-xl transition-colors whitespace-nowrap disabled:opacity-60"
+          >
+            {loading ? "..." : "Search"}
+          </button>
+        </div>
+
+        {showDropdown && suggestions.length > 0 && (
+          <div className="absolute top-full left-0 right-0 z-50 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl shadow-lg mt-1 overflow-hidden">
+            {suggestions.map(s => (
+              <div
+                key={s.id}
+                onMouseDown={() => handleSuggestionClick(s)}
+                className="px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer text-sm text-[var(--text-primary)]"
+              >
+                {s.question}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {results.length > 0 && (
-        <div className="mt-3 flex flex-col gap-2">
-          {results.map(r => (
-            <div key={r.id} className="bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
-              <p className="font-semibold text-sm text-[var(--text-primary)] mb-1">{r.question}</p>
-              <p className="text-sm text-[#374151] dark:text-[#CBD5E1]">{r.answer}</p>
-              <p className="text-xs text-[var(--text-tertiary)] mt-2">📚 From our FAQ · General information only, not advice</p>
-            </div>
-          ))}
+      {selectedResult && (
+        <div className="mt-3 bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
+          <p className="font-semibold text-sm text-[var(--text-primary)] mb-1">{selectedResult.question}</p>
+          <p className="text-sm text-[#374151] dark:text-[#CBD5E1]">{selectedResult.answer}</p>
+          <p className="text-xs text-[var(--text-tertiary)] mt-2">📚 From our FAQ · General information only, not advice</p>
         </div>
       )}
 
-      {aiAnswer && !results.length && (
+      {loading && (
+        <div className="animate-pulse h-20 bg-slate-100 dark:bg-slate-800 rounded-lg mt-3" />
+      )}
+
+      {aiAnswer && !selectedResult && (
         <div className="mt-3 bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
           <p className="text-sm text-[#374151] dark:text-[#CBD5E1]">{aiAnswer.answer}</p>
-          <p className="text-xs text-[var(--text-tertiary)] mt-2">🤖 AI Answer · General information only, not advice</p>
+          <p className="text-xs text-[var(--text-tertiary)] mt-2">🤖 AI Answer · General info only, not financial advice</p>
         </div>
       )}
     </div>

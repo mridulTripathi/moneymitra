@@ -233,9 +233,15 @@ export default function PrepayCalculator() {
             <p className="text-sm text-[var(--text-secondary)] mt-1">✅ Time saved</p>
           </div>
           <div className="text-center">
-            <p className="text-lg font-bold text-[#0D9488] dark:text-[#14B8A6] result-value">{result.withClose}</p>
-            <p className="text-sm text-[var(--text-secondary)] mt-1">🎯 Loan closes on</p>
-            <p className="text-xs text-[var(--text-tertiary)]">instead of {result.withoutClose}</p>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1">
+              <span>🎯</span> Loan closes on
+            </p>
+            <p className="text-3xl font-bold text-teal-600 dark:text-teal-400 mt-1">
+              {result.withClose}
+            </p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+              instead of {result.withoutClose}
+            </p>
           </div>
         </div>
       </div>

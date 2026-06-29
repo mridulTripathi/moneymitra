@@ -3,15 +3,28 @@ import { useState, useMemo } from "react";
 import type { BankRate } from "./page";
 import { track } from "@/lib/analytics";
 
+const RD_MIN_DEPOSIT: Record<string, string> = {
+  SBI: '₹100',
+  HDFC: '₹1,000',
+  ICICI: '₹500',
+  Axis: '₹500',
+  Kotak: '₹500',
+};
+
+function getRDMinDeposit(bankShortName: string): string {
+  return RD_MIN_DEPOSIT[bankShortName] ?? '₹500';
+}
+
 interface Props {
   rates: BankRate[];
   showSenior: boolean;
   isFD: boolean;
+  isRD?: boolean;
 }
 
 type SortKey = "bank" | "min" | "max";
 
-export default function BankRatesTable({ rates, showSenior, isFD }: Props) {
+export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("min");
   const [asc, setAsc] = useState(true);
 
@@ -45,9 +58,10 @@ export default function BankRatesTable({ rates, showSenior, isFD }: Props) {
           <tr className="border-b-2 border-[var(--border-default)]">
             <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("bank")} scope="col">Bank{arrow("bank")}</th>
             <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Type</th>
-            <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("min")} scope="col">{isFD ? "Rate" : "Min"}{arrow("min")}</th>
+            <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("min")} scope="col">{isFD ? (isRD ? "1yr RD Rate" : "Rate") : "Min"}{arrow("min")}</th>
             {!isFD && <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("max")} scope="col">Max{arrow("max")}</th>}
-            {isFD && showSenior && <th className="text-right py-2.5 text-[var(--text-secondary)] font-semibold" scope="col">Senior</th>}
+            {isFD && showSenior && <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Senior Rate</th>}
+            {isRD && <th className="text-right py-2.5 text-[var(--text-secondary)] font-semibold" scope="col">Min Monthly Deposit</th>}
           </tr>
         </thead>
         <tbody>
@@ -62,8 +76,13 @@ export default function BankRatesTable({ rates, showSenior, isFD }: Props) {
               <td className="py-2.5 pr-4 text-right text-[#0D9488] dark:text-[#14B8A6] tabular-nums font-semibold">{Number(r.min_rate).toFixed(2)}%</td>
               {!isFD && <td className="py-2.5 pr-4 text-right text-[var(--text-primary)] tabular-nums">{Number(r.max_rate).toFixed(2)}%</td>}
               {isFD && showSenior && (
-                <td className="py-2.5 text-right text-[#F59E0B] tabular-nums font-semibold">
+                <td className="py-2.5 pr-4 text-right text-[#F59E0B] tabular-nums font-semibold">
                   {(Number(r.min_rate) + Number(r.senior_citizen_extra)).toFixed(2)}%
+                </td>
+              )}
+              {isRD && (
+                <td className="py-2.5 text-right text-[var(--text-secondary)] tabular-nums">
+                  {getRDMinDeposit(r.bank_short_name)}
                 </td>
               )}
             </tr>
