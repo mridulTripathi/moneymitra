@@ -13,7 +13,7 @@ export function TipCard({ icon = "💡", children }: { icon?: string; children: 
 
 export function TipsDisclaimer() {
   return (
-    <p className="text-xs text-[#94A3B8] mt-1">
+    <p className="text-xs text-[var(--text-tertiary)] mt-1">
       These tips are general information based on your inputs, not personalised financial advice.
     </p>
   );

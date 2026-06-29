@@ -7,7 +7,7 @@ import TaxTips from "@/components/tips/TaxTips";
 
 const TaxChart = dynamic(() => import("./TaxChart"), {
   ssr: false,
-  loading: () => <div className="h-[200px] rounded-xl bg-[#F1F5F9] dark:bg-[#0F172A] animate-pulse" />,
+  loading: () => <div className="h-[200px] rounded-xl bg-[var(--bg-elevated)] animate-pulse" />,
 });
 
 interface Deductions {
@@ -67,15 +67,15 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors mr-2 flex-shrink-0 ${checked ? "bg-[#0D9488]" : "bg-[#E2E8F0]"}`}
       aria-label={label}
     >
-      <span className={`inline-block h-4 w-4 transform rounded-full bg-white dark:bg-[#1E293B] shadow transition-transform ${checked ? "translate-x-6" : "translate-x-1"}`} />
+      <span className={`inline-block h-4 w-4 transform rounded-full bg-[var(--bg-card)] shadow transition-transform ${checked ? "translate-x-6" : "translate-x-1"}`} />
     </button>
   );
 }
 
 function AmtInput({ value, onChange, max }: { value: number; onChange: (v: number) => void; max?: number }) {
   return (
-    <div className="flex items-center gap-1 bg-[#F8FAFC] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-[#334155] rounded-lg px-2 py-1 w-36">
-      <span className="text-[#64748B] dark:text-[#94A3B8] text-xs">₹</span>
+    <div className="flex items-center gap-1 bg-[var(--bg-base)] border border-[var(--border-default)] rounded-lg px-2 py-1 w-36">
+      <span className="text-[var(--text-secondary)] text-xs">₹</span>
       <input
         type="text"
         value={formatIndian(value)}
@@ -83,7 +83,7 @@ function AmtInput({ value, onChange, max }: { value: number; onChange: (v: numbe
           const n = parseInt(e.target.value.replace(/,/g, ""), 10);
           if (!isNaN(n)) onChange(max ? Math.min(n, max) : n);
         }}
-        className="bg-transparent text-right text-xs font-semibold text-[#0F172A] dark:text-[#F1F5F9] w-full outline-none tabular-nums"
+        className="bg-transparent text-right text-xs font-semibold text-[var(--text-primary)] w-full outline-none tabular-nums"
         inputMode="numeric"
       />
     </div>
@@ -153,26 +153,26 @@ export default function TaxCalculator() {
   return (
     <div className="flex flex-col gap-6">
       {/* Sticky mobile result bar */}
-      <div className="md:hidden sticky top-14 z-40 bg-white dark:bg-[#1E293B] border-b border-[#E2E8F0] dark:border-[#334155] px-4 py-3 flex items-center justify-between shadow-sm">
+      <div className="md:hidden sticky top-14 z-40 bg-[var(--bg-card)] border-b border-[var(--border-default)] px-4 py-3 flex items-center justify-between shadow-sm">
         <div>
-          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Best choice</p>
+          <p className="text-xs text-[var(--text-secondary)]">Best choice</p>
           <p className="text-base font-bold text-[#0D9488] dark:text-[#14B8A6]">
             {result.winner === "new" ? "New Regime" : "Old Regime"}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">You save</p>
+          <p className="text-xs text-[var(--text-secondary)]">You save</p>
           <p className="text-lg font-bold text-[#F59E0B] tabular-nums">{formatShort(result.savedAmt)}</p>
         </div>
       </div>
 
       {/* Gross salary input */}
-      <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
+      <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">
-            <label className="text-sm font-medium text-[#0F172A] dark:text-[#F1F5F9] block mb-1">Annual Gross Salary</label>
-            <div className="flex items-center gap-2 bg-[#F1F5F9] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-[#334155] rounded-xl px-4 py-3">
-              <span className="text-[#64748B] dark:text-[#94A3B8] text-lg">₹</span>
+            <label className="text-sm font-medium text-[var(--text-primary)] block mb-1">Annual Gross Salary</label>
+            <div className="flex items-center gap-2 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3">
+              <span className="text-[var(--text-secondary)] text-lg">₹</span>
               <input
                 type="text"
                 value={formatIndian(grossSalary)}
@@ -180,13 +180,13 @@ export default function TaxCalculator() {
                   const n = parseInt(e.target.value.replace(/,/g, ""), 10);
                   if (!isNaN(n)) setGrossSalary(n);
                 }}
-                className="bg-transparent text-xl font-bold text-[#0F172A] dark:text-[#F1F5F9] w-full outline-none tabular-nums"
+                className="bg-transparent text-xl font-bold text-[var(--text-primary)] w-full outline-none tabular-nums"
                 inputMode="numeric"
               />
             </div>
           </div>
-          <div className="text-sm text-[#64748B] dark:text-[#94A3B8]">
-            <span className="bg-[#F1F5F9] dark:bg-[#0F172A] px-3 py-1 rounded-lg">FY 2025-26</span>
+          <div className="text-sm text-[var(--text-secondary)]">
+            <span className="bg-[var(--bg-elevated)] px-3 py-1 rounded-lg">FY 2025-26</span>
           </div>
         </div>
         <input
@@ -198,16 +198,16 @@ export default function TaxCalculator() {
           onChange={(e) => setGrossSalary(Number(e.target.value))}
           className="w-full mt-4"
         />
-        <div className="flex justify-between text-xs text-[#94A3B8] mt-1">
+        <div className="flex justify-between text-xs text-[var(--text-tertiary)] mt-1">
           <span>₹3L</span><span>₹1Cr</span>
         </div>
         <button onClick={share} className="mt-3 text-sm text-[#0D9488] dark:text-[#14B8A6] hover:underline">🔗 Share this calculation</button>
       </div>
 
       {/* Old regime deductions */}
-      <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-        <h2 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] mb-1">Old Regime Deductions</h2>
-        <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mb-4">Toggle the deductions that apply to you</p>
+      <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
+        <h2 className="font-semibold text-[var(--text-primary)] mb-1">Old Regime Deductions</h2>
+        <p className="text-xs text-[var(--text-secondary)] mb-4">Toggle the deductions that apply to you</p>
         <div className="flex flex-col gap-3">
           {[
             { key: "sec80C" as const, label: "80C — PF / ELSS / LIC / PPF", amtKey: "sec80C_amt" as const, max: 150000, cap: "Max ₹1.5L" },
@@ -226,8 +226,8 @@ export default function TaxCalculator() {
                   onChange={(v) => upd(item.key, v)}
                 />
                 <div className="flex-1 min-w-0">
-                  <span className="text-sm font-medium text-[#0F172A] dark:text-[#F1F5F9]">{item.label}</span>
-                  {item.cap && <span className="ml-2 text-xs text-[#94A3B8]">{item.cap}</span>}
+                  <span className="text-sm font-medium text-[var(--text-primary)]">{item.label}</span>
+                  {item.cap && <span className="ml-2 text-xs text-[var(--text-tertiary)]">{item.cap}</span>}
                 </div>
               </div>
               {/* Amount input on new row when active */}
@@ -266,10 +266,10 @@ export default function TaxCalculator() {
           return (
             <div
               key={regime}
-              className={`bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border-2 ${isWinner ? "border-[#0D9488]" : "border-[#E2E8F0] dark:border-[#334155]"}`}
+              className={`bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border-2 ${isWinner ? "border-[#0D9488]" : "border-[var(--border-default)]"}`}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-[#0F172A] dark:text-[#F1F5F9] text-lg">
+                <h3 className="font-bold text-[var(--text-primary)] text-lg">
                   {regime === "old" ? "Old Regime" : "New Regime"}
                 </h3>
                 {isWinner && (
@@ -281,12 +281,12 @@ export default function TaxCalculator() {
               <TaxRow label="Gross Income" value={formatINR(grossSalary)} />
               <TaxRow label="Total Deductions" value={`−${formatINR(Math.round(r.deductions))}`} color="text-[#10B981] dark:text-[#34D399]" />
               <TaxRow label="Taxable Income" value={formatINR(Math.round(r.taxable))} bold />
-              <div className="my-2 border-t border-dashed border-[#E2E8F0] dark:border-[#334155]" />
+              <div className="my-2 border-t border-dashed border-[var(--border-default)]" />
               <TaxRow label="Tax (before cess)" value={formatINR(Math.round(r.taxBefore))} />
               <TaxRow label="Health & Education Cess (4%)" value={formatINR(Math.round(r.cess))} />
               <TaxRow label="Total Tax" value={formatINR(Math.round(r.total))} bold color="text-red-500" />
               <div className="mt-3 p-3 bg-[#F0FDF9] rounded-xl">
-                <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Monthly Take-Home</p>
+                <p className="text-xs text-[var(--text-secondary)]">Monthly Take-Home</p>
                 <p className="text-xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums">
                   {formatINR(Math.round(r.takeHome))}
                 </p>
@@ -297,9 +297,9 @@ export default function TaxCalculator() {
       </div>
 
       {/* Chart */}
-      <div className="bg-white dark:bg-[#1E293B] rounded-2xl p-6 shadow-sm border border-[#E2E8F0] dark:border-[#334155]">
-        <h3 className="font-semibold text-[#0F172A] dark:text-[#F1F5F9] mb-1">Tax Comparison</h3>
-        <p className="text-xs text-[#94A3B8] mb-4">Shorter bar = less tax = more money in your pocket</p>
+      <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
+        <h3 className="font-semibold text-[var(--text-primary)] mb-1">Tax Comparison</h3>
+        <p className="text-xs text-[var(--text-tertiary)] mb-4">Shorter bar = less tax = more money in your pocket</p>
         <TaxChart oldTax={result.old.total} newTax={result.new.total} />
         <EmailCapture />
       </div>
@@ -314,10 +314,10 @@ export default function TaxCalculator() {
   );
 }
 
-function TaxRow({ label, value, bold, color = "text-[#0F172A] dark:text-[#F1F5F9]" }: { label: string; value: string; bold?: boolean; color?: string }) {
+function TaxRow({ label, value, bold, color = "text-[var(--text-primary)]" }: { label: string; value: string; bold?: boolean; color?: string }) {
   return (
     <div className="flex justify-between items-center py-1.5">
-      <span className="text-sm text-[#64748B] dark:text-[#94A3B8]">{label}</span>
+      <span className="text-sm text-[var(--text-secondary)]">{label}</span>
       <span className={`text-sm tabular-nums ${bold ? "font-bold" : "font-medium"} ${color}`}>{value}</span>
     </div>
   );

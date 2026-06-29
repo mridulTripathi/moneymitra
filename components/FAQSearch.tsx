@@ -58,7 +58,7 @@ export default function FAQSearch() {
           onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === "Enter" && handleSearch()}
           placeholder="Ask anything — 'EMI for 50 lakh loan' or 'PPF vs FD'"
-          className="flex-1 border border-[#E2E8F0] dark:border-[#334155] bg-white dark:bg-[#1E293B] rounded-xl px-4 py-3 text-sm text-[#0F172A] dark:text-[#F1F5F9] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
+          className="flex-1 border border-[var(--border-default)] bg-[var(--bg-card)] rounded-xl px-4 py-3 text-sm text-[var(--text-primary)] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
         />
         <button
           onClick={handleSearch}
@@ -72,19 +72,19 @@ export default function FAQSearch() {
       {results.length > 0 && (
         <div className="mt-3 flex flex-col gap-2">
           {results.map(r => (
-            <div key={r.id} className="bg-[#F0FDFA] dark:bg-[#042F2E] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
-              <p className="font-semibold text-sm text-[#0F172A] dark:text-[#F1F5F9] mb-1">{r.question}</p>
+            <div key={r.id} className="bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
+              <p className="font-semibold text-sm text-[var(--text-primary)] mb-1">{r.question}</p>
               <p className="text-sm text-[#374151] dark:text-[#CBD5E1]">{r.answer}</p>
-              <p className="text-xs text-[#94A3B8] mt-2">📚 From our FAQ · General information only, not advice</p>
+              <p className="text-xs text-[var(--text-tertiary)] mt-2">📚 From our FAQ · General information only, not advice</p>
             </div>
           ))}
         </div>
       )}
 
       {aiAnswer && !results.length && (
-        <div className="mt-3 bg-[#F0FDFA] dark:bg-[#042F2E] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
+        <div className="mt-3 bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
           <p className="text-sm text-[#374151] dark:text-[#CBD5E1]">{aiAnswer.answer}</p>
-          <p className="text-xs text-[#94A3B8] mt-2">🤖 AI Answer · General information only, not advice</p>
+          <p className="text-xs text-[var(--text-tertiary)] mt-2">🤖 AI Answer · General information only, not advice</p>
         </div>
       )}
     </div>
