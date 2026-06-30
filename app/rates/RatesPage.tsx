@@ -16,6 +16,7 @@ const LOAN_TABS = [
   { key: 'home_loan', label: 'Home Loan' },
   { key: 'personal_loan', label: 'Personal Loan' },
   { key: 'car_loan', label: 'Car Loan' },
+  { key: 'two_wheeler_loan', label: 'Two Wheeler Loan' },
 ] as const;
 
 const INVEST_TABS = [
