@@ -8,7 +8,7 @@ import EmailCapture from "@/components/EmailCapture";
 import { createServiceClient } from "@/lib/supabase";
 import { pages, SITE_URL, SITE_NAME } from "@/lib/seo";
 
-export const revalidate = 21600; // 6 hours
+export const revalidate = 3600; // 1 hour
 
 export const metadata: Metadata = {
   title: pages.rates.title,
