@@ -101,21 +101,21 @@ export default function Header() {
               Live Rates
             </Link>
             {tooltipOpen && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-52 bg-slate-900 dark:bg-[#131f2e] border border-slate-700 dark:border-[#1e2d40] rounded-xl shadow-xl p-3 text-sm"
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-52 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl shadow-xl p-3 text-sm"
                 onMouseEnter={() => { if (tooltipRef.current) clearTimeout(tooltipRef.current); setTooltipOpen(true); }}
                 onMouseLeave={() => { tooltipRef.current = setTimeout(() => setTooltipOpen(false), 200); }}
               >
-                <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-900 dark:bg-[#131f2e] border-l border-t border-slate-700 dark:border-[#1e2d40] rotate-45" />
+                <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[var(--bg-card)] border-l border-t border-[var(--border-default)] rotate-45" />
                 {ratesData.repo !== null ? (
-                  <div className="space-y-1.5 text-slate-200">
-                    <div className="flex justify-between"><span className="text-slate-400">Repo Rate</span><span className="font-semibold text-green-400">{ratesData.repo}%</span></div>
-                    {ratesData.bestFD !== null && <div className="flex justify-between"><span className="text-slate-400">Best FD</span><span className="font-semibold text-amber-400">Up to {ratesData.bestFD}%</span></div>}
-                    {ratesData.bestHL !== null && <div className="flex justify-between"><span className="text-slate-400">Best Home Loan</span><span className="font-semibold text-teal-400">From {ratesData.bestHL}%</span></div>}
-                    <Link href="/rates" className="block text-center text-xs text-teal-400 hover:text-teal-300 pt-1 border-t border-slate-700 mt-2">See all rates →</Link>
+                  <div className="space-y-1.5 text-[var(--text-primary)]">
+                    <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Repo Rate</span><span className="font-semibold text-green-600 dark:text-green-400">{ratesData.repo}%</span></div>
+                    {ratesData.bestFD !== null && <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Best FD</span><span className="font-semibold text-amber-600 dark:text-amber-400">Up to {ratesData.bestFD}%</span></div>}
+                    {ratesData.bestHL !== null && <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Best Home Loan</span><span className="font-semibold text-teal-600 dark:text-teal-400">From {ratesData.bestHL}%</span></div>}
+                    <Link href="/rates" className="block text-center text-xs text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 pt-1 border-t border-[var(--border-default)] mt-2">See all rates →</Link>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {[1,2,3].map(i => <div key={i} className="h-4 bg-slate-700 rounded animate-pulse" />)}
+                    {[1,2,3].map(i => <div key={i} className="h-4 bg-[var(--bg-elevated)] rounded animate-pulse" />)}
                   </div>
                 )}
               </div>
