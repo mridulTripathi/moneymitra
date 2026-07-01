@@ -64,12 +64,12 @@ export default function GratuityPage() {
         <ol className="flex items-center gap-1">
           <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
           <li aria-hidden="true">›</li>
-          <li className="text-[#0F172A]">Gratuity Calculator</li>
+          <li className="text-[var(--text-primary)]">Gratuity Calculator</li>
         </ol>
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F172A] mb-2">Gratuity Calculator</h1>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Gratuity Calculator</h1>
         <p className="text-[#64748B]">Estimate your gratuity payout under the Payment of Gratuity Act.</p>
       </div>
 

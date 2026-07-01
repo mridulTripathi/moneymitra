@@ -63,12 +63,12 @@ export default function TaxPage() {
         <ol className="flex items-center gap-1">
           <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
           <li aria-hidden="true">›</li>
-          <li className="text-[#0F172A]">Tax Regime Comparator</li>
+          <li className="text-[var(--text-primary)]">Tax Regime Comparator</li>
         </ol>
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F172A] mb-2">New vs Old Tax Regime Comparator</h1>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">New vs Old Tax Regime Comparator</h1>
         <p className="text-[#64748B]">FY 2025-26 · Find out which regime keeps more money in your pocket.</p>
       </div>
 

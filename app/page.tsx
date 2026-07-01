@@ -124,15 +124,15 @@ const homeFaqs = [
 ];
 
 const calculators = [
-  { emoji: "💰", title: "EMI Calculator", desc: "Know your exact monthly payment before you take any loan", href: "/emi", color: "bg-teal-50 border-teal-100", iconBg: "bg-teal-100" },
-  { emoji: "🏠", title: "Prepayment Simulator", desc: "See exactly how much time and money you save by paying extra", href: "/prepay", color: "bg-amber-50 border-amber-100", iconBg: "bg-amber-100" },
-  { emoji: "📈", title: "SIP Calculator", desc: "Watch your wealth grow with the power of compounding", href: "/sip", color: "bg-emerald-50 border-emerald-100", iconBg: "bg-emerald-100" },
-  { emoji: "🧾", title: "Tax Comparator", desc: "Old regime vs new — find out which puts more money in your pocket", href: "/tax", color: "bg-purple-50 border-purple-100", iconBg: "bg-purple-100" },
-  { emoji: "🏦", title: "FD & RD Calculator", desc: "Calculate fixed deposit maturity and recurring deposit returns", href: "/fd", color: "bg-blue-50 border-blue-100", iconBg: "bg-blue-100" },
-  { emoji: "📊", title: "PPF Calculator", desc: "See how your PPF grows tax-free over 15 to 30 years", href: "/ppf", color: "bg-indigo-50 border-indigo-100", iconBg: "bg-indigo-100" },
-  { emoji: "🏡", title: "HRA Calculator", desc: "Find your exact HRA tax exemption using the 3-condition formula", href: "/hra", color: "bg-rose-50 border-rose-100", iconBg: "bg-rose-100" },
-  { emoji: "🎁", title: "Gratuity Calculator", desc: "Calculate your gratuity entitlement as per the Gratuity Act", href: "/gratuity", color: "bg-orange-50 border-orange-100", iconBg: "bg-orange-100" },
-  { emoji: "💳", title: "Loan vs Card EMI", desc: "Find out whether a personal loan or credit card EMI costs less", href: "/loan-vs-card", color: "bg-cyan-50 border-cyan-100", iconBg: "bg-cyan-100" },
+  { emoji: "💰", title: "EMI Calculator", desc: "Know your exact monthly payment before you take any loan", href: "/emi", color: "bg-teal-50 dark:bg-teal-950/60 border-teal-100 dark:border-teal-800", iconBg: "bg-teal-100 dark:bg-teal-900/70" },
+  { emoji: "🏠", title: "Prepayment Simulator", desc: "See exactly how much time and money you save by paying extra", href: "/prepay", color: "bg-amber-50 dark:bg-amber-950/60 border-amber-100 dark:border-amber-800", iconBg: "bg-amber-100 dark:bg-amber-900/70" },
+  { emoji: "📈", title: "SIP Calculator", desc: "Watch your wealth grow with the power of compounding", href: "/sip", color: "bg-emerald-50 dark:bg-emerald-950/60 border-emerald-100 dark:border-emerald-800", iconBg: "bg-emerald-100 dark:bg-emerald-900/70" },
+  { emoji: "🧾", title: "Tax Comparator", desc: "Old regime vs new — find out which puts more money in your pocket", href: "/tax", color: "bg-purple-50 dark:bg-purple-950/60 border-purple-100 dark:border-purple-800", iconBg: "bg-purple-100 dark:bg-purple-900/70" },
+  { emoji: "🏦", title: "FD & RD Calculator", desc: "Calculate fixed deposit maturity and recurring deposit returns", href: "/fd", color: "bg-blue-50 dark:bg-blue-950/60 border-blue-100 dark:border-blue-800", iconBg: "bg-blue-100 dark:bg-blue-900/70" },
+  { emoji: "📊", title: "PPF Calculator", desc: "See how your PPF grows tax-free over 15 to 30 years", href: "/ppf", color: "bg-indigo-50 dark:bg-indigo-950/60 border-indigo-100 dark:border-indigo-800", iconBg: "bg-indigo-100 dark:bg-indigo-900/70" },
+  { emoji: "🏡", title: "HRA Calculator", desc: "Find your exact HRA tax exemption using the 3-condition formula", href: "/hra", color: "bg-rose-50 dark:bg-rose-950/60 border-rose-100 dark:border-rose-800", iconBg: "bg-rose-100 dark:bg-rose-900/70" },
+  { emoji: "🎁", title: "Gratuity Calculator", desc: "Calculate your gratuity entitlement as per the Gratuity Act", href: "/gratuity", color: "bg-orange-50 dark:bg-orange-950/60 border-orange-100 dark:border-orange-800", iconBg: "bg-orange-100 dark:bg-orange-900/70" },
+  { emoji: "💳", title: "Loan vs Card EMI", desc: "Find out whether a personal loan or credit card EMI costs less", href: "/loan-vs-card", color: "bg-cyan-50 dark:bg-cyan-950/60 border-cyan-100 dark:border-cyan-800", iconBg: "bg-cyan-100 dark:bg-cyan-900/70" },
 ];
 
 const features = [
@@ -312,11 +312,11 @@ export default async function Home() {
       </section>
 
       {/* Suggest a Tool */}
-      <section className="bg-teal-50 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-800 rounded-2xl p-8 mx-auto max-w-2xl my-12">
+      <section className="bg-[var(--tip-bg)] border border-teal-200 dark:border-teal-800 rounded-2xl p-8 mx-auto max-w-2xl my-12">
         <div className="text-center mb-6">
           <span className="text-3xl">🛠️</span>
-          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200 mt-2">What tool should we build next?</h2>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Tell us what financial calculation you wish existed. We read every suggestion.</p>
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mt-2">What tool should we build next?</h2>
+          <p className="text-[var(--text-secondary)] text-sm mt-1">Tell us what financial calculation you wish existed. We read every suggestion.</p>
         </div>
         <SuggestToolForm sourcePage="home" />
       </section>

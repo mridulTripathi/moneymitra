@@ -65,12 +65,12 @@ export default function FDPage() {
         <ol className="flex items-center gap-1">
           <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
           <li aria-hidden="true">›</li>
-          <li className="text-[#0F172A]">FD &amp; RD Calculator</li>
+          <li className="text-[var(--text-primary)]">FD &amp; RD Calculator</li>
         </ol>
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F172A] mb-2">FD &amp; RD Calculator</h1>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">FD &amp; RD Calculator</h1>
         <p className="text-[#64748B]">See exactly what your fixed or recurring deposit will be worth at maturity.</p>
       </div>
 

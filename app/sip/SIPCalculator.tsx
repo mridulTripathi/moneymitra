@@ -150,7 +150,7 @@ export default function SIPCalculator() {
           <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
             <p className="text-sm text-[var(--text-secondary)] mb-1">Total Corpus</p>
             <AnimatedNumber value={result.corpus} duration={800} formatter={(n) => formatShort(n)} className="text-4xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums result-value" aria-live="polite" aria-atomic="true" />
-            <div className="inline-block bg-[#F59E0B]/10 text-[#D97706] text-sm font-bold px-3 py-1 rounded-full mt-2">
+            <div className="inline-block bg-[#F59E0B]/10 text-[#D97706] dark:text-[#FBBF24] text-sm font-bold px-3 py-1 rounded-full mt-2">
               {result.multiplier.toFixed(1)}x your money
             </div>
             {/* Step-up callout — only show when on basic SIP tab */}
@@ -177,7 +177,7 @@ export default function SIPCalculator() {
           </div>
 
           {/* Insight */}
-          <div className="bg-[#F0FDF9] border border-[#10B981]/20 rounded-2xl p-4 text-sm text-[#064E3B]">
+          <div className="bg-[#F0FDF9] dark:bg-emerald-950/40 border border-[#10B981]/20 dark:border-emerald-800 rounded-2xl p-4 text-sm text-[#064E3B] dark:text-emerald-300">
             <p className="font-medium mb-1">💡 Power of Compounding</p>
             <p>
               Your final 5 years contribute <strong>{formatShort(Math.abs(result.last5Amount))}</strong> to your

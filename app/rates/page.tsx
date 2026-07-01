@@ -95,12 +95,12 @@ export default async function Page() {
         <ol className="flex items-center gap-1">
           <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
           <li aria-hidden="true">›</li>
-          <li className="text-[#0F172A]">Interest Rates</li>
+          <li className="text-[var(--text-primary)]">Interest Rates</li>
         </ol>
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F172A] mb-2">Current Bank Interest Rates</h1>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Current Bank Interest Rates</h1>
         <div className="flex flex-wrap items-center gap-3 mt-2">
           <div className="flex items-center gap-1.5 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-xs font-medium px-3 py-1 rounded-full">
             <span className="relative flex h-2 w-2">
@@ -119,7 +119,7 @@ export default async function Page() {
       </div>
 
       <FAQSearch />
-      <div className="bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-400 dark:border-amber-600 rounded-r-xl p-4 my-6">
+      <div className="bg-amber-50 dark:bg-[#3f2d0a] border-l-4 border-amber-400 dark:border-amber-600 rounded-r-xl p-4 my-6">
         <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">⚠️ Important: Rates shown are indicative only</p>
         <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
           Bank interest rates change without notice. MoneyMitra updates rates monthly but cannot guarantee real-time accuracy. Always verify the current rate directly with your bank before making any deposit or loan decision. This is not financial advice.
@@ -128,7 +128,7 @@ export default async function Page() {
       <Suspense fallback={null}>
         <RatesPage rbi={rbi} bankRates={bankRates} lastUpdated={lastUpdated} />
       </Suspense>
-      <div className="bg-teal-50 dark:bg-teal-950/30 border border-teal-200 dark:border-teal-800 rounded-2xl p-6 mt-6">
+      <div className="bg-[var(--tip-bg)] border border-teal-200 dark:border-teal-800 rounded-2xl p-6 mt-6">
         <div className="flex items-start gap-3">
           <span className="text-2xl">📬</span>
           <div className="flex-1">

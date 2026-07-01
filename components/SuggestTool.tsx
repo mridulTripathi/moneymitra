@@ -35,7 +35,7 @@ export function SuggestToolForm({ sourcePage, onSuccess }: Props) {
       <div className="text-center py-4">
         <span className="text-2xl">🙏</span>
         <p className="font-medium text-teal-700 dark:text-teal-400 mt-2">Got it! We&apos;ll review your suggestion.</p>
-        <p className="text-sm text-slate-500 mt-1">If you left your email, we&apos;ll let you know when it&apos;s built.</p>
+        <p className="text-sm text-[var(--text-secondary)] mt-1">If you left your email, we&apos;ll let you know when it&apos;s built.</p>
       </div>
     );
   }
@@ -48,15 +48,15 @@ export function SuggestToolForm({ sourcePage, onSuccess }: Props) {
         maxLength={500}
         value={suggestion}
         onChange={e => setSuggestion(e.target.value)}
-        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#131f2e] text-slate-800 dark:text-slate-200 p-4 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="w-full rounded-xl border border-[var(--border-default)] bg-[var(--bg-base)] text-[var(--text-primary)] p-4 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500"
       />
-      <div className="text-xs text-slate-400 text-right mt-1">{suggestion.length}/500</div>
+      <div className="text-xs text-[var(--text-tertiary)] text-right mt-1">{suggestion.length}/500</div>
       <input
         type="email"
         placeholder="Email (optional) — we'll notify you when it's built"
         value={email}
         onChange={e => setEmail(e.target.value)}
-        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#131f2e] text-slate-800 dark:text-slate-200 px-4 py-3 text-sm mt-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="w-full rounded-xl border border-[var(--border-default)] bg-[var(--bg-base)] text-[var(--text-primary)] px-4 py-3 text-sm mt-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
       />
       <button
         onClick={handleSubmit}

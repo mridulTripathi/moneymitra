@@ -221,7 +221,7 @@ export default function PrepayCalculator() {
       </div>
 
       {/* Savings callout */}
-      <div className="bg-[#FFF8E7] border border-[#F59E0B]/30 rounded-2xl p-6">
+      <div className="bg-[#FFF8E7] dark:bg-amber-950/40 border border-[#F59E0B]/30 dark:border-amber-800 rounded-2xl p-6">
         <h3 className="font-bold text-[var(--text-primary)] mb-4 text-lg">💰 Your Savings</h3>
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="text-center">
@@ -256,7 +256,7 @@ export default function PrepayCalculator() {
 
       <PrepayTips interestSaved={result.interestSaved} timeSavedMonths={result.timeSavedMonths} mode={mode} />
 
-      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
+      <div className="bg-blue-50 dark:bg-[#0f1f33] border border-blue-100 dark:border-blue-800 rounded-xl p-4 text-sm text-blue-800 dark:text-blue-300">
         💡 Most Indian banks allow 25% annual prepayment on floating rate home loans with no penalty. Check with your bank for the exact terms.
       </div>
     </div>
@@ -265,7 +265,7 @@ export default function PrepayCalculator() {
 
 function Row({ label, value, color = "text-[var(--text-primary)]" }: { label: string; value: string; color?: string }) {
   return (
-    <div className="flex justify-between items-center py-2.5 border-b border-[#F1F5F9] last:border-0">
+    <div className="flex justify-between items-center py-2.5 border-b border-[var(--border-subtle)] last:border-0">
       <span className="text-sm text-[var(--text-secondary)]">{label}</span>
       <span className={`text-sm font-semibold tabular-nums ${color}`}>{value}</span>
     </div>

@@ -59,7 +59,7 @@ export default function RatesPage({ rbi, bankRates }: Props) {
         <div className="flex gap-2 flex-wrap mb-4">
           {LOAN_TABS.map((t) => (
             <button key={t.key} onClick={() => { setLoanTab(t.key); track('rates-tab-viewed', { tab: t.key }); }}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${loanTab === t.key ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[#E2E8F0]"}`}>
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${loanTab === t.key ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"}`}>
               {t.label}
             </button>
           ))}
@@ -91,13 +91,13 @@ export default function RatesPage({ rbi, bankRates }: Props) {
         <div className="flex gap-2 flex-wrap mb-4">
           {INVEST_TABS.map((t) => (
             <button key={t.key} onClick={() => { setInvestTab(t.key); track('rates-tab-viewed', { tab: t.key }); }}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${investTab === t.key ? "bg-[#F59E0B] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[#E2E8F0]"}`}>
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${investTab === t.key ? "bg-[#F59E0B] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"}`}>
               {t.label}
             </button>
           ))}
         </div>
         {investTab === 'rd_1yr' && (
-          <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3 mb-3">
+          <div className="bg-blue-50 dark:bg-[#0f1f33] border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3 mb-3">
             <p className="text-sm text-blue-700 dark:text-blue-300">💡 RD interest is compounded quarterly by most banks. Rates shown are for 1-year tenure and are typically similar to FD rates.</p>
           </div>
         )}

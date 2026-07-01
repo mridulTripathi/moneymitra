@@ -117,7 +117,7 @@ export default function AdminRatesPage() {
         <button
           disabled={busy}
           onClick={() => post("mark_updated", { notes: "Manual admin update" })}
-          className="bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#0F172A] text-sm font-semibold px-5 py-2.5 rounded-xl"
+          className="bg-[#F1F5F9] hover:bg-[var(--bg-hover)] text-[#0F172A] text-sm font-semibold px-5 py-2.5 rounded-xl"
         >
           Mark rates as updated now
         </button>

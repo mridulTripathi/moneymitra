@@ -36,8 +36,8 @@ export default function GratuityCalculator() {
           <div className="mb-2">
             <label className="text-sm font-medium text-[var(--text-primary)] mb-2 block">Employer covered by Gratuity Act?</label>
             <div className="flex gap-2">
-              <button onClick={() => setIsCovered(true)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isCovered ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[#E2E8F0]"}`}>Covered (÷26)</button>
-              <button onClick={() => setIsCovered(false)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${!isCovered ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[#E2E8F0]"}`}>Not covered (÷30)</button>
+              <button onClick={() => setIsCovered(true)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${isCovered ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"}`}>Covered (÷26)</button>
+              <button onClick={() => setIsCovered(false)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${!isCovered ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"}`}>Not covered (÷30)</button>
             </div>
             <p className="text-xs text-[var(--text-tertiary)] mt-2">Most companies with 10+ employees are covered.</p>
           </div>
@@ -54,7 +54,7 @@ export default function GratuityCalculator() {
                     <p className="text-xs text-[var(--text-secondary)] mb-1">Tax-free portion</p>
                     <p className="font-bold text-[#10B981] dark:text-[#34D399] tabular-nums text-lg">{formatShort(result.taxFree)}</p>
                   </div>
-                  <div className="bg-red-50 rounded-xl p-3">
+                  <div className="bg-red-50 dark:bg-red-950/50 rounded-xl p-3">
                     <p className="text-xs text-[var(--text-secondary)] mb-1">Taxable portion</p>
                     <p className="font-bold text-red-500 tabular-nums text-lg">{formatShort(result.taxable)}</p>
                   </div>

@@ -103,7 +103,7 @@ export default function PPFCalculator() {
               </thead>
               <tbody>
                 {result.yearlyBreakdown.map((row) => (
-                  <tr key={row.year} className="border-b border-[#F1F5F9] hover:bg-[var(--bg-base)] transition-colors">
+                  <tr key={row.year} className="border-b border-[var(--border-subtle)] hover:bg-[var(--bg-base)] transition-colors">
                     <td className="py-2.5 pr-4 font-medium text-[var(--text-primary)]">Year {row.year}</td>
                     <td className="py-2.5 pr-4 text-right text-[var(--text-secondary)] tabular-nums">{formatINR(Math.round(row.opening))}</td>
                     <td className="py-2.5 pr-4 text-right text-[var(--text-primary)] tabular-nums">{formatINR(Math.round(row.investment))}</td>

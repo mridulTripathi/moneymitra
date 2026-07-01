@@ -64,12 +64,12 @@ export default function EMIPage() {
         <ol className="flex items-center gap-1">
           <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
           <li aria-hidden="true">›</li>
-          <li className="text-[#0F172A]">EMI Calculator</li>
+          <li className="text-[var(--text-primary)]">EMI Calculator</li>
         </ol>
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F172A] mb-2">EMI Calculator</h1>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">EMI Calculator</h1>
         <p className="text-[#64748B]">Know your exact monthly instalment before you sign any loan documents.</p>
       </div>
 

@@ -65,7 +65,7 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
   return (
     <button
       onClick={() => onChange(!checked)}
-      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors mr-2 flex-shrink-0 ${checked ? "bg-[#0D9488]" : "bg-[#E2E8F0]"}`}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors mr-2 flex-shrink-0 ${checked ? "bg-[#0D9488]" : "bg-[var(--bg-hover)]"}`}
       aria-label={label}
     >
       <span className={`inline-block h-4 w-4 transform rounded-full bg-[var(--bg-card)] shadow transition-transform ${checked ? "translate-x-6" : "translate-x-1"}`} />
@@ -218,7 +218,7 @@ export default function TaxCalculator() {
             { key: "nps" as const, label: "80CCD(1B) — NPS", amtKey: "nps_amt" as const, max: 50000, cap: "Max ₹50K" },
             { key: "other" as const, label: "Other deduction", amtKey: "other_amt" as const, cap: "" },
           ].map((item) => (
-            <div key={item.key} className="py-3 border-b border-[#F1F5F9] last:border-0">
+            <div key={item.key} className="py-3 border-b border-[var(--border-subtle)] last:border-0">
               {/* Toggle + label row */}
               <div className="flex items-center gap-3">
                 <Toggle
@@ -289,7 +289,7 @@ export default function TaxCalculator() {
                 <span className="text-sm text-[var(--text-secondary)]">Total Tax</span>
                 <AnimatedNumber value={r.total} duration={500} formatter={(n) => formatINR(Math.round(n))} className="text-sm tabular-nums font-bold text-red-500" />
               </div>
-              <div className="mt-3 p-3 bg-[#F0FDF9] rounded-xl">
+              <div className="mt-3 p-3 bg-[#F0FDF9] dark:bg-emerald-950/40 rounded-xl">
                 <p className="text-xs text-[var(--text-secondary)]">Monthly Take-Home</p>
                 <p className="text-xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums">
                   {formatINR(Math.round(r.takeHome))}

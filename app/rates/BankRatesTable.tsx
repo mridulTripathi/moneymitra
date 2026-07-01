@@ -66,7 +66,7 @@ export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props)
         </thead>
         <tbody>
           {sorted.map((r) => (
-            <tr key={r.id} className="border-b border-[#F1F5F9] hover:bg-[var(--bg-base)] transition-colors">
+            <tr key={r.id} className="border-b border-[var(--border-subtle)] hover:bg-[var(--bg-base)] transition-colors">
               <td className="py-2.5 pr-4 font-medium text-[var(--text-primary)]">
                 {r.bank_url ? (
                   <a href={r.bank_url} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-[#0D9488] dark:text-[#14B8A6]" onClick={() => track('bank-link-clicked', { bank: r.bank_short_name, rate_type: r.rate_type })}>{r.bank_name}</a>

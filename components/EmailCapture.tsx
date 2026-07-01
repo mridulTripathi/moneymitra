@@ -63,7 +63,7 @@ export default function EmailCapture({ sourcePage = 'unknown' }: EmailCapturePro
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@email.com"
           required
-          className="flex-1 min-w-0 border border-[var(--border-default)] bg-white dark:bg-[#0F172A] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
+          className="flex-1 min-w-0 border border-[var(--border-default)] bg-[var(--bg-base)] rounded-xl px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
         />
         <button
           type="submit"

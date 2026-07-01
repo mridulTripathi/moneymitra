@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export function TipCard({ icon = "💡", children }: { icon?: string; children: ReactNode }) {
   return (
-    <div className="bg-[#F0FDFA] border border-[#0D9488]/20 rounded-xl p-4 text-sm text-[#374151]">
+    <div className="bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4 text-sm text-[var(--tip-body)]">
       <div className="flex gap-2">
         <span aria-hidden="true">{icon}</span>
         <div>{children}</div>

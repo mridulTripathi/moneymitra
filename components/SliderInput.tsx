@@ -93,7 +93,7 @@ export default function SliderInput({
       </div>
       <div className="flex justify-between text-xs text-[var(--text-tertiary)] mt-0.5">
         {rangeHint ? (
-          <span className="text-slate-400">{rangeHint}</span>
+          <span className="text-[var(--text-tertiary)]">{rangeHint}</span>
         ) : (
           <>
             <span>{prefix}{format ? format(min) : min}{suffix}</span>

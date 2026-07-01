@@ -78,7 +78,7 @@ export default function FDCalculator() {
             key={t}
             onClick={() => setTab(t)}
             className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-              tab === t ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[#E2E8F0]"
+              tab === t ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
             }`}
           >
             {t === "fd" ? "Fixed Deposit" : "Recurring Deposit"}
@@ -110,7 +110,7 @@ export default function FDCalculator() {
                     key={f.value}
                     onClick={() => setFreq(f.value)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      freq === f.value ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[#E2E8F0]"
+                      freq === f.value ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
                     }`}
                   >
                     {f.label}

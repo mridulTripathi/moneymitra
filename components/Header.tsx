@@ -125,7 +125,7 @@ export default function Header() {
             <button
               onClick={() => setMoreOpen((v) => !v)}
               onMouseEnter={() => setMoreOpen(true)}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-[#64748B] hover:text-[#0F172A] hover:bg-gray-100 flex items-center gap-1 transition-colors"
+              className="px-3 py-2 rounded-lg text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] flex items-center gap-1 transition-colors"
               aria-expanded={moreOpen}
             >
               More <ChevronDown size={14} />

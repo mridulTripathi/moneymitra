@@ -62,7 +62,7 @@ export default function HRACalculator() {
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Exempt / year</p>
                 <p className="font-bold text-[#10B981] dark:text-[#34D399] tabular-nums text-lg">{formatINR(Math.round(result.exemption * 12))}</p>
               </div>
-              <div className="bg-red-50 rounded-xl p-3">
+              <div className="bg-red-50 dark:bg-red-950/50 rounded-xl p-3">
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Taxable / month</p>
                 <p className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite">{formatINR(Math.round(result.taxableHRA))}</p>
               </div>

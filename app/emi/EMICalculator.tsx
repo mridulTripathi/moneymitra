@@ -119,7 +119,7 @@ export default function EMICalculator() {
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Total Payable</p>
                 <AnimatedNumber value={totalPayable} duration={600} formatter={(n) => formatShort(n)} className="font-bold text-[var(--text-primary)] tabular-nums text-lg" aria-live="polite" />
               </div>
-              <div className="bg-red-50 rounded-xl p-3">
+              <div className="bg-red-50 dark:bg-red-950/50 rounded-xl p-3">
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Total Interest</p>
                 <AnimatedNumber value={totalInterest} duration={600} formatter={(n) => formatShort(n)} className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite" />
               </div>
@@ -143,7 +143,7 @@ export default function EMICalculator() {
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Total Payable</p>
                 <p className="font-bold text-[var(--text-primary)] tabular-nums">{formatShort(totalPayable)}</p>
               </div>
-              <div className="col-span-2 bg-red-50 rounded-xl p-3">
+              <div className="col-span-2 bg-red-50 dark:bg-red-950/50 rounded-xl p-3">
                 <p className="text-xs text-[var(--text-secondary)] mb-1">Interest over {tenure} years</p>
                 <p className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite">{formatShort(totalInterest)}</p>
                 <p className="text-xs text-[var(--text-tertiary)] mt-1">{((totalInterest / principal) * 100).toFixed(0)}% extra over the principal</p>
@@ -203,7 +203,7 @@ export default function EMICalculator() {
                     <p className="text-xs text-[var(--text-secondary)] mb-1">LTV ratio</p>
                     <p className="font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums text-lg" aria-live="polite">{ltv.toFixed(0)}%</p>
                   </div>
-                  <div className="bg-amber-50 rounded-xl p-3">
+                  <div className="bg-amber-50 dark:bg-amber-950/50 rounded-xl p-3">
                     <p className="text-xs text-[var(--text-secondary)] mb-1">New EMI</p>
                     <p className="font-bold text-[#F59E0B] tabular-nums text-lg" aria-live="polite">{formatINR(Math.round(dpEMI))}</p>
                   </div>
@@ -255,11 +255,11 @@ export default function EMICalculator() {
                     <p className="font-bold text-[#F59E0B] tabular-nums text-lg" aria-live="polite">{formatShort(investGain)}</p>
                   </div>
                 </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-                  <p className="text-sm font-semibold text-[#92400E]">
+                <div className="bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded-xl p-3">
+                  <p className="text-sm font-semibold text-[#92400E] dark:text-amber-300">
                     {investWins ? "📈 Investing comes out ahead" : "🏦 Paying down the loan comes out ahead"} on these assumptions.
                   </p>
-                  <p className="text-xs text-[#92400E] mt-1">
+                  <p className="text-xs text-[#92400E] dark:text-amber-400 mt-1">
                     Paying down is a guaranteed, risk-free return equal to your loan rate. Investment returns are not guaranteed and carry market risk. This is general information, not financial advice.
                   </p>
                 </div>
@@ -287,7 +287,7 @@ export default function EMICalculator() {
             {showTable ? "Hide" : "View"} full repayment schedule
           </button>
           {showTable && (
-            <button onClick={downloadCSV} className="text-sm bg-[var(--bg-elevated)] hover:bg-[#E2E8F0] text-[var(--text-primary)] px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5">
+            <button onClick={downloadCSV} className="text-sm bg-[var(--bg-elevated)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)] px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5">
               ⬇ Export CSV
             </button>
           )}
@@ -306,7 +306,7 @@ export default function EMICalculator() {
               </thead>
               <tbody>
                 {yearlySchedule.map((row) => (
-                  <tr key={row.year} className="border-b border-[#F1F5F9] hover:bg-[var(--bg-base)] transition-colors">
+                  <tr key={row.year} className="border-b border-[var(--border-subtle)] hover:bg-[var(--bg-base)] transition-colors">
                     <td className="py-2.5 pr-4 font-medium text-[var(--text-primary)]">Year {row.year}</td>
                     <td className="py-2.5 pr-4 text-right text-[#10B981] dark:text-[#34D399] tabular-nums font-medium">{formatINR(Math.round(row.principal))}</td>
                     <td className="py-2.5 pr-4 text-right text-red-500 tabular-nums font-medium">{formatINR(Math.round(row.interest))}</td>

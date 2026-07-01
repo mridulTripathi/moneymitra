@@ -64,12 +64,12 @@ export default function PrepayPage() {
         <ol className="flex items-center gap-1">
           <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
           <li aria-hidden="true">›</li>
-          <li className="text-[#0F172A]">Prepayment Simulator</li>
+          <li className="text-[var(--text-primary)]">Prepayment Simulator</li>
         </ol>
       </nav>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F172A] mb-2">Prepayment &amp; Foreclosure Simulator</h1>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Prepayment &amp; Foreclosure Simulator</h1>
         <p className="text-[#64748B]">Find out how much you save by paying extra on your loan.</p>
       </div>
 

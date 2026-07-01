@@ -93,8 +93,8 @@ export default function LoanVsCardCalculator() {
             <Row label="Total extra cost" value={card.totalCost} bold />
           </div>
 
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-            <p className="text-xs text-[#92400E]">
+          <div className="bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
+            <p className="text-xs text-[#92400E] dark:text-amber-400">
               ⚠️ This is a general comparison, not financial advice. Actual rates, fees, and no-cost-EMI terms vary by lender and offer.
               Always confirm the effective annual rate before deciding.
             </p>
