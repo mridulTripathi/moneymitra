@@ -1,8 +1,64 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 import Fuse from "fuse.js";
 import { FAQ_DATA, FAQItem } from "@/lib/faq-data";
 import { track } from "@/lib/analytics";
+
+// Lightly formats an AI answer into paragraphs / bullet / numbered lists
+// and bolds **text** — purely presentational, doesn't touch the source text.
+function FormattedAnswer({ text }: { text: string }) {
+  const blocks = text.trim().split(/\n+/).filter(Boolean);
+  const renderInline = (s: string) =>
+    s.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+      part.startsWith("**") && part.endsWith("**")
+        ? <strong key={i} className="font-semibold text-[var(--text-primary)]">{part.slice(2, -2)}</strong>
+        : <Fragment key={i}>{part}</Fragment>
+    );
+
+  const bulletRe = /^\s*[-•]\s+(.*)/;
+  const numberedRe = /^\s*\d+[.)]\s+(.*)/;
+  const headingRe = /^\s*#{1,3}\s+(.*)/;
+
+  const elements: React.ReactNode[] = [];
+  let listBuffer: string[] = [];
+  let listType: "ul" | "ol" | null = null;
+
+  const flushList = (key: string) => {
+    if (listBuffer.length === 0) return;
+    const Tag = listType === "ol" ? "ol" : "ul";
+    elements.push(
+      <Tag key={key} className={`${listType === "ol" ? "list-decimal" : "list-disc"} pl-5 space-y-1 my-2`}>
+        {listBuffer.map((item, i) => <li key={i}>{renderInline(item)}</li>)}
+      </Tag>
+    );
+    listBuffer = [];
+    listType = null;
+  };
+
+  blocks.forEach((line, idx) => {
+    const headingMatch = line.match(headingRe);
+    const bulletMatch = line.match(bulletRe);
+    const numberedMatch = line.match(numberedRe);
+    if (headingMatch) {
+      flushList(`list-${idx}`);
+      elements.push(<p key={idx} className="font-semibold text-[var(--text-primary)]">{renderInline(headingMatch[1])}</p>);
+    } else if (bulletMatch) {
+      if (listType !== "ul") flushList(`list-${idx}`);
+      listType = "ul";
+      listBuffer.push(bulletMatch[1]);
+    } else if (numberedMatch) {
+      if (listType !== "ol") flushList(`list-${idx}`);
+      listType = "ol";
+      listBuffer.push(numberedMatch[1]);
+    } else {
+      flushList(`list-${idx}`);
+      elements.push(<p key={idx} className="leading-relaxed">{renderInline(line)}</p>);
+    }
+  });
+  flushList("list-end");
+
+  return <div className="space-y-2 text-sm text-[#374151] dark:text-[#CBD5E1]">{elements}</div>;
+}
 
 const fuse = new Fuse(FAQ_DATA, {
   keys: [
@@ -150,13 +206,34 @@ export default function FAQSearch() {
       )}
 
       {loading && (
-        <div className="animate-pulse h-20 bg-slate-100 dark:bg-slate-800 rounded-lg mt-3" />
+        <div className="mt-3 bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
+          <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
+            <span className="flex gap-1" aria-hidden="true">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488] dark:bg-[#14B8A6] animate-bounce [animation-delay:-0.3s]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488] dark:bg-[#14B8A6] animate-bounce [animation-delay:-0.15s]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488] dark:bg-[#14B8A6] animate-bounce" />
+            </span>
+            🤖 Thinking through your question…
+          </div>
+          <div className="mt-3 space-y-2 animate-pulse">
+            <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full" />
+            <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-5/6" />
+            <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-2/3" />
+          </div>
+        </div>
       )}
 
       {aiAnswer && !selectedResult && (
         <div className="mt-3 bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
-          <p className="text-sm text-[#374151] dark:text-[#CBD5E1]">{aiAnswer.answer}</p>
-          <p className="text-xs text-[var(--text-tertiary)] mt-2">🤖 AI Answer · General info only, not financial advice</p>
+          <div className="flex items-center justify-between mb-2">
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#0D9488] dark:bg-[#14B8A6] text-white dark:text-[#0a0f1a]">
+              ✨ AI-generated answer
+            </span>
+          </div>
+          <FormattedAnswer text={aiAnswer.answer} />
+          <p className="text-xs text-amber-700 dark:text-amber-400 mt-3 pt-2 border-t border-[#0D9488]/10 dark:border-[#14B8A6]/10 flex items-center gap-1">
+            ⚠️ For general awareness only — not financial advice. Please verify important numbers.
+          </p>
         </div>
       )}
     </div>

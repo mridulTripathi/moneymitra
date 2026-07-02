@@ -47,6 +47,30 @@ export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props)
 
   const arrow = (k: SortKey) => (sortKey === k ? (asc ? " ▲" : " ▼") : "");
 
+  // Best-rate detection: for loans, lower is better; for FD/RD, higher is better.
+  // Computed on the full `rates` set so it stays correct regardless of table sort order.
+  const { overallBestId, bestByType } = useMemo(() => {
+    if (rates.length === 0) return { overallBestId: null as string | null, bestByType: new Map<string, string>() };
+    const better = (a: number, b: number) => (isFD ? a > b : a < b);
+
+    let overall = rates[0];
+    for (const r of rates) if (better(Number(r.min_rate), Number(overall.min_rate))) overall = r;
+
+    const byType = new Map<string, BankRate>();
+    for (const r of rates) {
+      const current = byType.get(r.bank_type);
+      if (!current || better(Number(r.min_rate), Number(current.min_rate))) byType.set(r.bank_type, r);
+    }
+    const bestByType = new Map<string, string>();
+    byType.forEach((r, type) => bestByType.set(type, r.id));
+
+    return { overallBestId: overall.id, bestByType };
+  }, [rates, isFD]);
+
+  const typeLabels: Record<string, string> = {
+    public: "Public", private: "Private", small_finance: "Small Finance", nbfc: "NBFC",
+  };
+
   if (rates.length === 0) {
     return <p className="text-sm text-[var(--text-tertiary)] py-8 text-center">Rates are being updated. Please check back soon.</p>;
   }
@@ -65,12 +89,27 @@ export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props)
           </tr>
         </thead>
         <tbody>
-          {sorted.map((r) => (
-            <tr key={r.id} className="border-b border-[var(--border-subtle)] hover:bg-[var(--bg-base)] transition-colors">
+          {sorted.map((r) => {
+            const isOverallBest = r.id === overallBestId;
+            const isTypeBest = bestByType.get(r.bank_type) === r.id && !isOverallBest;
+            return (
+            <tr key={r.id} className={`border-b border-[var(--border-subtle)] hover:bg-[var(--bg-base)] transition-colors ${isOverallBest ? "bg-[#0D9488]/5 dark:bg-[#14B8A6]/10" : ""}`}>
               <td className="py-2.5 pr-4 font-medium text-[var(--text-primary)]">
-                {r.bank_url ? (
-                  <a href={r.bank_url} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-[#0D9488] dark:text-[#14B8A6]" onClick={() => track('bank-link-clicked', { bank: r.bank_short_name, rate_type: r.rate_type })}>{r.bank_name}</a>
-                ) : r.bank_name}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {r.bank_url ? (
+                    <a href={r.bank_url} target="_blank" rel="noopener noreferrer nofollow" className="hover:text-[#0D9488] dark:text-[#14B8A6]" onClick={() => track('bank-link-clicked', { bank: r.bank_short_name, rate_type: r.rate_type })}>{r.bank_name}</a>
+                  ) : r.bank_name}
+                  {isOverallBest && (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#0D9488] text-white whitespace-nowrap">
+                      🏆 Best Rate
+                    </span>
+                  )}
+                  {isTypeBest && (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 whitespace-nowrap">
+                      ⭐ Best in {typeLabels[r.bank_type] ?? r.bank_type}
+                    </span>
+                  )}
+                </div>
               </td>
               <td className="py-2.5 pr-4 text-[var(--text-secondary)] capitalize">{r.bank_type.replace("_", " ")}</td>
               <td className="py-2.5 pr-4 text-right text-[#0D9488] dark:text-[#14B8A6] tabular-nums font-semibold">{Number(r.min_rate).toFixed(2)}%</td>
@@ -86,7 +125,8 @@ export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props)
                 </td>
               )}
             </tr>
-          ))}
+            );
+          })}
         </tbody>
       </table>
     </div>
