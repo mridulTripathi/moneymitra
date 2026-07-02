@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/ThemeProvider";
 import { ConditionalSuggestButton } from "@/components/ConditionalSuggestButton";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -78,6 +79,7 @@ export default function RootLayout({
           <Footer />
           <ConditionalSuggestButton />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
