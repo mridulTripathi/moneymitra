@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import FDCalculator from "./FDCalculator";
 import FAQAccordion from "@/components/FAQAccordion";
+import RelatedTools from "@/components/RelatedTools";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
 import { DisclaimerBar } from "@/components/DisclaimerBar";
@@ -76,6 +77,7 @@ export default function FDPage() {
 
       <FAQSearch />
       <FDCalculator />
+      <RelatedTools />
       <FAQAccordion items={faqs} />
     </div>
     </>

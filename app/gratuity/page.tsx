@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import GratuityCalculator from "./GratuityCalculator";
 import FAQAccordion from "@/components/FAQAccordion";
+import RelatedTools from "@/components/RelatedTools";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
 import { DisclaimerBar } from "@/components/DisclaimerBar";
@@ -75,6 +76,7 @@ export default function GratuityPage() {
 
       <FAQSearch />
       <GratuityCalculator />
+      <RelatedTools />
       <FAQAccordion items={faqs} />
     </div>
     </>

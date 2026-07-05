@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import RatesPage from "./RatesPage";
 import FAQAccordion from "@/components/FAQAccordion";
+import RelatedTools from "@/components/RelatedTools";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
 import EmailCapture from "@/components/EmailCapture";
@@ -138,6 +139,7 @@ export default async function Page() {
           </div>
         </div>
       </div>
+      <RelatedTools />
       <FAQAccordion items={ratesFaqs} />
     </div>
   );
