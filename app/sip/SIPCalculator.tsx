@@ -10,6 +10,7 @@ const SIPChart = dynamic(() => import("./SIPChart"), {
 import SliderInput from "@/components/SliderInput";
 import SIPTips from "@/components/tips/SIPTips";
 import { formatINR, formatShort, formatIndian } from "@/lib/utils";
+import RelatedTools from "@/components/RelatedTools";
 import { calculateStepUpSIP } from "@/lib/calculators/sip";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 
@@ -195,6 +196,8 @@ export default function SIPCalculator() {
         <SIPChart data={result.chartData} years={years} />
         <EmailCapture />
       </div>
+
+      <RelatedTools />
 
       <SIPTips corpus={result.corpus} tab={tab} last5Pct={Number(result.last5Pct)} />
     </div>

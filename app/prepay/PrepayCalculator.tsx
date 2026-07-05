@@ -11,6 +11,7 @@ import SliderInput from "@/components/SliderInput";
 import PrepayTips from "@/components/tips/PrepayTips";
 import { calcEMI, amortizationSchedule, formatINR, formatShort, formatTenure, addMonths, formatIndian } from "@/lib/utils";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
+import RelatedTools from "@/components/RelatedTools";
 
 type Mode = "reduceTenure" | "reduceEMI";
 
@@ -253,6 +254,8 @@ export default function PrepayCalculator() {
         <PrepayChart data={result.chartData} />
         <EmailCapture />
       </div>
+
+      <RelatedTools />
 
       <PrepayTips interestSaved={result.interestSaved} timeSavedMonths={result.timeSavedMonths} mode={mode} />
 

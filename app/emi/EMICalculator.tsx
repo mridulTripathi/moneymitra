@@ -7,6 +7,7 @@ import EMITips from "@/components/tips/EMITips";
 import { calcEMI, amortizationSchedule, formatINR, formatShort, formatIndian } from "@/lib/utils";
 import { track, getLoanRange } from "@/lib/analytics";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
+import RelatedTools from "@/components/RelatedTools";
 
 const EMIChart = dynamic(() => import("./EMIChart"), {
   ssr: false,
@@ -268,6 +269,8 @@ export default function EMICalculator() {
           );
         })()}
       </div>
+
+      <RelatedTools />
 
       {/* Contextual tips */}
       <div className="mt-5">

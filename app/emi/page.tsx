@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import EMICalculator from "./EMICalculator";
 import FAQAccordion from "@/components/FAQAccordion";
-import RelatedTools from "@/components/RelatedTools";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
 import { DisclaimerBar } from "@/components/DisclaimerBar";
@@ -76,7 +75,6 @@ export default function EMIPage() {
 
       <FAQSearch />
       <EMICalculator />
-      <RelatedTools />
       <FAQAccordion items={faqs} />
     </div>
     </>

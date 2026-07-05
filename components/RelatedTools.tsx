@@ -10,9 +10,9 @@ export default function RelatedTools() {
   if (!recommendations || recommendations.length === 0) return null;
 
   return (
-    <section className="my-8">
-      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">
-        You might also find useful
+    <section className="my-6 bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-2xl p-5">
+      <h3 className="text-sm font-bold text-[#0D9488] dark:text-[#14B8A6] uppercase tracking-wide mb-3 flex items-center gap-1.5">
+        <span aria-hidden="true">🔗</span> You might also find useful
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {recommendations.map((rec) => (
@@ -20,13 +20,13 @@ export default function RelatedTools() {
             key={rec.path}
             href={rec.path}
             onClick={() => track('related-tool-clicked', { from: pathname, to: rec.path })}
-            className="block bg-white dark:bg-[#131f2e] border border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-teal-400 dark:hover:border-teal-600 hover:shadow-md transition-all group"
+            className="block bg-[var(--bg-card)] border border-[#0D9488]/30 dark:border-[#14B8A6]/30 rounded-xl p-4 hover:border-[#0D9488] dark:hover:border-[#14B8A6] hover:shadow-md transition-all group"
           >
-            <p className="font-medium text-slate-800 dark:text-slate-200 group-hover:text-teal-600 dark:group-hover:text-teal-400 flex items-center justify-between">
+            <p className="font-semibold text-[var(--text-primary)] group-hover:text-[#0D9488] dark:group-hover:text-[#14B8A6] flex items-center justify-between">
               {rec.label}
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+              <span className="text-[#0D9488] dark:text-[#14B8A6] group-hover:translate-x-0.5 transition-transform">→</span>
             </p>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-sm text-[var(--text-secondary)] mt-1">
               {rec.reason}
             </p>
           </a>

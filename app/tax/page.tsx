@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import TaxCalculator from "./TaxCalculator";
 import FAQAccordion from "@/components/FAQAccordion";
-import RelatedTools from "@/components/RelatedTools";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
 import { DisclaimerBar } from "@/components/DisclaimerBar";
@@ -75,7 +74,6 @@ export default function TaxPage() {
 
       <FAQSearch />
       <TaxCalculator />
-      <RelatedTools />
       <FAQAccordion items={faqs} />
     </div>
     </>

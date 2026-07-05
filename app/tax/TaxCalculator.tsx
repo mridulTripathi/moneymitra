@@ -5,6 +5,7 @@ import { formatINR, formatShort, formatIndian } from "@/lib/utils";
 import EmailCapture from "@/components/EmailCapture";
 import TaxTips from "@/components/tips/TaxTips";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
+import RelatedTools from "@/components/RelatedTools";
 
 const TaxChart = dynamic(() => import("./TaxChart"), {
   ssr: false,
@@ -307,6 +308,8 @@ export default function TaxCalculator() {
         <TaxChart oldTax={result.old.total} newTax={result.new.total} />
         <EmailCapture />
       </div>
+
+      <RelatedTools />
 
       <TaxTips winner={result.winner} difference={result.savedAmt} totalDeductions={result.old.deductions} />
 
