@@ -6,6 +6,7 @@ import FAQAccordion from "@/components/FAQAccordion";
 import { SuggestToolForm } from "@/components/SuggestTool";
 import { SITE_URL, SITE_NAME, pages } from "@/lib/seo";
 import { createServiceClient } from "@/lib/supabase";
+import { getRateUpdateFrequency } from "@/lib/rate-update-config";
 
 export const revalidate = 21600;
 
@@ -30,18 +31,19 @@ export const metadata: Metadata = {
 async function getRatesSnapshot() {
   try {
     const client = createServiceClient();
-    const [rbiRes, bankRes] = await Promise.all([
+    const [rbiRes, bankRes, updRes] = await Promise.all([
       client.from('rbi_policy_rates').select('*').order('effective_date', { ascending: false }).limit(1).single(),
       client.from('bank_rates').select('bank_name,bank_short_name,rate_type,min_rate,max_rate').in('rate_type', ['home_loan', 'fd_1yr', 'personal_loan']),
+      client.from('rates_last_updated').select('updated_at').eq('id', 1).single(),
     ]);
     const rbi = rbiRes.data;
     const banks = bankRes.data ?? [];
     const bestHomeLoan = banks.filter((b: {rate_type: string, min_rate: number}) => b.rate_type === 'home_loan').sort((a: {min_rate: number}, b: {min_rate: number}) => a.min_rate - b.min_rate)[0];
     const bestFD = banks.filter((b: {rate_type: string, max_rate: number}) => b.rate_type === 'fd_1yr').sort((a: {max_rate: number}, b: {max_rate: number}) => b.max_rate - a.max_rate)[0];
     const bestPersonalLoan = banks.filter((b: {rate_type: string, min_rate: number}) => b.rate_type === 'personal_loan').sort((a: {min_rate: number}, b: {min_rate: number}) => a.min_rate - b.min_rate)[0];
-    return { rbi, bestHomeLoan, bestFD, bestPersonalLoan };
+    return { rbi, bestHomeLoan, bestFD, bestPersonalLoan, lastUpdated: updRes.data?.updated_at ?? null };
   } catch {
-    return { rbi: null, bestHomeLoan: null, bestFD: null, bestPersonalLoan: null };
+    return { rbi: null, bestHomeLoan: null, bestFD: null, bestPersonalLoan: null, lastUpdated: null };
   }
 }
 
@@ -193,7 +195,9 @@ export default async function Home() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
             </h2>
-            <span className="text-xs text-[var(--text-tertiary)]">Updated monthly</span>
+            <span className="text-xs text-[var(--text-tertiary)]">
+              Updated {getRateUpdateFrequency()}{ratesSnapshot.lastUpdated ? ` · ${new Date(ratesSnapshot.lastUpdated).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''}
+            </span>
           </div>
 
           {/* RBI Strip */}

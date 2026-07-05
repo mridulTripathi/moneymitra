@@ -8,6 +8,7 @@ import JsonLd from "@/components/JsonLd";
 import EmailCapture from "@/components/EmailCapture";
 import { createServiceClient } from "@/lib/supabase";
 import { pages, SITE_URL, SITE_NAME } from "@/lib/seo";
+import { getRateUpdateFrequency } from "@/lib/rate-update-config";
 
 export const revalidate = 3600; // 1 hour
 
@@ -111,11 +112,11 @@ export default async function Page() {
             RBI Repo Rate: Live
           </div>
           <span className="text-slate-500 dark:text-slate-400 text-sm">
-            Bank rates updated monthly{lastUpdated ? ` · Last updated: ${new Date(lastUpdated).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''}
+            Rates are updated {getRateUpdateFrequency()}{lastUpdated ? ` · Last updated: ${new Date(lastUpdated).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''}
           </span>
         </div>
         <p className="text-xs text-[var(--text-tertiary)] mt-2">
-          RBI policy rates (repo, CRR, SLR) update automatically. Bank product rates are verified and updated after each RBI MPC meeting.
+          RBI policy rates and bank product rates refresh automatically on this schedule. This is not real-time.
         </p>
       </div>
 
@@ -123,7 +124,7 @@ export default async function Page() {
       <div className="bg-amber-50 dark:bg-[#3f2d0a] border-l-4 border-amber-400 dark:border-amber-600 rounded-r-xl p-4 my-6">
         <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">⚠️ Important: Rates shown are indicative only</p>
         <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
-          Bank interest rates change without notice. MoneyMitra updates rates monthly but cannot guarantee real-time accuracy. Always verify the current rate directly with your bank before making any deposit or loan decision. This is not financial advice.
+          Bank interest rates change without notice. MoneyMitra updates rates {getRateUpdateFrequency()} but cannot guarantee real-time accuracy. Always verify the current rate directly with your bank before making any deposit or loan decision. This is not financial advice.
         </p>
       </div>
       <Suspense fallback={null}>
