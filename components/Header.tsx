@@ -4,9 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 
 function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return <div className="w-10 h-10" />;
@@ -15,7 +18,7 @@ function ThemeToggle() {
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="w-10 h-10 flex items-center justify-center rounded-lg text-[var(--text-secondary)] hover:bg-gray-100 dark:hover:bg-[#1E293B] transition-all"
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={isDark ? t("header.themeToggleLight") : t("header.themeToggleDark")}
     >
       <span className={`transition-transform duration-300 ${isDark ? "rotate-180" : "rotate-0"}`}>
         {isDark ? <Sun size={20} /> : <Moon size={20} />}
@@ -24,31 +27,32 @@ function ThemeToggle() {
   );
 }
 
-const primaryLinks = [
-  { href: "/emi", label: "EMI" },
-  { href: "/prepay", label: "Prepay" },
-  { href: "/sip", label: "SIP" },
-  { href: "/tax", label: "Tax" },
-  { href: "/rates", label: "Rates" },
-];
-
-const moreLinks = [
-  { href: "/fd", label: "FD & RD" },
-  { href: "/ppf", label: "PPF" },
-  { href: "/hra", label: "HRA" },
-  { href: "/gratuity", label: "Gratuity" },
-  { href: "/loan-vs-card", label: "Loan vs Card" },
-];
-
-const allLinks = [...primaryLinks, ...moreLinks];
-
 export default function Header() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const pathname = usePathname();
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [ratesData, setRatesData] = useState<{repo: number|null, bestFD: number|null, bestHL: number|null}>({repo: null, bestFD: null, bestHL: null});
   const tooltipRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const primaryLinks = [
+    { href: "/emi", label: t("nav.emi") },
+    { href: "/prepay", label: t("nav.prepay") },
+    { href: "/sip", label: t("nav.sip") },
+    { href: "/tax", label: t("nav.tax") },
+    { href: "/rates", label: t("nav.rates") },
+  ];
+
+  const moreLinks = [
+    { href: "/fd", label: t("nav.fdRd") },
+    { href: "/ppf", label: t("nav.ppf") },
+    { href: "/hra", label: t("nav.hra") },
+    { href: "/gratuity", label: t("nav.gratuity") },
+    { href: "/loan-vs-card", label: t("nav.loanVsCard") },
+  ];
+
+  const allLinks = [...primaryLinks, ...moreLinks];
 
   useEffect(() => {
     Promise.all([
@@ -81,7 +85,7 @@ export default function Header() {
           <span className="text-xl font-bold text-[#0D9488] tracking-tight group-hover:text-[#0F766E] transition-colors">
             MoneyMitra
           </span>
-          <span className="hidden lg:block text-xs text-[#64748B] font-normal">Your Money Friend</span>
+          <span className="hidden lg:block text-xs text-[#64748B] font-normal">{t("header.tagline")}</span>
         </Link>
 
         {/* Desktop nav */}
@@ -98,7 +102,7 @@ export default function Header() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              Live Rates
+              {t("header.liveRates")}
             </Link>
             {tooltipOpen && (
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-50 w-52 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl shadow-xl p-3 text-sm"
@@ -108,10 +112,10 @@ export default function Header() {
                 <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[var(--bg-card)] border-l border-t border-[var(--border-default)] rotate-45" />
                 {ratesData.repo !== null ? (
                   <div className="space-y-1.5 text-[var(--text-primary)]">
-                    <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Repo Rate</span><span className="font-semibold text-green-600 dark:text-green-400">{ratesData.repo}%</span></div>
-                    {ratesData.bestFD !== null && <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Best FD</span><span className="font-semibold text-amber-600 dark:text-amber-400">Up to {ratesData.bestFD}%</span></div>}
-                    {ratesData.bestHL !== null && <div className="flex justify-between"><span className="text-[var(--text-secondary)]">Best Home Loan</span><span className="font-semibold text-teal-600 dark:text-teal-400">From {ratesData.bestHL}%</span></div>}
-                    <Link href="/rates" className="block text-center text-xs text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 pt-1 border-t border-[var(--border-default)] mt-2">See all rates →</Link>
+                    <div className="flex justify-between"><span className="text-[var(--text-secondary)]">{t("header.repoRate")}</span><span className="font-semibold text-green-600 dark:text-green-400">{ratesData.repo}%</span></div>
+                    {ratesData.bestFD !== null && <div className="flex justify-between"><span className="text-[var(--text-secondary)]">{t("header.bestFD")}</span><span className="font-semibold text-amber-600 dark:text-amber-400">Up to {ratesData.bestFD}%</span></div>}
+                    {ratesData.bestHL !== null && <div className="flex justify-between"><span className="text-[var(--text-secondary)]">{t("header.bestHomeLoan")}</span><span className="font-semibold text-teal-600 dark:text-teal-400">From {ratesData.bestHL}%</span></div>}
+                    <Link href="/rates" className="block text-center text-xs text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 pt-1 border-t border-[var(--border-default)] mt-2">{t("header.seeAllRates")}</Link>
                   </div>
                 ) : (
                   <div className="space-y-2">
@@ -128,7 +132,7 @@ export default function Header() {
               className="px-3 py-2 rounded-lg text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] flex items-center gap-1 transition-colors"
               aria-expanded={moreOpen}
             >
-              More <ChevronDown size={14} />
+              {t("nav.more")} <ChevronDown size={14} />
             </button>
             {moreOpen && (
               <div className="absolute right-0 top-full mt-1 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl shadow-lg py-1 min-w-[160px]">
@@ -149,6 +153,11 @@ export default function Header() {
           </div>
         </nav>
 
+        {/* Language switcher (desktop) */}
+        <div className="hidden md:block">
+          <LanguageSwitcher variant="desktop" />
+        </div>
+
         {/* Theme toggle */}
         <ThemeToggle />
 
@@ -156,7 +165,7 @@ export default function Header() {
         <button
           className="md:hidden p-2 rounded-lg text-[var(--text-secondary)] hover:bg-gray-100 dark:hover:bg-[#1E293B] transition-colors"
           onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
+          aria-label={t("header.toggleMenu")}
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -186,8 +195,11 @@ export default function Header() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
-            Live Rates
+            {t("header.liveRates")}
           </Link>
+          <div className="mt-1 pt-1 border-t border-[var(--border-default)]">
+            <LanguageSwitcher variant="mobile" />
+          </div>
         </div>
       )}
     </header>
