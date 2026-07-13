@@ -1,5 +1,10 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import EmailCapture from '@/components/EmailCapture';
+import LanguageProvider from '@/components/i18n/LanguageProvider';
+
+function renderWithProvider(ui: React.ReactElement) {
+  return render(<LanguageProvider>{ui}</LanguageProvider>);
+}
 
 describe('EmailCapture', () => {
   beforeEach(() => {
@@ -8,12 +13,12 @@ describe('EmailCapture', () => {
   });
 
   it('renders the email input', () => {
-    render(<EmailCapture sourcePage="test" />);
+    renderWithProvider(<EmailCapture sourcePage="test" />);
     expect(screen.getByPlaceholderText('you@email.com')).toBeInTheDocument();
   });
 
   it('submits the email and shows confirmation', async () => {
-    render(<EmailCapture sourcePage="test" />);
+    renderWithProvider(<EmailCapture sourcePage="test" />);
     fireEvent.change(screen.getByPlaceholderText('you@email.com'), { target: { value: 'a@b.com' } });
     fireEvent.click(screen.getByText('Notify me →'));
     await waitFor(() => expect(screen.getByText(/You're in!/i)).toBeInTheDocument());
@@ -23,7 +28,7 @@ describe('EmailCapture', () => {
 
   it('shows confirmation immediately if already captured', () => {
     localStorage.setItem('mm_email_captured', 'x@y.com');
-    render(<EmailCapture />);
+    renderWithProvider(<EmailCapture />);
     expect(screen.getByText(/You're in!/i)).toBeInTheDocument();
   });
 });

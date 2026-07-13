@@ -1,4 +1,6 @@
+"use client";
 import { ReactNode } from "react";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
 
 export function TipCard({ icon = "💡", children }: { icon?: string; children: ReactNode }) {
   return (
@@ -12,9 +14,10 @@ export function TipCard({ icon = "💡", children }: { icon?: string; children: 
 }
 
 export function TipsDisclaimer() {
+  const { t } = useTranslation();
   return (
     <p className="text-xs text-[var(--text-tertiary)] mt-1">
-      These tips are general information based on your inputs, not personalised financial advice.
+      {t("tips.disclaimer")}
     </p>
   );
 }

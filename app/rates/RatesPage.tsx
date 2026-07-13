@@ -5,6 +5,7 @@ import { track } from "@/lib/analytics";
 import RBIRates from "./RBIRates";
 import BankRatesTable from "./BankRatesTable";
 import type { BankRate } from "./page";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
 
 interface Props {
   rbi: { repo_rate: number; reverse_repo_rate: number | null; crr: number | null; slr: number | null; bank_rate?: number | null };
@@ -13,22 +14,23 @@ interface Props {
 }
 
 const LOAN_TABS = [
-  { key: 'home_loan', label: 'Home Loan' },
-  { key: 'personal_loan', label: 'Personal Loan' },
-  { key: 'car_loan', label: 'Car Loan' },
-  { key: 'two_wheeler_loan', label: 'Two Wheeler Loan' },
+  { key: 'home_loan', labelKey: 'rates.tabHomeLoan' },
+  { key: 'personal_loan', labelKey: 'rates.tabPersonalLoan' },
+  { key: 'car_loan', labelKey: 'rates.tabCarLoan' },
+  { key: 'two_wheeler_loan', labelKey: 'rates.tabTwoWheelerLoan' },
 ] as const;
 
 const INVEST_TABS = [
-  { key: 'fd_1yr', label: 'FD' },
-  { key: 'rd_1yr', label: 'RD' },
-  { key: 'fd_sfb', label: 'Small Finance Bank FD' },
+  { key: 'fd_1yr', labelKey: 'rates.tabFd' },
+  { key: 'rd_1yr', labelKey: 'rates.tabRd' },
+  { key: 'fd_sfb', labelKey: 'rates.tabFdSfb' },
 ] as const;
 
 type LoanTabKey = typeof LOAN_TABS[number]['key'];
 type InvestTabKey = typeof INVEST_TABS[number]['key'];
 
 export default function RatesPage({ rbi, bankRates }: Props) {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
 
@@ -52,15 +54,15 @@ export default function RatesPage({ rbi, bankRates }: Props) {
       {/* SECTION A: Loan Rates */}
       <div className="bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)] mb-4">
         <div className="flex items-center gap-2 mb-4">
-          <span className="bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-semibold px-2.5 py-1 rounded-full">Borrowing</span>
-          <h2 className="font-semibold text-[var(--text-primary)]">📉 Loan Rates</h2>
-          <span className="text-xs text-[var(--text-tertiary)] ml-1">Lower is better ↓</span>
+          <span className="bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-semibold px-2.5 py-1 rounded-full">{t("rates.badgeBorrowing")}</span>
+          <h2 className="font-semibold text-[var(--text-primary)]">{t("rates.loanRatesHeading")}</h2>
+          <span className="text-xs text-[var(--text-tertiary)] ml-1">{t("rates.lowerIsBetter")}</span>
         </div>
         <div className="flex gap-2 flex-wrap mb-4">
-          {LOAN_TABS.map((t) => (
-            <button key={t.key} onClick={() => { setLoanTab(t.key); track('rates-tab-viewed', { tab: t.key }); }}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${loanTab === t.key ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"}`}>
-              {t.label}
+          {LOAN_TABS.map((tab) => (
+            <button key={tab.key} onClick={() => { setLoanTab(tab.key); track('rates-tab-viewed', { tab: tab.key }); }}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${loanTab === tab.key ? "bg-[#0D9488] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"}`}>
+              {t(tab.labelKey)}
             </button>
           ))}
         </div>
@@ -71,7 +73,7 @@ export default function RatesPage({ rbi, bankRates }: Props) {
       <div className="relative my-6">
         <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[var(--border-default)]" /></div>
         <div className="relative flex justify-center">
-          <span className="bg-[var(--bg-base)] px-4 text-xs text-[var(--text-tertiary)] font-medium tracking-widest uppercase">— Switch from borrowing to investing —</span>
+          <span className="bg-[var(--bg-base)] px-4 text-xs text-[var(--text-tertiary)] font-medium tracking-widest uppercase">{t("rates.switchDivider")}</span>
         </div>
       </div>
 
@@ -79,26 +81,26 @@ export default function RatesPage({ rbi, bankRates }: Props) {
       <div className="bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-2">
-            <span className="bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-semibold px-2.5 py-1 rounded-full">Investing</span>
-            <h2 className="font-semibold text-[var(--text-primary)]">📈 Investment &amp; Deposit Rates</h2>
-            <span className="text-xs text-[var(--text-tertiary)] ml-1">Higher is better ↑</span>
+            <span className="bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-semibold px-2.5 py-1 rounded-full">{t("rates.badgeInvesting")}</span>
+            <h2 className="font-semibold text-[var(--text-primary)]">{t("rates.investmentRatesHeading")}</h2>
+            <span className="text-xs text-[var(--text-tertiary)] ml-1">{t("rates.higherIsBetter")}</span>
           </div>
           <label className="flex items-center gap-2 cursor-pointer text-sm text-[var(--text-primary)]">
             <input type="checkbox" checked={showSenior} onChange={(e) => setShowSenior(e.target.checked)} className="accent-[#0D9488] w-4 h-4" />
-            Senior citizen rates (+0.5%)
+            {t("rates.seniorCitizenRatesLabel")}
           </label>
         </div>
         <div className="flex gap-2 flex-wrap mb-4">
-          {INVEST_TABS.map((t) => (
-            <button key={t.key} onClick={() => { setInvestTab(t.key); track('rates-tab-viewed', { tab: t.key }); }}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${investTab === t.key ? "bg-[#F59E0B] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"}`}>
-              {t.label}
+          {INVEST_TABS.map((tab) => (
+            <button key={tab.key} onClick={() => { setInvestTab(tab.key); track('rates-tab-viewed', { tab: tab.key }); }}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${investTab === tab.key ? "bg-[#F59E0B] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"}`}>
+              {t(tab.labelKey)}
             </button>
           ))}
         </div>
         {investTab === 'rd_1yr' && (
           <div className="bg-blue-50 dark:bg-[#0f1f33] border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3 mb-3">
-            <p className="text-sm text-blue-700 dark:text-blue-300">💡 RD interest is compounded quarterly by most banks. Rates shown are for 1-year tenure and are typically similar to FD rates.</p>
+            <p className="text-sm text-blue-700 dark:text-blue-300">{t("rates.rdNote")}</p>
           </div>
         )}
         <BankRatesTable

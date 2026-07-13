@@ -12,10 +12,12 @@ import PrepayTips from "@/components/tips/PrepayTips";
 import { calcEMI, amortizationSchedule, formatINR, formatShort, formatTenure, addMonths, formatIndian } from "@/lib/utils";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 import RelatedTools from "@/components/RelatedTools";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
 
 type Mode = "reduceTenure" | "reduceEMI";
 
 export default function PrepayCalculator() {
+  const { t } = useTranslation();
   const [loanAmt, setLoanAmt] = useState(3000000);
   const [rate, setRate] = useState(8.5);
   const [tenure, setTenure] = useState(20);
@@ -140,11 +142,11 @@ export default function PrepayCalculator() {
       {/* Sticky mobile result bar */}
       <div className="md:hidden sticky top-14 z-40 bg-[var(--bg-card)] border-b border-[var(--border-default)] px-4 py-3 flex items-center justify-between shadow-sm">
         <div>
-          <p className="text-xs text-[var(--text-secondary)]">Interest saved</p>
+          <p className="text-xs text-[var(--text-secondary)]">{t("prepay.calculator.mobileInterestSaved")}</p>
           <p className="text-xl font-bold text-[#10B981] dark:text-[#34D399] tabular-nums">{formatShort(result.interestSaved)}</p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-[var(--text-secondary)]">Time saved</p>
+          <p className="text-xs text-[var(--text-secondary)]">{t("prepay.calculator.mobileTimeSaved")}</p>
           <p className="text-base font-bold text-[#F59E0B]">{formatTenure(result.timeSavedMonths)}</p>
         </div>
       </div>
@@ -152,20 +154,20 @@ export default function PrepayCalculator() {
       {/* Inputs */}
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-          <h2 className="font-semibold text-[var(--text-primary)] mb-5 text-lg">Loan Details</h2>
-          <SliderInput label="Original Loan Amount" value={loanAmt} min={100000} max={50000000} step={50000} onChange={setLoanAmt} prefix="₹" format={formatIndian} hint="From your loan sanction letter" />
-          <SliderInput label="Annual Interest Rate" value={rate} min={5} max={20} step={0.1} onChange={setRate} suffix="%" format={(v) => v.toFixed(1)} hint="Current applicable rate" />
-          <SliderInput label="Original Tenure" value={tenure} min={1} max={30} step={1} onChange={setTenure} suffix=" yr" format={String} hint="Total loan period agreed" />
-          <SliderInput label="EMIs Already Paid" value={emisPaid} min={0} max={tenure * 12 - 1} step={1} onChange={setEmisPaid} suffix=" months" format={String} hint="How many monthly payments done so far" />
+          <h2 className="font-semibold text-[var(--text-primary)] mb-5 text-lg">{t("prepay.calculator.loanDetails")}</h2>
+          <SliderInput label={t("prepay.calculator.originalLoanAmountLabel")} value={loanAmt} min={100000} max={50000000} step={50000} onChange={setLoanAmt} prefix="₹" format={formatIndian} hint={t("prepay.calculator.originalLoanAmountHint")} />
+          <SliderInput label={t("prepay.calculator.rateLabel")} value={rate} min={5} max={20} step={0.1} onChange={setRate} suffix="%" format={(v) => v.toFixed(1)} hint={t("prepay.calculator.rateHint")} />
+          <SliderInput label={t("prepay.calculator.originalTenureLabel")} value={tenure} min={1} max={30} step={1} onChange={setTenure} suffix=" yr" format={String} hint={t("prepay.calculator.originalTenureHint")} />
+          <SliderInput label={t("prepay.calculator.emisPaidLabel")} value={emisPaid} min={0} max={tenure * 12 - 1} step={1} onChange={setEmisPaid} suffix=" months" format={String} hint={t("prepay.calculator.emisPaidHint")} />
         </div>
 
         <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-          <h2 className="font-semibold text-[var(--text-primary)] mb-5 text-lg">Prepayment Details</h2>
-          <SliderInput label="Prepayment Amount" value={prepayAmt} min={10000} max={loanAmt} step={10000} onChange={setPrepayAmt} prefix="₹" format={formatIndian} />
-          <SliderInput label="Prepayment After (months from now)" value={prepayMonth} min={1} max={Math.max(1, tenure * 12 - emisPaid - 1)} step={1} onChange={setPrepayMonth} suffix=" mo" format={String} />
+          <h2 className="font-semibold text-[var(--text-primary)] mb-5 text-lg">{t("prepay.calculator.prepaymentDetails")}</h2>
+          <SliderInput label={t("prepay.calculator.prepayAmountLabel")} value={prepayAmt} min={10000} max={loanAmt} step={10000} onChange={setPrepayAmt} prefix="₹" format={formatIndian} />
+          <SliderInput label={t("prepay.calculator.prepayAfterLabel")} value={prepayMonth} min={1} max={Math.max(1, tenure * 12 - emisPaid - 1)} step={1} onChange={setPrepayMonth} suffix=" mo" format={String} />
 
           <div className="mt-4">
-            <p className="text-sm font-medium text-[var(--text-primary)] mb-3">After prepayment, I want to:</p>
+            <p className="text-sm font-medium text-[var(--text-primary)] mb-3">{t("prepay.calculator.goalPrompt")}</p>
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => setMode("reduceTenure")}
@@ -175,9 +177,9 @@ export default function PrepayCalculator() {
                     : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[#0D9488]"
                 }`}
               >
-                Reduce tenure
+                {t("prepay.calculator.reduceTenure")}
                 <br />
-                <span className="text-xs font-normal opacity-80">Keep same EMI</span>
+                <span className="text-xs font-normal opacity-80">{t("prepay.calculator.reduceTenureSub")}</span>
               </button>
               <button
                 onClick={() => setMode("reduceEMI")}
@@ -187,15 +189,15 @@ export default function PrepayCalculator() {
                     : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-default)] hover:border-[#0D9488]"
                 }`}
               >
-                Reduce EMI
+                {t("prepay.calculator.reduceEmi")}
                 <br />
-                <span className="text-xs font-normal opacity-80">Keep same tenure</span>
+                <span className="text-xs font-normal opacity-80">{t("prepay.calculator.reduceEmiSub")}</span>
               </button>
             </div>
           </div>
 
           <button onClick={share} className="mt-4 text-sm text-[#0D9488] dark:text-[#14B8A6] hover:underline">
-            🔗 Share this calculation
+            {t("prepay.calculator.shareButton")}
           </button>
         </div>
       </div>
@@ -203,45 +205,45 @@ export default function PrepayCalculator() {
       {/* Comparison */}
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-          <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide mb-4">Without Prepayment</p>
-          <Row label="Monthly EMI" value={formatINR(Math.round(result.withoutEMI))} />
-          <Row label="Remaining Tenure" value={formatTenure(result.withoutTenure)} />
-          <Row label="Total Interest Remaining" value={formatShort(result.withoutInterest)} color="text-red-500" />
-          <Row label="Loan Closes On" value={result.withoutClose} />
+          <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide mb-4">{t("prepay.calculator.withoutPrepayment")}</p>
+          <Row label={t("prepay.calculator.monthlyEmi")} value={formatINR(Math.round(result.withoutEMI))} />
+          <Row label={t("prepay.calculator.remainingTenure")} value={formatTenure(result.withoutTenure)} />
+          <Row label={t("prepay.calculator.totalInterestRemaining")} value={formatShort(result.withoutInterest)} color="text-red-500" />
+          <Row label={t("prepay.calculator.loanClosesOn")} value={result.withoutClose} />
         </div>
         <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)] relative overflow-hidden">
           <div className="absolute top-0 right-0 bg-[#10B981] dark:bg-[#34D399] text-white text-xs px-3 py-1 rounded-bl-xl font-medium">
-            With Prepayment
+            {t("prepay.calculator.withPrepaymentBadge")}
           </div>
-          <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide mb-4">With Prepayment</p>
-          <Row label="Monthly EMI" value={formatINR(Math.round(result.withEMI))} />
-          <Row label="Remaining Tenure" value={formatTenure(result.withTenure)} />
-          <Row label="Total Interest Remaining" value={formatShort(result.withInterest)} color="text-[#10B981] dark:text-[#34D399]" />
-          <Row label="Loan Closes On" value={result.withClose} />
+          <p className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wide mb-4">{t("prepay.calculator.withPrepayment")}</p>
+          <Row label={t("prepay.calculator.monthlyEmi")} value={formatINR(Math.round(result.withEMI))} />
+          <Row label={t("prepay.calculator.remainingTenure")} value={formatTenure(result.withTenure)} />
+          <Row label={t("prepay.calculator.totalInterestRemaining")} value={formatShort(result.withInterest)} color="text-[#10B981] dark:text-[#34D399]" />
+          <Row label={t("prepay.calculator.loanClosesOn")} value={result.withClose} />
         </div>
       </div>
 
       {/* Savings callout */}
       <div className="bg-[#FFF8E7] dark:bg-amber-950/40 border border-[#F59E0B]/30 dark:border-amber-800 rounded-2xl p-6">
-        <h3 className="font-bold text-[var(--text-primary)] mb-4 text-lg">💰 Your Savings</h3>
+        <h3 className="font-bold text-[var(--text-primary)] mb-4 text-lg">{t("prepay.calculator.savingsTitle")}</h3>
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="text-center">
             <AnimatedNumber value={result.interestSaved} duration={700} formatter={(n) => formatShort(n)} className="text-3xl font-bold text-[#F59E0B] tabular-nums result-value" aria-live="polite" aria-atomic="true" />
-            <p className="text-sm text-[var(--text-secondary)] mt-1">✅ Interest saved</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">{t("prepay.calculator.interestSaved")}</p>
           </div>
           <div className="text-center">
             <AnimatedNumber value={result.timeSavedMonths} duration={700} formatter={(n) => formatTenure(Math.round(n))} className="text-3xl font-bold text-[#10B981] dark:text-[#34D399] tabular-nums result-value" aria-live="polite" aria-atomic="true" />
-            <p className="text-sm text-[var(--text-secondary)] mt-1">✅ Time saved</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">{t("prepay.calculator.timeSaved")}</p>
           </div>
           <div className="text-center">
             <p className="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1">
-              <span>🎯</span> Loan closes on
+              {t("prepay.calculator.loanClosesOnIcon")}
             </p>
             <p className="text-3xl font-bold text-teal-600 dark:text-teal-400 mt-1">
               {result.withClose}
             </p>
             <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-              instead of {result.withoutClose}
+              {t("prepay.calculator.insteadOf", { date: result.withoutClose })}
             </p>
           </div>
         </div>
@@ -249,8 +251,8 @@ export default function PrepayCalculator() {
 
       {/* Chart */}
       <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-        <h3 className="font-semibold text-[var(--text-primary)] mb-1">Outstanding Balance Over Time</h3>
-        <p className="text-xs text-[var(--text-tertiary)] mb-4">The gap between the two lines is your interest saving</p>
+        <h3 className="font-semibold text-[var(--text-primary)] mb-1">{t("prepay.calculator.chartTitle")}</h3>
+        <p className="text-xs text-[var(--text-tertiary)] mb-4">{t("prepay.calculator.chartSubtitle")}</p>
         <PrepayChart data={result.chartData} />
         <EmailCapture />
       </div>
@@ -260,7 +262,7 @@ export default function PrepayCalculator() {
       <PrepayTips interestSaved={result.interestSaved} timeSavedMonths={result.timeSavedMonths} mode={mode} />
 
       <div className="bg-blue-50 dark:bg-[#0f1f33] border border-blue-100 dark:border-blue-800 rounded-xl p-4 text-sm text-blue-800 dark:text-blue-300">
-        💡 Most Indian banks allow 25% annual prepayment on floating rate home loans with no penalty. Check with your bank for the exact terms.
+        {t("prepay.calculator.bottomNote")}
       </div>
     </div>
   );

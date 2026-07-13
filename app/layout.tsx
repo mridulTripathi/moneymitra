@@ -5,6 +5,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ThemeProvider from "@/components/ThemeProvider";
+import LanguageProvider from "@/components/i18n/LanguageProvider";
+import TranslationDisclaimer from "@/components/i18n/TranslationDisclaimer";
 import { ConditionalSuggestButton } from "@/components/ConditionalSuggestButton";
 import { SITE_URL, SITE_NAME } from "@/lib/seo";
 import { Analytics } from "@vercel/analytics/next";
@@ -74,10 +76,13 @@ export default function RootLayout({
           />
         )}
         <ThemeProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <ConditionalSuggestButton />
+          <LanguageProvider>
+            <Header />
+            <TranslationDisclaimer />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <ConditionalSuggestButton />
+          </LanguageProvider>
         </ThemeProvider>
         <Analytics />
       </body>

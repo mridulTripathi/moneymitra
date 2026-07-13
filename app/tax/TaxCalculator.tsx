@@ -6,6 +6,8 @@ import EmailCapture from "@/components/EmailCapture";
 import TaxTips from "@/components/tips/TaxTips";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 import RelatedTools from "@/components/RelatedTools";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
+import { PLACEHOLDER_MARKER, splitAroundPlaceholder } from "@/lib/i18n/split-placeholder";
 
 const TaxChart = dynamic(() => import("./TaxChart"), {
   ssr: false,
@@ -93,6 +95,7 @@ function AmtInput({ value, onChange, max }: { value: number; onChange: (v: numbe
 }
 
 export default function TaxCalculator() {
+  const { t } = useTranslation();
   const [grossSalary, setGrossSalary] = useState(1200000);
   const [ded, setDed] = useState<Deductions>({
     sec80C: true, sec80C_amt: 150000,
@@ -147,23 +150,20 @@ export default function TaxCalculator() {
     navigator.clipboard.writeText(url.toString());
   };
 
-  const chartData = [
-    { name: "Old Regime", tax: Math.round(result.old.total) },
-    { name: "New Regime", tax: Math.round(result.new.total) },
-  ];
+
 
   return (
     <div className="flex flex-col gap-6">
       {/* Sticky mobile result bar */}
       <div className="md:hidden sticky top-14 z-40 bg-[var(--bg-card)] border-b border-[var(--border-default)] px-4 py-3 flex items-center justify-between shadow-sm">
         <div>
-          <p className="text-xs text-[var(--text-secondary)]">Best choice</p>
+          <p className="text-xs text-[var(--text-secondary)]">{t("tax.calculator.mobileBestChoice")}</p>
           <p className="text-base font-bold text-[#0D9488] dark:text-[#14B8A6]">
-            {result.winner === "new" ? "New Regime" : "Old Regime"}
+            {result.winner === "new" ? t("tax.calculator.regimeNew") : t("tax.calculator.regimeOld")}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-[var(--text-secondary)]">You save</p>
+          <p className="text-xs text-[var(--text-secondary)]">{t("tax.calculator.mobileYouSave")}</p>
           <p className="text-lg font-bold text-[#F59E0B] tabular-nums">{formatShort(result.savedAmt)}</p>
         </div>
       </div>
@@ -172,7 +172,7 @@ export default function TaxCalculator() {
       <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">
-            <label className="text-sm font-medium text-[var(--text-primary)] block mb-1">Annual Gross Salary</label>
+            <label className="text-sm font-medium text-[var(--text-primary)] block mb-1">{t("tax.calculator.grossSalaryLabel")}</label>
             <div className="flex items-center gap-2 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3">
               <span className="text-[var(--text-secondary)] text-lg">₹</span>
               <input
@@ -188,7 +188,7 @@ export default function TaxCalculator() {
             </div>
           </div>
           <div className="text-sm text-[var(--text-secondary)]">
-            <span className="bg-[var(--bg-elevated)] px-3 py-1 rounded-lg">FY 2025-26</span>
+            <span className="bg-[var(--bg-elevated)] px-3 py-1 rounded-lg">{t("tax.calculator.fyBadge")}</span>
           </div>
         </div>
         <input
@@ -201,23 +201,23 @@ export default function TaxCalculator() {
           className="w-full mt-4"
         />
         <div className="flex justify-between text-xs text-[var(--text-tertiary)] mt-1">
-          <span>₹3L</span><span>₹1Cr</span>
+          <span>{t("tax.calculator.rangeMin")}</span><span>{t("tax.calculator.rangeMax")}</span>
         </div>
-        <button onClick={share} className="mt-3 text-sm text-[#0D9488] dark:text-[#14B8A6] hover:underline">🔗 Share this calculation</button>
+        <button onClick={share} className="mt-3 text-sm text-[#0D9488] dark:text-[#14B8A6] hover:underline">{t("tax.calculator.shareButton")}</button>
       </div>
 
       {/* Old regime deductions */}
       <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-        <h2 className="font-semibold text-[var(--text-primary)] mb-1">Old Regime Deductions</h2>
-        <p className="text-xs text-[var(--text-secondary)] mb-4">Toggle the deductions that apply to you</p>
+        <h2 className="font-semibold text-[var(--text-primary)] mb-1">{t("tax.calculator.deductionsHeading")}</h2>
+        <p className="text-xs text-[var(--text-secondary)] mb-4">{t("tax.calculator.deductionsSubtitle")}</p>
         <div className="flex flex-col gap-3">
           {[
-            { key: "sec80C" as const, label: "80C — PF / ELSS / LIC / PPF", amtKey: "sec80C_amt" as const, max: 150000, cap: "Max ₹1.5L" },
-            { key: "sec80D" as const, label: "80D — Health Insurance", amtKey: "sec80D_amt" as const, max: 25000, cap: "Max ₹25K" },
-            { key: "hra" as const, label: "HRA Exemption", amtKey: "hra_amt" as const, cap: "Actual exempt amount" },
-            { key: "homeLoan" as const, label: "24(b) — Home Loan Interest", amtKey: "homeLoan_amt" as const, max: 200000, cap: "Max ₹2L" },
-            { key: "nps" as const, label: "80CCD(1B) — NPS", amtKey: "nps_amt" as const, max: 50000, cap: "Max ₹50K" },
-            { key: "other" as const, label: "Other deduction", amtKey: "other_amt" as const, cap: "" },
+            { key: "sec80C" as const, label: t("tax.calculator.deduction80c"), amtKey: "sec80C_amt" as const, max: 150000, cap: t("tax.calculator.deduction80cCap") },
+            { key: "sec80D" as const, label: t("tax.calculator.deduction80d"), amtKey: "sec80D_amt" as const, max: 25000, cap: t("tax.calculator.deduction80dCap") },
+            { key: "hra" as const, label: t("tax.calculator.deductionHra"), amtKey: "hra_amt" as const, cap: t("tax.calculator.deductionHraCap") },
+            { key: "homeLoan" as const, label: t("tax.calculator.deductionHomeLoan"), amtKey: "homeLoan_amt" as const, max: 200000, cap: t("tax.calculator.deductionHomeLoanCap") },
+            { key: "nps" as const, label: t("tax.calculator.deductionNps"), amtKey: "nps_amt" as const, max: 50000, cap: t("tax.calculator.deductionNpsCap") },
+            { key: "other" as const, label: t("tax.calculator.deductionOther"), amtKey: "other_amt" as const, cap: "" },
           ].map((item) => (
             <div key={item.key} className="py-3 border-b border-[var(--border-subtle)] last:border-0">
               {/* Toggle + label row */}
@@ -250,13 +250,32 @@ export default function TaxCalculator() {
         aria-atomic="true"
       >
         <p className="text-2xl font-bold mb-1">
-          {result.winner === "new" ? "🎉 New Regime" : "🏆 Old Regime"} saves you{" "}
-          <AnimatedNumber value={result.savedAmt} duration={700} formatter={(n) => formatShort(n)} /> this year
+          {(() => {
+            const [before, after] = splitAroundPlaceholder(
+              t(result.winner === "new" ? "tax.calculator.winnerBannerNew" : "tax.calculator.winnerBannerOld", { amount: PLACEHOLDER_MARKER })
+            );
+            return (
+              <>
+                {before}
+                <AnimatedNumber value={result.savedAmt} duration={700} formatter={(n) => formatShort(n)} />
+                {after}
+              </>
+            );
+          })()}
         </p>
         <p className="text-sm opacity-90">
-          You save{" "}
-          <strong><AnimatedNumber value={result.savedAmt / 12} duration={700} formatter={(n) => formatINR(Math.round(n))} />/month</strong> by choosing the{" "}
-          {result.winner === "new" ? "New" : "Old"} Regime
+          {(() => {
+            const [before, after] = splitAroundPlaceholder(
+              t("tax.calculator.winnerBannerSubtext", { amountPerMonth: PLACEHOLDER_MARKER, regime: result.winner === "new" ? t("tax.calculator.regimeNew") : t("tax.calculator.regimeOld") })
+            );
+            return (
+              <>
+                {before}
+                <strong><AnimatedNumber value={result.savedAmt / 12} duration={700} formatter={(n) => formatINR(Math.round(n))} /></strong>
+                {after}
+              </>
+            );
+          })()}
         </p>
       </div>
 
@@ -272,26 +291,26 @@ export default function TaxCalculator() {
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-[var(--text-primary)] text-lg">
-                  {regime === "old" ? "Old Regime" : "New Regime"}
+                  {regime === "old" ? t("tax.calculator.oldRegimeTitle") : t("tax.calculator.newRegimeTitle")}
                 </h3>
                 {isWinner && (
                   <span className="text-xs bg-[#0D9488] text-white px-2 py-1 rounded-full font-medium">
-                    Better choice ✓
+                    {t("tax.calculator.betterChoiceBadge")}
                   </span>
                 )}
               </div>
-              <TaxRow label="Gross Income" value={formatINR(grossSalary)} />
-              <TaxRow label="Total Deductions" value={`−${formatINR(Math.round(r.deductions))}`} color="text-[#10B981] dark:text-[#34D399]" />
-              <TaxRow label="Taxable Income" value={formatINR(Math.round(r.taxable))} bold />
+              <TaxRow label={t("tax.calculator.grossIncome")} value={formatINR(grossSalary)} />
+              <TaxRow label={t("tax.calculator.totalDeductions")} value={t("tax.calculator.totalDeductionsValue", { amount: formatINR(Math.round(r.deductions)) })} color="text-[#10B981] dark:text-[#34D399]" />
+              <TaxRow label={t("tax.calculator.taxableIncome")} value={formatINR(Math.round(r.taxable))} bold />
               <div className="my-2 border-t border-dashed border-[var(--border-default)]" />
-              <TaxRow label="Tax (before cess)" value={formatINR(Math.round(r.taxBefore))} />
-              <TaxRow label="Health & Education Cess (4%)" value={formatINR(Math.round(r.cess))} />
+              <TaxRow label={t("tax.calculator.taxBeforeCess")} value={formatINR(Math.round(r.taxBefore))} />
+              <TaxRow label={t("tax.calculator.cess")} value={formatINR(Math.round(r.cess))} />
               <div className="flex justify-between items-center py-1.5">
-                <span className="text-sm text-[var(--text-secondary)]">Total Tax</span>
+                <span className="text-sm text-[var(--text-secondary)]">{t("tax.calculator.totalTax")}</span>
                 <AnimatedNumber value={r.total} duration={500} formatter={(n) => formatINR(Math.round(n))} className="text-sm tabular-nums font-bold text-red-500" />
               </div>
               <div className="mt-3 p-3 bg-[#F0FDF9] dark:bg-emerald-950/40 rounded-xl">
-                <p className="text-xs text-[var(--text-secondary)]">Monthly Take-Home</p>
+                <p className="text-xs text-[var(--text-secondary)]">{t("tax.calculator.monthlyTakeHome")}</p>
                 <p className="text-xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums">
                   {formatINR(Math.round(r.takeHome))}
                 </p>
@@ -303,8 +322,8 @@ export default function TaxCalculator() {
 
       {/* Chart */}
       <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-        <h3 className="font-semibold text-[var(--text-primary)] mb-1">Tax Comparison</h3>
-        <p className="text-xs text-[var(--text-tertiary)] mb-4">Shorter bar = less tax = more money in your pocket</p>
+        <h3 className="font-semibold text-[var(--text-primary)] mb-1">{t("tax.calculator.chartHeading")}</h3>
+        <p className="text-xs text-[var(--text-tertiary)] mb-4">{t("tax.calculator.chartCaption")}</p>
         <TaxChart oldTax={result.old.total} newTax={result.new.total} />
         <EmailCapture />
       </div>
@@ -315,7 +334,7 @@ export default function TaxCalculator() {
 
 
       <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
-        💡 <strong>Note:</strong> These calculations are for salaried individuals. The New Regime has lower rates but fewer deductions. The Old Regime benefits those with significant 80C investments, HRA exemption, and home loan interest deductions.
+        {t("tax.calculator.footerNotePrefix")}<strong>{t("tax.calculator.footerNoteBold")}</strong>{t("tax.calculator.footerNoteRest")}
       </div>
     </div>
   );

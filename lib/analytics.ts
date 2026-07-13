@@ -29,6 +29,7 @@ export function getSalaryRange(annual: number): string {
 
 export function track(event: string, data?: Record<string, string | number>) {
   if (typeof window !== 'undefined' && window.umami) {
-    window.umami.track(event, data);
+    const language = localStorage.getItem('mm_locale') || 'en';
+    window.umami.track(event, { ...data, language });
   }
 }

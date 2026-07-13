@@ -4,6 +4,7 @@ import FAQAccordion from "@/components/FAQAccordion";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
 import { DisclaimerBar } from "@/components/DisclaimerBar";
+import PageHeader from "@/components/i18n/PageHeader";
 import { pages, SITE_URL, SITE_NAME } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -60,18 +61,7 @@ export default function EMIPage() {
       <JsonLd data={howToSchema} />
       <JsonLd data={breadcrumbSchema} />
 
-      <nav aria-label="Breadcrumb" className="text-xs text-[var(--text-tertiary)] mb-4">
-        <ol className="flex items-center gap-1">
-          <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
-          <li aria-hidden="true">›</li>
-          <li className="text-[var(--text-primary)]">EMI Calculator</li>
-        </ol>
-      </nav>
-
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">EMI Calculator</h1>
-        <p className="text-[#64748B]">Know your exact monthly instalment before you sign any loan documents.</p>
-      </div>
+      <PageHeader breadcrumbKey="emi.page.breadcrumb" titleKey="emi.page.title" subtitleKey="emi.page.subtitle" />
 
       <FAQSearch />
       <EMICalculator />

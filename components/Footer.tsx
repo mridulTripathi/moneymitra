@@ -1,19 +1,22 @@
+"use client";
 import Link from "next/link";
-
-const footerLinks = [
-  { href: "/emi", label: "EMI" },
-  { href: "/prepay", label: "Prepayment" },
-  { href: "/sip", label: "SIP" },
-  { href: "/tax", label: "Tax" },
-  { href: "/fd", label: "FD & RD" },
-  { href: "/ppf", label: "PPF" },
-  { href: "/hra", label: "HRA" },
-  { href: "/gratuity", label: "Gratuity" },
-  { href: "/loan-vs-card", label: "Loan vs Card" },
-  { href: "/rates", label: "Bank Rates" },
-];
+import { useTranslation } from "@/components/i18n/LanguageProvider";
 
 export default function Footer() {
+  const { t } = useTranslation();
+  const footerLinks = [
+    { href: "/emi", label: t("footer.emi") },
+    { href: "/prepay", label: t("footer.prepayment") },
+    { href: "/sip", label: t("footer.sip") },
+    { href: "/tax", label: t("footer.tax") },
+    { href: "/fd", label: t("footer.fdRd") },
+    { href: "/ppf", label: t("footer.ppf") },
+    { href: "/hra", label: t("footer.hra") },
+    { href: "/gratuity", label: t("footer.gratuity") },
+    { href: "/loan-vs-card", label: t("footer.loanVsCard") },
+    { href: "/rates", label: t("footer.bankRates") },
+  ];
+
   return (
     <footer className="bg-[var(--bg-card)] border-t border-[var(--border-default)] py-6 mt-12">
       <div className="max-w-6xl mx-auto px-4 text-center text-sm text-[var(--text-secondary)]">
@@ -24,10 +27,9 @@ export default function Footer() {
             </Link>
           ))}
         </nav>
-        <p>Made with ❤️ for India &nbsp;|&nbsp; Not financial advice</p>
+        <p>{t("footer.madeWithLove")}</p>
         <p className="mt-1 text-xs">
-          All calculations are indicative. Please consult a financial advisor for
-          personalised advice.
+          {t("footer.disclaimer")}
         </p>
       </div>
     </footer>
