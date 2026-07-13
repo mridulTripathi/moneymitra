@@ -2,13 +2,26 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { LANGUAGES } from "@/lib/i18n/languages";
 import { en, TranslationDict } from "@/lib/i18n/translations/en";
+import { hi } from "@/lib/i18n/translations/hi";
+import { bn } from "@/lib/i18n/translations/bn";
+import { mr } from "@/lib/i18n/translations/mr";
+import { te } from "@/lib/i18n/translations/te";
+import { ta } from "@/lib/i18n/translations/ta";
+import { gu } from "@/lib/i18n/translations/gu";
+import { kn } from "@/lib/i18n/translations/kn";
+import { ml } from "@/lib/i18n/translations/ml";
+import { pa } from "@/lib/i18n/translations/pa";
+import { or } from "@/lib/i18n/translations/or";
+import { as } from "@/lib/i18n/translations/as";
+import { ur } from "@/lib/i18n/translations/ur";
 import { track } from "@/lib/analytics";
 
-// Map of locale -> translation dictionary. Only `en` exists today; other
-// locales will be added here in a later pass without changing this file's
-// public API.
+// Map of locale -> translation dictionary. Every locale falls back to `en`
+// for any key it's missing (see resolvePath usage in t() below), so a
+// partially-translated dictionary never breaks — it just shows English for
+// the untranslated bits.
 const translations: Record<string, TranslationDict> = {
-  en,
+  en, hi, bn, mr, te, ta, gu, kn, ml, pa, or, as, ur,
 };
 
 function getCookie(name: string): string | null {

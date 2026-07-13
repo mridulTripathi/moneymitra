@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, Fragment } from "react";
 import Fuse from "fuse.js";
 import { FAQ_DATA, FAQItem } from "@/lib/faq-data";
 import { track } from "@/lib/analytics";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
 
 // Lightly formats an AI answer into paragraphs / bullet / numbered lists
 // and bolds **text** — purely presentational, doesn't touch the source text.
@@ -79,6 +80,7 @@ function getBestMatches(query: string): FAQItem[] {
 }
 
 export default function FAQSearch() {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<FAQItem[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -90,6 +92,7 @@ export default function FAQSearch() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Debounced Fuse search for dropdown
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     setSelectedResult(null);
@@ -107,6 +110,7 @@ export default function FAQSearch() {
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -170,7 +174,7 @@ export default function FAQSearch() {
               if (e.key === "Enter") { handleSearch(); }
               if (e.key === "Escape") { setShowDropdown(false); }
             }}
-            placeholder="Ask anything — 'EMI for 50 lakh loan' or 'PPF vs FD'"
+            placeholder={t("faqSearch.placeholder")}
             className="flex-1 border border-[var(--border-default)] bg-[var(--bg-card)] rounded-xl px-4 py-3 text-sm text-[var(--text-primary)] outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/20 transition-all"
           />
           <button
@@ -178,7 +182,7 @@ export default function FAQSearch() {
             disabled={loading}
             className="bg-[#0D9488] hover:bg-[#0F766E] text-white text-sm font-semibold px-5 py-3 rounded-xl transition-colors whitespace-nowrap disabled:opacity-60"
           >
-            {loading ? "..." : "Search"}
+            {loading ? t("faqSearch.searchLoading") : t("faqSearch.searchButton")}
           </button>
         </div>
 
@@ -201,7 +205,7 @@ export default function FAQSearch() {
         <div className="mt-3 bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
           <p className="font-semibold text-sm text-[var(--text-primary)] mb-1">{selectedResult.question}</p>
           <p className="text-sm text-[#374151] dark:text-[#CBD5E1]">{selectedResult.answer}</p>
-          <p className="text-xs text-[var(--text-tertiary)] mt-2">📚 From our FAQ · General information only, not advice</p>
+          <p className="text-xs text-[var(--text-tertiary)] mt-2">{t("faqSearch.faqSourceNote")}</p>
         </div>
       )}
 
@@ -213,7 +217,7 @@ export default function FAQSearch() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488] dark:bg-[#14B8A6] animate-bounce [animation-delay:-0.15s]" />
               <span className="w-1.5 h-1.5 rounded-full bg-[#0D9488] dark:bg-[#14B8A6] animate-bounce" />
             </span>
-            🤖 Thinking through your question…
+            {t("faqSearch.thinking")}
           </div>
           <div className="mt-3 space-y-2 animate-pulse">
             <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full" />
@@ -227,12 +231,12 @@ export default function FAQSearch() {
         <div className="mt-3 bg-[var(--tip-bg)] border border-[#0D9488]/20 dark:border-[#14B8A6]/20 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#0D9488] dark:bg-[#14B8A6] text-white dark:text-[#0a0f1a]">
-              ✨ AI-generated answer
+              {t("faqSearch.aiGeneratedBadge")}
             </span>
           </div>
           <FormattedAnswer text={aiAnswer.answer} />
           <p className="text-xs text-amber-700 dark:text-amber-400 mt-3 pt-2 border-t border-[#0D9488]/10 dark:border-[#14B8A6]/10 flex items-center gap-1">
-            ⚠️ For general awareness only — not financial advice. Please verify important numbers.
+            {t("faqSearch.aiDisclaimer")}
           </p>
         </div>
       )}

@@ -9,10 +9,11 @@ const SIPChart = dynamic(() => import("./SIPChart"), {
 });
 import SliderInput from "@/components/SliderInput";
 import SIPTips from "@/components/tips/SIPTips";
-import { formatINR, formatShort, formatIndian } from "@/lib/utils";
+import { formatShort, formatIndian } from "@/lib/utils";
 import RelatedTools from "@/components/RelatedTools";
 import { calculateStepUpSIP } from "@/lib/calculators/sip";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
 
 type Tab = "basic" | "stepup";
 
@@ -59,6 +60,7 @@ function buildYearlyData(monthly: number, annualReturn: number, years: number, s
 }
 
 export default function SIPCalculator() {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>("basic");
   const [monthly, setMonthly] = useState(10000);
   const [returnRate, setReturnRate] = useState(12);
@@ -108,25 +110,25 @@ export default function SIPCalculator() {
       {/* Sticky mobile result bar */}
       <div className="md:hidden sticky top-14 z-40 bg-[var(--bg-card)] border-b border-[var(--border-default)] px-4 py-3 flex items-center justify-between shadow-sm">
         <div>
-          <p className="text-xs text-[var(--text-secondary)]">Total Corpus</p>
+          <p className="text-xs text-[var(--text-secondary)]">{t("sip.calculator.mobileCorpusLabel")}</p>
           <p className="text-xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums">{formatShort(result.corpus)}</p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-[var(--text-secondary)]">Returns</p>
+          <p className="text-xs text-[var(--text-secondary)]">{t("sip.calculator.mobileReturnsLabel")}</p>
           <p className="text-base font-bold text-[#F59E0B] tabular-nums">{result.multiplier.toFixed(1)}x</p>
         </div>
       </div>
       {/* Tab switcher */}
       <div className="flex bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-1 w-fit shadow-sm">
-        {(["basic", "stepup"] as Tab[]).map((t) => (
+        {(["basic", "stepup"] as Tab[]).map((tabKey) => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
+            key={tabKey}
+            onClick={() => setTab(tabKey)}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-              tab === t ? "bg-[#0D9488] text-white shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              tab === tabKey ? "bg-[#0D9488] text-white shadow-sm" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             }`}
           >
-            {t === "basic" ? "Basic SIP" : "Step-Up SIP"}
+            {tabKey === "basic" ? t("sip.calculator.tabBasic") : t("sip.calculator.tabStepup")}
           </button>
         ))}
       </div>
@@ -134,44 +136,46 @@ export default function SIPCalculator() {
       <div className="grid lg:grid-cols-[1fr_1fr] gap-6">
         {/* Inputs */}
         <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-          <h2 className="font-semibold text-[var(--text-primary)] mb-5 text-lg">Investment Details</h2>
-          <SliderInput label="Monthly Investment" value={monthly} min={500} max={500000} step={500} onChange={setMonthly} prefix="₹" format={formatIndian} hint="How much you invest each month" />
-          <SliderInput label="Expected Annual Return" value={returnRate} min={6} max={25} step={0.5} onChange={setReturnRate} suffix="%" format={(v) => v.toFixed(1)} hint="Equity MFs avg ~12%, debt ~7%" />
-          <SliderInput label="Investment Period" value={years} min={1} max={40} step={1} onChange={setYears} suffix=" yr" format={String} hint="Longer = more compounding" />
+          <h2 className="font-semibold text-[var(--text-primary)] mb-5 text-lg">{t("sip.calculator.investmentDetails")}</h2>
+          <SliderInput label={t("sip.calculator.monthlyLabel")} value={monthly} min={500} max={500000} step={500} onChange={setMonthly} prefix="₹" format={formatIndian} hint={t("sip.calculator.monthlyHint")} />
+          <SliderInput label={t("sip.calculator.returnLabel")} value={returnRate} min={6} max={25} step={0.5} onChange={setReturnRate} suffix="%" format={(v) => v.toFixed(1)} hint={t("sip.calculator.returnHint")} />
+          <SliderInput label={t("sip.calculator.yearsLabel")} value={years} min={1} max={40} step={1} onChange={setYears} suffix=" yr" format={String} hint={t("sip.calculator.yearsHint")} />
           {tab === "stepup" && (
-            <SliderInput label="Annual Step-Up %" value={stepUp} min={1} max={50} step={1} onChange={setStepUp} suffix="%" format={String} hint="Increase SIP by this % each year" />
+            <SliderInput label={t("sip.calculator.stepupLabel")} value={stepUp} min={1} max={50} step={1} onChange={setStepUp} suffix="%" format={String} hint={t("sip.calculator.stepupHint")} />
           )}
           <button onClick={share} className="mt-2 text-sm text-[#0D9488] dark:text-[#14B8A6] hover:underline">
-            🔗 Share this calculation
+            {t("sip.calculator.shareButton")}
           </button>
         </div>
 
         {/* Results */}
         <div className="flex flex-col gap-4">
           <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-            <p className="text-sm text-[var(--text-secondary)] mb-1">Total Corpus</p>
+            <p className="text-sm text-[var(--text-secondary)] mb-1">{t("sip.calculator.totalCorpus")}</p>
             <AnimatedNumber value={result.corpus} duration={800} formatter={(n) => formatShort(n)} className="text-4xl font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums result-value" aria-live="polite" aria-atomic="true" />
             <div className="inline-block bg-[#F59E0B]/10 text-[#D97706] dark:text-[#FBBF24] text-sm font-bold px-3 py-1 rounded-full mt-2">
-              {result.multiplier.toFixed(1)}x your money
+              {t("sip.calculator.multiplierBadge", { multiplier: result.multiplier.toFixed(1) })}
             </div>
             {/* Step-up callout — only show when on basic SIP tab */}
             {tab === 'basic' && (
               <button onClick={() => setTab('stepup')} className="w-full mt-3 flex items-center justify-between bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-3 text-left">
                 <p className="text-sm text-[var(--text-primary)]">
-                  💡 <strong>Step up 10%/yr:</strong> corpus grows to{' '}
-                  <span className="text-[#0D9488] font-bold">{formatShort(calculateStepUpSIP(monthly, returnRate, years, 10))}</span>
-                  {' '}— {formatShort(calculateStepUpSIP(monthly, returnRate, years, 10) - result.corpus)} more
+                  {t("sip.calculator.stepupCalloutPrefix")}<strong>{t("sip.calculator.stepupCalloutBold")}</strong>
+                  {t("sip.calculator.stepupCalloutMiddle", {
+                    amount: formatShort(calculateStepUpSIP(monthly, returnRate, years, 10)),
+                    extra: formatShort(calculateStepUpSIP(monthly, returnRate, years, 10) - result.corpus),
+                  })}
                 </p>
-                <span className="text-[var(--text-secondary)] ml-3 flex-shrink-0">Switch →</span>
+                <span className="text-[var(--text-secondary)] ml-3 flex-shrink-0">{t("sip.calculator.switchTo")}</span>
               </button>
             )}
             <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-[var(--text-secondary)]">Total Invested</p>
+                <p className="text-[var(--text-secondary)]">{t("sip.calculator.totalInvested")}</p>
                 <AnimatedNumber value={result.totalInvested} duration={600} formatter={(n) => formatShort(n)} className="font-semibold tabular-nums" />
               </div>
               <div>
-                <p className="text-[var(--text-secondary)]">Estimated Returns</p>
+                <p className="text-[var(--text-secondary)]">{t("sip.calculator.estimatedReturns")}</p>
                 <AnimatedNumber value={result.gains} duration={700} formatter={(n) => formatShort(n)} className="font-semibold text-[#10B981] dark:text-[#34D399] tabular-nums" />
               </div>
             </div>
@@ -179,11 +183,9 @@ export default function SIPCalculator() {
 
           {/* Insight */}
           <div className="bg-[#F0FDF9] dark:bg-emerald-950/40 border border-[#10B981]/20 dark:border-emerald-800 rounded-2xl p-4 text-sm text-[#064E3B] dark:text-emerald-300">
-            <p className="font-medium mb-1">💡 Power of Compounding</p>
+            <p className="font-medium mb-1">{t("sip.calculator.compoundingInsightHeading")}</p>
             <p>
-              Your final 5 years contribute <strong>{formatShort(Math.abs(result.last5Amount))}</strong> to your
-              total corpus — that&apos;s <strong>{result.last5Pct}%</strong> of the total. This is why
-              staying invested matters.
+              {t("sip.calculator.compoundingInsightBody", { amount: formatShort(Math.abs(result.last5Amount)), pct: result.last5Pct })}
             </p>
           </div>
         </div>
@@ -191,8 +193,8 @@ export default function SIPCalculator() {
 
       {/* Chart */}
       <div className="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-        <h3 className="font-semibold text-[var(--text-primary)] mb-1">Wealth Growth Year by Year</h3>
-        <p className="text-xs text-[var(--text-tertiary)] mb-4">Teal = invested, amber = returns. Notice how returns overtake investments over time.</p>
+        <h3 className="font-semibold text-[var(--text-primary)] mb-1">{t("sip.calculator.chartHeading")}</h3>
+        <p className="text-xs text-[var(--text-tertiary)] mb-4">{t("sip.calculator.chartCaption")}</p>
         <SIPChart data={result.chartData} years={years} />
         <EmailCapture />
       </div>

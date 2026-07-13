@@ -6,6 +6,11 @@ export const en = {
     calculate: "Calculate →",
     seeAllRates: "See all rates →",
     translationDisclaimer: "This page is shown in {language}. Automated translation may not be perfectly accurate in places — if anything is unclear, you can switch back to English anytime.",
+    frequencyDaily: "daily",
+    frequencyWeekly: "weekly",
+    frequencyMonthly: "monthly",
+    faqHeading: "Common Questions",
+    faqSubheading: "Answers to what people ask Google and financial advisors — with real numbers.",
   },
   nav: {
     emi: "EMI",

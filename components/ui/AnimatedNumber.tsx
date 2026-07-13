@@ -31,6 +31,7 @@ export function AnimatedNumber({ value, duration = 600, formatter, className }: 
     }
     rafRef.current = requestAnimationFrame(animate)
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration])
 
   return <span className={className}>{formatter(display)}</span>

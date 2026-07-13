@@ -8,6 +8,7 @@ import { calcEMI, amortizationSchedule, formatINR, formatShort, formatIndian } f
 import { track, getLoanRange } from "@/lib/analytics";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
 import RelatedTools from "@/components/RelatedTools";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
 
 const EMIChart = dynamic(() => import("./EMIChart"), {
   ssr: false,
@@ -15,6 +16,7 @@ const EMIChart = dynamic(() => import("./EMIChart"), {
 });
 
 export default function EMICalculator() {
+  const { t } = useTranslation();
   const [principal, setPrincipal] = useState(3000000);
   const [rate, setRate] = useState(8.5);
   const [tenure, setTenure] = useState(20);
@@ -61,8 +63,8 @@ export default function EMICalculator() {
     url.searchParams.set("p", String(principal));
     url.searchParams.set("r", String(rate));
     url.searchParams.set("t", String(tenure));
-    navigator.clipboard.writeText(url.toString()).then(() => alert("Link copied!"));
-  }, [principal, rate, tenure]);
+    navigator.clipboard.writeText(url.toString()).then(() => alert(t("emi.calculator.linkCopied")));
+  }, [principal, rate, tenure, t]);
 
   const downloadCSV = () => {
     const rows = [
@@ -81,13 +83,13 @@ export default function EMICalculator() {
       {/* Sticky mobile result */}
       <div className="md:hidden sticky top-14 z-40 bg-[var(--bg-card)] border-b border-[var(--border-default)] px-4 py-3 flex items-center justify-between shadow-sm">
         <div>
-          <p className="text-xs text-[var(--text-secondary)]">Monthly EMI</p>
+          <p className="text-xs text-[var(--text-secondary)]">{t("emi.calculator.mobileEmiLabel")}</p>
           <p className="text-2xl font-bold text-[#F59E0B] tabular-nums" aria-live="polite" aria-atomic="true">
             {formatINR(Math.round(emi))}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-[var(--text-secondary)]">Total Interest</p>
+          <p className="text-xs text-[var(--text-secondary)]">{t("emi.calculator.mobileInterestLabel")}</p>
           <p className="text-base font-semibold text-red-500 tabular-nums" aria-live="polite" aria-atomic="true">
             {formatShort(totalInterest)}
           </p>
@@ -99,13 +101,13 @@ export default function EMICalculator() {
         <div className="bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
           <div className="flex items-center gap-2 mb-5">
             <span className="text-xl" aria-hidden="true">💰</span>
-            <h2 className="font-bold text-[var(--text-primary)] text-lg">Loan Details</h2>
+            <h2 className="font-bold text-[var(--text-primary)] text-lg">{t("emi.calculator.loanDetails")}</h2>
           </div>
-          <SliderInput label="Loan Amount" value={principal} min={100000} max={50000000} step={50000} onChange={setPrincipal} prefix="₹" format={formatIndian} hint="Home loan, car loan, personal loan…" />
-          <SliderInput label="Annual Interest Rate" value={rate} min={5} max={20} step={0.1} onChange={setRate} suffix="%" format={(v) => v.toFixed(1)} hint="Check your loan offer letter" />
-          <SliderInput label="Loan Tenure" value={tenure} min={1} max={30} step={1} onChange={setTenure} suffix=" yr" format={String} hint="How many years to repay" />
-          <button onClick={share} className="mt-1 text-sm text-[#0D9488] dark:text-[#14B8A6] hover:text-[#0F766E] flex items-center gap-1.5 font-medium" aria-label="Copy shareable link to clipboard">
-            🔗 Share this calculation
+          <SliderInput label={t("emi.calculator.loanAmountLabel")} value={principal} min={100000} max={50000000} step={50000} onChange={setPrincipal} prefix="₹" format={formatIndian} hint={t("emi.calculator.loanAmountHint")} />
+          <SliderInput label={t("emi.calculator.rateLabel")} value={rate} min={5} max={20} step={0.1} onChange={setRate} suffix="%" format={(v) => v.toFixed(1)} hint={t("emi.calculator.rateHint")} />
+          <SliderInput label={t("emi.calculator.tenureLabel")} value={tenure} min={1} max={30} step={1} onChange={setTenure} suffix=" yr" format={String} hint={t("emi.calculator.tenureHint")} />
+          <button onClick={share} className="mt-1 text-sm text-[#0D9488] dark:text-[#14B8A6] hover:text-[#0F766E] flex items-center gap-1.5 font-medium" aria-label={t("emi.calculator.shareAriaLabel")}>
+            {t("emi.calculator.shareButton")}
           </button>
         </div>
 
@@ -113,41 +115,41 @@ export default function EMICalculator() {
         <div className="flex flex-col gap-4">
           {/* Desktop result card */}
           <div className="hidden md:block bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-default)]">
-            <p className="text-sm text-[var(--text-secondary)] mb-1">Monthly EMI</p>
+            <p className="text-sm text-[var(--text-secondary)] mb-1">{t("emi.calculator.monthlyEmi")}</p>
             <AnimatedNumber value={emi} duration={500} formatter={(n) => formatINR(Math.round(n))} className="text-5xl font-bold text-[#F59E0B] tabular-nums result-value" aria-live="polite" aria-atomic="true" />
             <div className="mt-5 grid grid-cols-2 gap-4">
               <div className="bg-[var(--bg-base)] rounded-xl p-3">
-                <p className="text-xs text-[var(--text-secondary)] mb-1">Total Payable</p>
+                <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.totalPayable")}</p>
                 <AnimatedNumber value={totalPayable} duration={600} formatter={(n) => formatShort(n)} className="font-bold text-[var(--text-primary)] tabular-nums text-lg" aria-live="polite" />
               </div>
               <div className="bg-red-50 dark:bg-red-950/50 rounded-xl p-3">
-                <p className="text-xs text-[var(--text-secondary)] mb-1">Total Interest</p>
+                <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.totalInterest")}</p>
                 <AnimatedNumber value={totalInterest} duration={600} formatter={(n) => formatShort(n)} className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite" />
               </div>
             </div>
             <div className="mt-5">
-              <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">Principal vs Interest</p>
-              <p className="text-xs text-[var(--text-tertiary)] mb-3">Where your money actually goes</p>
+              <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">{t("emi.calculator.principalVsInterest")}</p>
+              <p className="text-xs text-[var(--text-tertiary)] mb-3">{t("emi.calculator.whereMoneyGoes")}</p>
               <EMIChart principal={principal} totalInterest={totalInterest} totalPayable={totalPayable} />
             </div>
           </div>
 
           {/* Mobile breakdown */}
           <div className="md:hidden bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm border border-[var(--border-default)]">
-            <p className="text-sm font-medium text-[var(--text-secondary)] mb-3">Breakdown</p>
+            <p className="text-sm font-medium text-[var(--text-secondary)] mb-3">{t("emi.calculator.breakdown")}</p>
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-[var(--bg-base)] rounded-xl p-3">
-                <p className="text-xs text-[var(--text-secondary)] mb-1">Loan Amount</p>
+                <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.loanAmount")}</p>
                 <p className="font-bold text-[var(--text-primary)] tabular-nums">{formatShort(principal)}</p>
               </div>
               <div className="bg-[var(--bg-base)] rounded-xl p-3">
-                <p className="text-xs text-[var(--text-secondary)] mb-1">Total Payable</p>
+                <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.totalPayable")}</p>
                 <p className="font-bold text-[var(--text-primary)] tabular-nums">{formatShort(totalPayable)}</p>
               </div>
               <div className="col-span-2 bg-red-50 dark:bg-red-950/50 rounded-xl p-3">
-                <p className="text-xs text-[var(--text-secondary)] mb-1">Interest over {tenure} years</p>
+                <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.interestOverYears", { years: tenure })}</p>
                 <p className="font-bold text-red-500 tabular-nums text-lg" aria-live="polite">{formatShort(totalInterest)}</p>
-                <p className="text-xs text-[var(--text-tertiary)] mt-1">{((totalInterest / principal) * 100).toFixed(0)}% extra over the principal</p>
+                <p className="text-xs text-[var(--text-tertiary)] mt-1">{t("emi.calculator.interestExtraPct", { percent: ((totalInterest / principal) * 100).toFixed(0) })}</p>
               </div>
             </div>
           </div>
@@ -159,15 +161,15 @@ export default function EMICalculator() {
       <div className="md:hidden flex flex-col gap-3 mt-4">
         <button onClick={() => setShowDownPayment(v => !v)} className="w-full flex items-center justify-between bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-4 text-left">
           <div>
-            <p className="font-semibold text-[var(--text-primary)] text-sm">🏠 How does my down payment affect the EMI?</p>
-            <p className="text-xs text-[var(--text-secondary)] mt-0.5">Adjust down payment to see how it changes your EMI instantly</p>
+            <p className="font-semibold text-[var(--text-primary)] text-sm">{t("emi.calculator.downPaymentTeaserTitle")}</p>
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">{t("emi.calculator.downPaymentTeaserSubtitle")}</p>
           </div>
           <span className="text-[var(--text-secondary)] text-lg ml-3">›</span>
         </button>
         <button onClick={() => setShowInvestVsPay(v => !v)} className="w-full flex items-center justify-between bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-4 text-left">
           <div>
-            <p className="font-semibold text-[var(--text-primary)] text-sm">📊 Should I invest extra cash or prepay my loan?</p>
-            <p className="text-xs text-[var(--text-secondary)] mt-0.5">See which option grows your wealth faster</p>
+            <p className="font-semibold text-[var(--text-primary)] text-sm">{t("emi.calculator.investVsPayTeaserTitle")}</p>
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">{t("emi.calculator.investVsPayTeaserSubtitle")}</p>
           </div>
           <span className="text-[var(--text-secondary)] text-lg ml-3">›</span>
         </button>
@@ -181,9 +183,9 @@ export default function EMICalculator() {
           aria-expanded={showDownPayment}
         >
           <span className="text-lg" aria-hidden="true">{showDownPayment ? "▲" : "▼"}</span>
-          Down payment &amp; LTV impact
+          {t("emi.calculator.downPaymentToggle")}
         </button>
-        {!showDownPayment && <p className="text-sm text-[var(--text-tertiary)] mt-2">See how your down payment changes the loan amount and EMI.</p>}
+        {!showDownPayment && <p className="text-sm text-[var(--text-tertiary)] mt-2">{t("emi.calculator.downPaymentCollapsedHint")}</p>}
         {showDownPayment && (() => {
           const loanFromDP = Math.max(0, propertyValue - downPayment);
           const ltv = propertyValue > 0 ? (loanFromDP / propertyValue) * 100 : 0;
@@ -191,25 +193,25 @@ export default function EMICalculator() {
           return (
             <div className="mt-4 grid lg:grid-cols-2 gap-5">
               <div>
-                <SliderInput label="Property Value" value={propertyValue} min={500000} max={100000000} step={100000} onChange={setPropertyValue} prefix="₹" format={formatIndian} rangeHint="Min ₹5L · Max ₹10Cr" />
-                <SliderInput label="Down Payment" value={downPayment} min={0} max={propertyValue} step={50000} onChange={setDownPayment} prefix="₹" format={formatIndian} hint="Banks usually require at least 10-20%" />
+                <SliderInput label={t("emi.calculator.propertyValueLabel")} value={propertyValue} min={500000} max={100000000} step={100000} onChange={setPropertyValue} prefix="₹" format={formatIndian} rangeHint={t("emi.calculator.propertyValueRangeHint")} />
+                <SliderInput label={t("emi.calculator.downPaymentLabel")} value={downPayment} min={0} max={propertyValue} step={50000} onChange={setDownPayment} prefix="₹" format={formatIndian} hint={t("emi.calculator.downPaymentHint")} />
               </div>
               <div className="flex flex-col gap-3 justify-center">
                 <div className="bg-[var(--bg-base)] rounded-xl p-4">
-                  <p className="text-xs text-[var(--text-secondary)] mb-1">Loan needed</p>
+                  <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.loanNeeded")}</p>
                   <p className="font-bold text-[var(--text-primary)] tabular-nums text-xl" aria-live="polite">{formatINR(Math.round(loanFromDP))}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-[var(--tip-bg)] rounded-xl p-3">
-                    <p className="text-xs text-[var(--text-secondary)] mb-1">LTV ratio</p>
+                    <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.ltvRatio")}</p>
                     <p className="font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums text-lg" aria-live="polite">{ltv.toFixed(0)}%</p>
                   </div>
                   <div className="bg-amber-50 dark:bg-amber-950/50 rounded-xl p-3">
-                    <p className="text-xs text-[var(--text-secondary)] mb-1">New EMI</p>
+                    <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.newEmi")}</p>
                     <p className="font-bold text-[#F59E0B] tabular-nums text-lg" aria-live="polite">{formatINR(Math.round(dpEMI))}</p>
                   </div>
                 </div>
-                {ltv > 80 && <p className="text-xs text-amber-600">⚠️ LTV above 80% — a larger down payment usually means a better rate.</p>}
+                {ltv > 80 && <p className="text-xs text-amber-600">{t("emi.calculator.ltvWarning")}</p>}
               </div>
             </div>
           );
@@ -224,9 +226,9 @@ export default function EMICalculator() {
           aria-expanded={showInvestVsPay}
         >
           <span className="text-lg" aria-hidden="true">{showInvestVsPay ? "▲" : "▼"}</span>
-          Invest the money vs pay down the loan
+          {t("emi.calculator.investVsPayToggle")}
         </button>
-        {!showInvestVsPay && <p className="text-sm text-[var(--text-tertiary)] mt-2">Should a lump sum go into your loan or the market?</p>}
+        {!showInvestVsPay && <p className="text-sm text-[var(--text-tertiary)] mt-2">{t("emi.calculator.investVsPayCollapsedHint")}</p>}
         {showInvestVsPay && (() => {
           // Pay-down scenario: interest saved by prepaying extraAmount now (reduce tenure)
           const sched = amortizationSchedule(principal, rate, tenure);
@@ -242,26 +244,26 @@ export default function EMICalculator() {
           return (
             <div className="mt-4 grid lg:grid-cols-2 gap-5">
               <div>
-                <SliderInput label="Lump-sum Amount" value={extraAmount} min={50000} max={5000000} step={50000} onChange={setExtraAmount} prefix="₹" format={formatIndian} rangeHint="Min ₹50K · Max ₹50L" />
-                <SliderInput label="Expected MF Return" value={mfReturn} min={6} max={18} step={0.5} onChange={setMfReturn} suffix="%" format={(v) => v.toFixed(1)} hint="Equity funds historically ~12%" />
+                <SliderInput label={t("emi.calculator.lumpSumLabel")} value={extraAmount} min={50000} max={5000000} step={50000} onChange={setExtraAmount} prefix="₹" format={formatIndian} rangeHint={t("emi.calculator.lumpSumRangeHint")} />
+                <SliderInput label={t("emi.calculator.mfReturnLabel")} value={mfReturn} min={6} max={18} step={0.5} onChange={setMfReturn} suffix="%" format={(v) => v.toFixed(1)} hint={t("emi.calculator.mfReturnHint")} />
               </div>
               <div className="flex flex-col gap-3 justify-center">
                 <div className="grid grid-cols-2 gap-3">
                   <div className={`rounded-xl p-3 ${!investWins ? "bg-[var(--tip-bg)] border border-[#0D9488]/30" : "bg-[var(--bg-base)]"}`}>
-                    <p className="text-xs text-[var(--text-secondary)] mb-1">Pay down → interest saved</p>
+                    <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.payDownInterestSaved")}</p>
                     <p className="font-bold text-[#0D9488] dark:text-[#14B8A6] tabular-nums text-lg" aria-live="polite">{formatShort(interestSaved)}</p>
                   </div>
                   <div className={`rounded-xl p-3 ${investWins ? "bg-[var(--tip-bg)] border border-[#0D9488]/30" : "bg-[var(--bg-base)]"}`}>
-                    <p className="text-xs text-[var(--text-secondary)] mb-1">Invest → gain</p>
+                    <p className="text-xs text-[var(--text-secondary)] mb-1">{t("emi.calculator.investGain")}</p>
                     <p className="font-bold text-[#F59E0B] tabular-nums text-lg" aria-live="polite">{formatShort(investGain)}</p>
                   </div>
                 </div>
                 <div className="bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded-xl p-3">
                   <p className="text-sm font-semibold text-[#92400E] dark:text-amber-300">
-                    {investWins ? "📈 Investing comes out ahead" : "🏦 Paying down the loan comes out ahead"} on these assumptions.
+                    {t("emi.calculator.winnerAssumption", { winnerText: investWins ? t("emi.calculator.investingWins") : t("emi.calculator.paydownWins") })}
                   </p>
                   <p className="text-xs text-[#92400E] dark:text-amber-400 mt-1">
-                    Paying down is a guaranteed, risk-free return equal to your loan rate. Investment returns are not guaranteed and carry market risk. This is general information, not financial advice.
+                    {t("emi.calculator.investVsPayDisclaimer")}
                   </p>
                 </div>
               </div>
@@ -287,30 +289,30 @@ export default function EMICalculator() {
             aria-controls="amortization-table"
           >
             <span className="text-lg" aria-hidden="true">{showTable ? "▲" : "▼"}</span>
-            {showTable ? "Hide" : "View"} full repayment schedule
+            {showTable ? t("emi.calculator.hideSchedule") : t("emi.calculator.viewSchedule")}
           </button>
           {showTable && (
             <button onClick={downloadCSV} className="text-sm bg-[var(--bg-elevated)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)] px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5">
-              ⬇ Export CSV
+              {t("emi.calculator.exportCsv")}
             </button>
           )}
         </div>
-        {!showTable && <p className="text-sm text-[var(--text-tertiary)]">See exactly how much principal and interest you pay each year.</p>}
+        {!showTable && <p className="text-sm text-[var(--text-tertiary)]">{t("emi.calculator.scheduleCollapsedHint")}</p>}
         {showTable && (
           <div id="amortization-table" className="overflow-x-auto -mx-1">
             <table className="w-full text-sm min-w-[400px]">
               <thead>
                 <tr className="border-b-2 border-[var(--border-default)]">
-                  <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Year</th>
-                  <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Principal Paid</th>
-                  <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Interest Paid</th>
-                  <th className="text-right py-2.5 text-[var(--text-secondary)] font-semibold" scope="col">Balance</th>
+                  <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">{t("emi.calculator.tableYear")}</th>
+                  <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">{t("emi.calculator.tablePrincipalPaid")}</th>
+                  <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">{t("emi.calculator.tableInterestPaid")}</th>
+                  <th className="text-right py-2.5 text-[var(--text-secondary)] font-semibold" scope="col">{t("emi.calculator.tableBalance")}</th>
                 </tr>
               </thead>
               <tbody>
                 {yearlySchedule.map((row) => (
                   <tr key={row.year} className="border-b border-[var(--border-subtle)] hover:bg-[var(--bg-base)] transition-colors">
-                    <td className="py-2.5 pr-4 font-medium text-[var(--text-primary)]">Year {row.year}</td>
+                    <td className="py-2.5 pr-4 font-medium text-[var(--text-primary)]">{t("emi.calculator.tableRowYear", { year: row.year })}</td>
                     <td className="py-2.5 pr-4 text-right text-[#10B981] dark:text-[#34D399] tabular-nums font-medium">{formatINR(Math.round(row.principal))}</td>
                     <td className="py-2.5 pr-4 text-right text-red-500 tabular-nums font-medium">{formatINR(Math.round(row.interest))}</td>
                     <td className="py-2.5 text-right text-[var(--text-primary)] tabular-nums">{formatINR(Math.round(row.balance))}</td>

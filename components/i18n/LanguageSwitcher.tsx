@@ -18,6 +18,7 @@ export default function LanguageSwitcher({ variant = "desktop" }: { variant?: "d
 
   useEffect(() => {
     const suggested = getCookie("mm_suggested_locale");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (suggested) setSuggestedLocale(suggested);
   }, []);
 
@@ -32,12 +33,12 @@ export default function LanguageSwitcher({ variant = "desktop" }: { variant?: "d
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const current = languages.find((l) => l.code === locale) ?? languages[0];
+
   const english = languages.find((l) => l.code === "en")!;
-  const suggested =
-    suggestedLocale && suggestedLocale !== locale && suggestedLocale !== "en"
-      ? languages.find((l) => l.code === suggestedLocale)
-      : undefined;
+  const defaultStateLocale = suggestedLocale && suggestedLocale !== "en" ? suggestedLocale : "hi";
+  const stateLanguage = languages.find((l) => l.code === defaultStateLocale) ?? languages.find((l) => l.code === "hi") ?? languages[0];
+
+  const targetLanguage = locale === "en" ? stateLanguage : english;
 
   const handleSelect = (code: string) => {
     setLocale(code);
@@ -59,7 +60,7 @@ export default function LanguageSwitcher({ variant = "desktop" }: { variant?: "d
       >
         <span className="flex items-center gap-1.5">
           <Globe size={16} />
-          {current.nativeName}
+          {targetLanguage.nativeName}
         </span>
       </button>
 
@@ -71,28 +72,17 @@ export default function LanguageSwitcher({ variant = "desktop" }: { variant?: "d
               : "absolute right-0 top-full mt-1 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl shadow-lg py-1 min-w-[200px] max-h-[60vh] overflow-y-auto z-50"
           }
         >
-          <button
-            onClick={() => handleSelect(english.code)}
-            className={`block w-full text-left px-4 py-2.5 text-sm font-medium transition-colors ${
-              locale === english.code
-                ? "bg-[#0D9488]/10 text-[#0D9488] dark:text-[#14B8A6]"
-                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
-            }`}
-          >
-            {english.nativeName}
-          </button>
-
-          {suggested && !showAll && (
-            <div className="px-4 py-2.5">
-              <button
-                onClick={() => handleSelect(suggested.code)}
-                className="block w-full text-left text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >
-                {suggested.nativeName}
-              </button>
+          <div className="px-4 py-2.5">
+            <button
+              onClick={() => handleSelect(targetLanguage.code)}
+              className="block w-full text-left text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+            >
+              {targetLanguage.nativeName}
+            </button>
+            {locale === "en" && suggestedLocale && suggestedLocale === targetLanguage.code && (
               <p className="text-xs text-[var(--text-tertiary)] mt-0.5">Suggested for your region</p>
-            </div>
-          )}
+            )}
+          </div>
 
           {!showAll ? (
             <button
@@ -102,9 +92,9 @@ export default function LanguageSwitcher({ variant = "desktop" }: { variant?: "d
               Show all languages ▾
             </button>
           ) : (
-            <div className="max-h-[50vh] overflow-y-auto">
+            <div className="max-h-[50vh] overflow-y-auto border-t border-[var(--border-default)] pt-1">
               {languages
-                .filter((l) => l.code !== "en")
+                .filter((l) => l.code !== targetLanguage.code)
                 .map((l) => (
                   <button
                     key={l.code}

@@ -4,10 +4,13 @@ import SliderInput from "@/components/SliderInput";
 import EmailCapture from "@/components/EmailCapture";
 import { formatINR, formatIndian } from "@/lib/utils";
 import { calculateEMI } from "@/lib/calculators/emi";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
+import { PLACEHOLDER_MARKER, splitAroundPlaceholder } from "@/lib/i18n/split-placeholder";
 
 const GST = 0.18;
 
 export default function LoanVsCardCalculator() {
+  const { t } = useTranslation();
   const [amount, setAmount] = useState(200000);
   const [months, setMonths] = useState(12);
   const [loanRate, setLoanRate] = useState(12);
@@ -39,20 +42,23 @@ export default function LoanVsCardCalculator() {
   return (
     <>
       <div className="md:hidden sticky top-14 z-40 bg-[var(--bg-card)] border-b border-[var(--border-default)] px-4 py-3 shadow-sm">
-        <p className="text-xs text-[var(--text-secondary)]">Cheaper option</p>
+        <p className="text-xs text-[var(--text-secondary)]">{t("loanVsCard.calculator.mobileCheaperOption")}</p>
         <p className="text-xl font-bold text-[#0D9488] dark:text-[#14B8A6]" aria-live="polite" aria-atomic="true">
-          {loanWins ? "Personal Loan" : "Credit Card EMI"} · saves {formatINR(Math.round(savings))}
+          {loanWins ? t("loanVsCard.calculator.personalLoanLabel") : t("loanVsCard.calculator.creditCardEmiLabel")}{t("loanVsCard.calculator.savesTemplate", { amount: formatINR(Math.round(savings)) })}
         </p>
       </div>
 
       {/* Winner banner */}
       <div className="mb-5 rounded-2xl p-5 bg-[var(--tip-bg)] border border-[#0D9488]/30">
-        <p className="text-sm text-[var(--text-secondary)] mb-1">Cheaper option for you</p>
+        <p className="text-sm text-[var(--text-secondary)] mb-1">{t("loanVsCard.calculator.winnerBannerLabel")}</p>
         <p className="text-2xl font-bold text-[#0D9488] dark:text-[#14B8A6]" aria-live="polite" aria-atomic="true">
-          {loanWins ? "🏦 Personal Loan" : "💳 Credit Card EMI"}
+          {loanWins ? t("loanVsCard.calculator.winnerBannerLoan") : t("loanVsCard.calculator.winnerBannerCard")}
         </p>
         <p className="text-sm text-[#374151] dark:text-[#CBD5E1] mt-1">
-          Saves you <span className="font-bold">{formatINR(Math.round(savings))}</span> in total cost over {months} months.
+          {(() => {
+            const [before, after] = splitAroundPlaceholder(t("loanVsCard.calculator.savingsNote", { amount: PLACEHOLDER_MARKER, months }));
+            return (<>{before}<span className="font-bold">{formatINR(Math.round(savings))}</span>{after}</>);
+          })()}
         </p>
       </div>
 
@@ -60,43 +66,42 @@ export default function LoanVsCardCalculator() {
         <div className="bg-[var(--bg-card)] rounded-2xl p-5 sm:p-6 shadow-sm border border-[var(--border-default)]">
           <div className="flex items-center gap-2 mb-5">
             <span className="text-xl" aria-hidden="true">⚖️</span>
-            <h2 className="font-bold text-[var(--text-primary)] text-lg">Purchase Details</h2>
+            <h2 className="font-bold text-[var(--text-primary)] text-lg">{t("loanVsCard.calculator.purchaseDetailsHeading")}</h2>
           </div>
-          <SliderInput label="Amount to Finance" value={amount} min={10000} max={2000000} step={5000} onChange={setAmount} prefix="₹" format={formatIndian} rangeHint="Min ₹10K · Max ₹20L" />
-          <SliderInput label="Repayment Tenure" value={months} min={3} max={60} step={1} onChange={setMonths} suffix=" mo" format={String} hint="How many months to repay" />
-          <SliderInput label="Personal Loan Rate" value={loanRate} min={9} max={30} step={0.5} onChange={setLoanRate} suffix="%" format={(v) => v.toFixed(1)} hint="Typical 10.5–24%" />
-          <SliderInput label="Loan Processing Fee" value={loanFeePct} min={0} max={5} step={0.25} onChange={setLoanFeePct} suffix="%" format={(v) => v.toFixed(2)} hint="Usually 1–3% + GST" />
-          <SliderInput label="Credit Card EMI Rate" value={cardRate} min={12} max={48} step={0.5} onChange={setCardRate} suffix="%" format={(v) => v.toFixed(1)} hint="Revolving balances 36–45%" />
+          <SliderInput label={t("loanVsCard.calculator.amountLabel")} value={amount} min={10000} max={2000000} step={5000} onChange={setAmount} prefix="₹" format={formatIndian} rangeHint={t("loanVsCard.calculator.amountRangeHint")} />
+          <SliderInput label={t("loanVsCard.calculator.monthsLabel")} value={months} min={3} max={60} step={1} onChange={setMonths} suffix=" mo" format={String} hint={t("loanVsCard.calculator.monthsHint")} />
+          <SliderInput label={t("loanVsCard.calculator.loanRateLabel")} value={loanRate} min={9} max={30} step={0.5} onChange={setLoanRate} suffix="%" format={(v) => v.toFixed(1)} hint={t("loanVsCard.calculator.loanRateHint")} />
+          <SliderInput label={t("loanVsCard.calculator.loanFeeLabel")} value={loanFeePct} min={0} max={5} step={0.25} onChange={setLoanFeePct} suffix="%" format={(v) => v.toFixed(2)} hint={t("loanVsCard.calculator.loanFeeHint")} />
+          <SliderInput label={t("loanVsCard.calculator.cardRateLabel")} value={cardRate} min={12} max={48} step={0.5} onChange={setCardRate} suffix="%" format={(v) => v.toFixed(1)} hint={t("loanVsCard.calculator.cardRateHint")} />
         </div>
 
         <div className="flex flex-col gap-4">
           <div className={`bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm border ${loanWins ? "border-[#0D9488]/40" : "border-[var(--border-default)]"}`}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-bold text-[var(--text-primary)]">🏦 Personal Loan</h3>
-              {loanWins && <span className="text-xs bg-[#0D9488] text-white px-2 py-0.5 rounded-full font-semibold">Cheaper</span>}
+              <h3 className="font-bold text-[var(--text-primary)]">{t("loanVsCard.calculator.loanCardHeading")}</h3>
+              {loanWins && <span className="text-xs bg-[#0D9488] text-white px-2 py-0.5 rounded-full font-semibold">{t("loanVsCard.calculator.cheaperBadge")}</span>}
             </div>
-            <Row label="Monthly EMI" value={loan.emi} />
-            <Row label="Interest" value={loan.interest} />
-            <Row label={`Processing fee (${loanFeePct}%)`} value={loan.fee} />
-            <Row label="GST on fee" value={loan.gstOnFee} />
-            <Row label="Total extra cost" value={loan.totalCost} bold />
+            <Row label={t("loanVsCard.calculator.monthlyEmi")} value={loan.emi} />
+            <Row label={t("loanVsCard.calculator.interest")} value={loan.interest} />
+            <Row label={t("loanVsCard.calculator.processingFeeLabel", { pct: loanFeePct })} value={loan.fee} />
+            <Row label={t("loanVsCard.calculator.gstOnFee")} value={loan.gstOnFee} />
+            <Row label={t("loanVsCard.calculator.totalExtraCost")} value={loan.totalCost} bold />
           </div>
 
           <div className={`bg-[var(--bg-card)] rounded-2xl p-5 shadow-sm border ${!loanWins ? "border-[#0D9488]/40" : "border-[var(--border-default)]"}`}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-bold text-[var(--text-primary)]">💳 Credit Card EMI</h3>
-              {!loanWins && <span className="text-xs bg-[#0D9488] text-white px-2 py-0.5 rounded-full font-semibold">Cheaper</span>}
+              <h3 className="font-bold text-[var(--text-primary)]">{t("loanVsCard.calculator.cardCardHeading")}</h3>
+              {!loanWins && <span className="text-xs bg-[#0D9488] text-white px-2 py-0.5 rounded-full font-semibold">{t("loanVsCard.calculator.cheaperBadge")}</span>}
             </div>
-            <Row label="Monthly EMI" value={card.emi} />
-            <Row label="Interest" value={card.interest} />
-            <Row label="GST on interest" value={card.gstOnInterest} />
-            <Row label="Total extra cost" value={card.totalCost} bold />
+            <Row label={t("loanVsCard.calculator.monthlyEmi")} value={card.emi} />
+            <Row label={t("loanVsCard.calculator.interest")} value={card.interest} />
+            <Row label={t("loanVsCard.calculator.gstOnInterest")} value={card.gstOnInterest} />
+            <Row label={t("loanVsCard.calculator.totalExtraCost")} value={card.totalCost} bold />
           </div>
 
           <div className="bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
             <p className="text-xs text-[#92400E] dark:text-amber-400">
-              ⚠️ This is a general comparison, not financial advice. Actual rates, fees, and no-cost-EMI terms vary by lender and offer.
-              Always confirm the effective annual rate before deciding.
+              {t("loanVsCard.calculator.disclaimer")}
             </p>
             <EmailCapture sourcePage="loan-vs-card" />
           </div>

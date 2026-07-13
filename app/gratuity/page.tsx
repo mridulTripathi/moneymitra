@@ -5,6 +5,7 @@ import RelatedTools from "@/components/RelatedTools";
 import FAQSearch from "@/components/FAQSearch";
 import JsonLd from "@/components/JsonLd";
 import { DisclaimerBar } from "@/components/DisclaimerBar";
+import PageHeader from "@/components/i18n/PageHeader";
 import { pages, SITE_URL, SITE_NAME } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -61,18 +62,7 @@ export default function GratuityPage() {
       <JsonLd data={howToSchema} />
       <JsonLd data={breadcrumbSchema} />
 
-      <nav aria-label="Breadcrumb" className="text-xs text-[var(--text-tertiary)] mb-4">
-        <ol className="flex items-center gap-1">
-          <li><a href="/" className="hover:text-[#0D9488]">{SITE_NAME}</a></li>
-          <li aria-hidden="true">›</li>
-          <li className="text-[var(--text-primary)]">Gratuity Calculator</li>
-        </ol>
-      </nav>
-
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Gratuity Calculator</h1>
-        <p className="text-[#64748B]">Estimate your gratuity payout under the Payment of Gratuity Act.</p>
-      </div>
+      <PageHeader breadcrumbKey="gratuity.page.breadcrumb" titleKey="gratuity.page.title" subtitleKey="gratuity.page.subtitle" />
 
       <FAQSearch />
       <GratuityCalculator />

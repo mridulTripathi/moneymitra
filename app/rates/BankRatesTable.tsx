@@ -2,6 +2,7 @@
 import { useState, useMemo } from "react";
 import type { BankRate } from "./page";
 import { track } from "@/lib/analytics";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
 
 const RD_MIN_DEPOSIT: Record<string, string> = {
   SBI: '₹100',
@@ -25,6 +26,7 @@ interface Props {
 type SortKey = "bank" | "min" | "max";
 
 export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props) {
+  const { t } = useTranslation();
   const [sortKey, setSortKey] = useState<SortKey>("min");
   const [asc, setAsc] = useState(true);
 
@@ -68,11 +70,11 @@ export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props)
   }, [rates, isFD]);
 
   const typeLabels: Record<string, string> = {
-    public: "Public", private: "Private", small_finance: "Small Finance", nbfc: "NBFC",
+    public: t("rates.typePublic"), private: t("rates.typePrivate"), small_finance: t("rates.typeSmallFinance"), nbfc: t("rates.typeNbfc"),
   };
 
   if (rates.length === 0) {
-    return <p className="text-sm text-[var(--text-tertiary)] py-8 text-center">Rates are being updated. Please check back soon.</p>;
+    return <p className="text-sm text-[var(--text-tertiary)] py-8 text-center">{t("rates.emptyState")}</p>;
   }
 
   return (
@@ -80,12 +82,12 @@ export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props)
       <table className="w-full text-sm min-w-[480px]">
         <thead>
           <tr className="border-b-2 border-[var(--border-default)]">
-            <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("bank")} scope="col">Bank{arrow("bank")}</th>
-            <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Type</th>
-            <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("min")} scope="col">{isFD ? (isRD ? "1yr RD Rate" : "Rate") : "Min"}{arrow("min")}</th>
-            {!isFD && <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("max")} scope="col">Max{arrow("max")}</th>}
-            {isFD && showSenior && <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">Senior Rate</th>}
-            {isRD && <th className="text-right py-2.5 text-[var(--text-secondary)] font-semibold" scope="col">Min Monthly Deposit</th>}
+            <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("bank")} scope="col">{t("rates.tableBank")}{arrow("bank")}</th>
+            <th className="text-left py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">{t("rates.tableType")}</th>
+            <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("min")} scope="col">{isFD ? (isRD ? t("rates.tableRdRate") : t("rates.tableRate")) : t("rates.tableMin")}{arrow("min")}</th>
+            {!isFD && <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold cursor-pointer" onClick={() => toggle("max")} scope="col">{t("rates.tableMax")}{arrow("max")}</th>}
+            {isFD && showSenior && <th className="text-right py-2.5 pr-4 text-[var(--text-secondary)] font-semibold" scope="col">{t("rates.tableSeniorRate")}</th>}
+            {isRD && <th className="text-right py-2.5 text-[var(--text-secondary)] font-semibold" scope="col">{t("rates.tableMinMonthlyDeposit")}</th>}
           </tr>
         </thead>
         <tbody>
@@ -101,12 +103,12 @@ export default function BankRatesTable({ rates, showSenior, isFD, isRD }: Props)
                   ) : r.bank_name}
                   {isOverallBest && (
                     <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#0D9488] text-white whitespace-nowrap">
-                      🏆 Best Rate
+                      {t("rates.bestRateBadge")}
                     </span>
                   )}
                   {isTypeBest && (
                     <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 whitespace-nowrap">
-                      ⭐ Best in {typeLabels[r.bank_type] ?? r.bank_type}
+                      {t("rates.bestInTypeBadge", { type: typeLabels[r.bank_type] ?? r.bank_type })}
                     </span>
                   )}
                 </div>

@@ -1,14 +1,18 @@
+"use client";
+import { useTranslation } from "@/components/i18n/LanguageProvider";
+
 export interface FAQItem {
   q: string;
   a: string;
 }
 
 export default function FAQAccordion({ items }: { items: FAQItem[] }) {
+  const { t } = useTranslation();
   return (
     <section className="mt-10" aria-label="Frequently asked questions">
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-1">Common Questions</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-1">{t("common.faqHeading")}</h2>
       <p className="text-sm text-[var(--text-secondary)] mb-5">
-        Answers to what people ask Google and financial advisors — with real numbers.
+        {t("common.faqSubheading")}
       </p>
       <div className="flex flex-col divide-y divide-[var(--border-default)] border border-[var(--border-default)] rounded-2xl overflow-hidden bg-[var(--bg-card)] shadow-sm">
         {items.map((item, i) => (
