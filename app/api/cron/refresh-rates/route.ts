@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase';
 import Anthropic from '@anthropic-ai/sdk';
+import { getRateUpdateFrequency, isUpdateDue } from '@/lib/rate-update-config';
 
 export const maxDuration = 60;
 
@@ -74,6 +75,17 @@ export async function GET(req: NextRequest) {
 
   const client = createServiceClient();
   const summary = { rbiUpdated: false, banksUpdated: 0, banksSkipped: 0, errors: [] as string[] };
+
+  // The Vercel cron trigger fires daily (see vercel.json); this check is what
+  // actually turns that into the configured cadence (daily/weekly/monthly)
+  // without needing to edit the cron schedule itself.
+  const force = new URL(req.url).searchParams.get('force') === 'true';
+  if (!force) {
+    const { data: lastUpdated } = await client.from('rates_last_updated').select('updated_at').eq('id', 1).maybeSingle();
+    if (!isUpdateDue(lastUpdated?.updated_at ?? null)) {
+      return NextResponse.json({ success: true, skipped: true, reason: `Not due yet (frequency: ${getRateUpdateFrequency()})` });
+    }
+  }
 
   try {
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
